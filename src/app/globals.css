@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------- */
+/*  Study-desk palette: warm paper ground, indigo accent, yellow highlight     */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  --paper: #FAF9F5;
+  --surface: #FFFFFF;
+  --ink: #1E2430;
+  --muted: #6B7280;
+  --accent: #4338CA;       /* indigo — links, buttons, active nav */
+  --accent-light: #EEF2FF; /* tinted background for active/hover nav */
+  --highlight: #FEF08A;    /* transparent yellow highlight stripe  */
+  --success: #16A34A;
+  --danger: #DC2626;
+  --warning: #D97706;
+  --border: #E5E3DD;
+  --shadow: rgba(30, 36, 48, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #151922;
+    --surface: #1E2430;
+    --ink: #F1F0EE;
+    --muted: #9CA3AF;
+    --accent: #818CF8;
+    --accent-light: #1E1B4B;
+    --highlight: rgba(250, 204, 21, 0.12);
+    --success: #22C55E;
+    --danger: #F87171;
+    --warning: #FBBF24;
+    --border: #2D3442;
+    --shadow: rgba(0, 0, 0, 0.25);
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-highlight: var(--highlight);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --font-sans: var(--font-rubik), system-ui, sans-serif;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Notebook page feel: faint left gutter on chat/notes areas                  */
+/* -------------------------------------------------------------------------- */
+.notebook {
+  background-image: linear-gradient(
+    to right,
+    rgba(220, 50, 50, 0.08) 0px,
+    rgba(220, 50, 50, 0.08) 1px,
+    transparent 1px,
+    transparent 100%
+  );
+  background-size: 60px 100%;
+  background-repeat: no-repeat;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Highlight stripe — used sparingly to mark mastery-checked content           */
+/* -------------------------------------------------------------------------- */
+.highlight-stripe {
+  background: var(--highlight);
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Focus ring (accessibility)                                                 */
+/* -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Typography                                                                 */
+/* -------------------------------------------------------------------------- */
+.prose-teacher h1, .prose-teacher h2, .prose-teacher h3 {
+  color: var(--ink);
+}
+.prose-teacher ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.prose-teacher ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.prose-teacher code {
+  background: var(--accent-light);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.prose-teacher pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+}
+.prose-teacher strong { font-weight: 600; }
+
+/* -------------------------------------------------------------------------- */
+/*  Utility                                                                    */
+/* -------------------------------------------------------------------------- */
+/* Mastery colors (inline style works fine; these are reference tokens) */
+:root {
+  --mastery-0: #9CA3AF;  /* NOT_STARTED */
+  --mastery-1: #2563EB;  /* LEARNING */
+  --mastery-2: #D97706;  /* PRACTICING */
+  --mastery-3: #EA580C;  /* REVIEW_NEEDED */
+  --mastery-4: #16A34A;  /* MASTERED */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mastery-0: #6B7280;
+    --mastery-1: #60A5FA;
+    --mastery-2: #FBBF24;
+    --mastery-3: #FB923C;
+    --mastery-4: #4ADE80;
+  }
+}
+
+/* scrollbar helpers */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

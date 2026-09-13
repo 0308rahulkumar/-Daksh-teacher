@@ -1,0 +1,706 @@
+// CBSE Class 10 syllabus knowledge map (NCERT-based).
+//
+// NOTE: Boards revise syllabi from time to time (and New Delhi's board trims
+// chapters during exam-session changes). This is a faithful map of the
+// long-running NCERT Class 10 content. The UI shows a "verify with your board's
+// official syllabus" nudge, and the AI teacher is prompted to respect the
+// current session's board.
+//
+// Chapter ids stay stable so learning progress keyed to them survives edits.
+
+import type { Chapter, Subject, SubjectId } from "../types";
+
+export const SUBJECTS: Subject[] = [
+  {
+    id: "science",
+    name: "Science",
+    icon: "🔬",
+    tagline: "Physics · Chemistry · Biology",
+    accent: "#0d9488", // teal
+    chapters: [
+      {
+        id: "ch-chem1",
+        name: "Chemical Reactions and Equations",
+        branch: "Chemistry",
+        topics: [
+          { id: "balancing", name: "Balancing chemical equations", focus: "Law of conservation of mass in equations" },
+          { id: "types-reactions", name: "Types of chemical reactions", focus: "Combination, decomposition, displacement, double displacement" },
+          { id: "oxidation", name: "Oxidation and reduction", focus: "Gain/loss of oxygen and hydrogen; redox" },
+          { id: "corrosion", name: "Corrosion and rancidity", focus: "Everyday redox processes" },
+        ],
+      },
+      {
+        id: "ch-chem2",
+        name: "Acids, Bases and Salts",
+        branch: "Chemistry",
+        topics: [
+          { id: "acid-base-props", name: "Properties of acids and bases", focus: "Taste, litmus, and reactions with metals/carbonates" },
+          { id: "ph-scale", name: "pH scale and its importance", focus: "pH in everyday life: soil, teeth, stomach" },
+          { id: "neutralisation", name: "Neutralisation reaction", focus: "Acid + base gives salt and water" },
+          { id: "salts", name: "Important salts and their uses", focus: "Baking soda, washing soda, POP, bleaching powder" },
+        ],
+      },
+      {
+        id: "ch-chem3",
+        name: "Metals and Non-metals",
+        branch: "Chemistry",
+        topics: [
+          { id: "metal-props", name: "Properties of metals and non-metals", focus: "Physical and chemical differences" },
+          { id: "reactivity", name: "Reactivity series", focus: "Predicting displacement reactions" },
+          { id: "ionic-bond", name: "Ionic bonding", focus: "How metals and non-metals combine" },
+          { id: "extraction", name: "Extraction of metals", focus: "Concentration, reduction, refining" },
+          { id: "corrosion-prevention", name: "Corrosion and its prevention", focus: "Rusting, galvanisation, alloying" },
+        ],
+      },
+      {
+        id: "ch-chem4",
+        name: "Carbon and its Compounds",
+        branch: "Chemistry",
+        topics: [
+          { id: "covalent", name: "Covalent bonding in carbon", focus: "Why carbon forms chains and rings" },
+          { id: "allotropes", name: "Allotropes of carbon", focus: "Diamond, graphite, C60" },
+          { id: "hydrocarbons", name: "Saturated and unsaturated hydrocarbons", focus: "Alkanes, alkenes, alkynes, homologous series" },
+          { id: "functional-groups", name: "Functional groups", focus: "Alcohols, carboxylic acids and their reactions" },
+          { id: "soaps", name: "Soaps and detergents", focus: "Cleansing action — micelles" },
+        ],
+      },
+      {
+        id: "ch-bio1",
+        name: "Life Processes",
+        branch: "Biology",
+        topics: [
+          { id: "nutrition", name: "Nutrition — autotrophic and heterotrophic", focus: "Photosynthesis; nutrition in humans" },
+          { id: "respiration", name: "Respiration — aerobic and anaerobic", focus: "ATP production; breathing vs respiration" },
+          { id: "transportation", name: "Transportation in organisms", focus: "Blood, heart, xylem and phloem" },
+          { id: "excretion", name: "Excretion in plants and animals", focus: "Kidney, nephron, excretion in plants" },
+        ],
+      },
+      {
+        id: "ch-bio2",
+        name: "Control and Coordination",
+        branch: "Biology",
+        topics: [
+          { id: "nervous-system", name: "Nervous system and reflex action", focus: "Neuron, synapse, reflex arc" },
+          { id: "brain", name: "Human brain", focus: "Major parts and functions" },
+          { id: "hormones", name: "Hormones in animals", focus: "Endocrine glands and their effects" },
+          { id: "plant-movement", name: "Plant movements and hormones", focus: "Tropisms; auxin, gibberellin, cytokinin" },
+        ],
+      },
+      {
+        id: "ch-bio3",
+        name: "How do Organisms Reproduce?",
+        branch: "Biology",
+        topics: [
+          { id: "asexual", name: "Asexual reproduction", focus: "Fission, budding, fragmentation, vegetative propagation" },
+          { id: "sexual-plants", name: "Sexual reproduction in plants", focus: "Flower parts, pollination, fertilisation" },
+          { id: "human-repro", name: "Human reproductive system", focus: "Male and female systems; menstruation" },
+          { id: "repro-health", name: "Reproductive health", focus: "Contraception and STIs" },
+        ],
+      },
+      {
+        id: "ch-bio4",
+        name: "Heredity",
+        branch: "Biology",
+        topics: [
+          { id: "mendel", name: "Mendel's experiments", focus: "Dominant and recessive traits" },
+          { id: "crosses", name: "Monohybrid and dihybrid crosses", focus: "Genotype and phenotype ratios" },
+          { id: "sex-determination", name: "Sex determination in humans", focus: "XX / XY chromosomes" },
+          { id: "evolution", name: "Evolution basics", focus: "Variation, natural selection, fossils" },
+        ],
+      },
+      {
+        id: "ch-phy1",
+        name: "Light — Reflection and Refraction",
+        branch: "Physics",
+        topics: [
+          { id: "mirrors", name: "Reflection and curved mirrors", focus: "Laws; image formation by concave and convex mirrors" },
+          { id: "mirror-formula", name: "Mirror formula and magnification", focus: "1/v + 1/u = 1/f and its use" },
+          { id: "refraction", name: "Refraction and refractive index", focus: "Snell's law; glass slab" },
+          { id: "lenses", name: "Lenses — image formation", focus: "Convex and concave; ray diagrams" },
+          { id: "lens-formula", name: "Lens formula and power", focus: "1/f = 1/v − 1/u; P = 1/f (in dioptres)" },
+        ],
+      },
+      {
+        id: "ch-phy2",
+        name: "Human Eye and Colourful World",
+        branch: "Physics",
+        topics: [
+          { id: "eye-structure", name: "Structure and working of the human eye", focus: "Pupil, lens, retina; accommodation" },
+          { id: "eye-defects", name: "Defects of vision and correction", focus: "Myopia, hypermetropia, presbyopia; lenses used" },
+          { id: "dispersion", name: "Dispersion and scattering of light", focus: "Prism rainbow; why the sky is blue" },
+          { id: "atmospheric", name: "Atmospheric refraction", focus: "Twinkling, advanced sunrise, apparent position" },
+        ],
+      },
+      {
+        id: "ch-phy3",
+        name: "Electricity",
+        branch: "Physics",
+        topics: [
+          { id: "circuits", name: "Electric current and circuits", focus: "Charge, current, potential difference" },
+          { id: "ohms-law", name: "Ohm's law and resistance", focus: "V = IR; resistivity; factors affecting resistance" },
+          { id: "series-parallel", name: "Series and parallel circuits", focus: "Equivalent resistance; daily-life wiring" },
+          { id: "heating", name: "Heating effect of electric current", focus: "Joule's law of heating" },
+          { id: "power", name: "Electric power and energy", focus: "P = VI; kWh and electricity bill" },
+        ],
+      },
+      {
+        id: "ch-phy4",
+        name: "Magnetic Effects of Electric Current",
+        branch: "Physics",
+        topics: [
+          { id: "magnetic-field", name: "Magnetic field around a conductor", focus: "Field lines; right-hand thumb rule" },
+          { id: "motor", name: "Force on a conductor; electric motor", focus: "Fleming's left-hand rule" },
+          { id: "induction", name: "Electromagnetic induction", focus: "Faraday's experiment; generator" },
+          { id: "domestic", name: "Domestic electric circuits", focus: "Live/neutral/earth, fuse, earthing, short circuit" },
+        ],
+      },
+      {
+        id: "ch-bio5",
+        name: "Our Environment",
+        branch: "Biology",
+        topics: [
+          { id: "ecosystem", name: "Ecosystem and its components", focus: "Biotic and abiotic; food chains and webs" },
+          { id: "waste", name: "Waste management", focus: "Biodegradable vs non-biodegradable" },
+          { id: "ozone", name: "Ozone layer depletion", focus: "CFCs and the ozone hole" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "maths",
+    name: "Mathematics",
+    icon: "📐",
+    tagline: "Numbers to probability",
+    accent: "#4f46e5", // indigo
+    chapters: [
+      {
+        id: "ch-real",
+        name: "Real Numbers",
+        topics: [
+          { id: "euclid", name: "Euclid's division lemma and algorithm", focus: "gcd via repeated division" },
+          { id: "fundamental", name: "Fundamental Theorem of Arithmetic", focus: "Prime factorisation; HCF × LCM" },
+          { id: "irrationals", name: "Proving irrationality", focus: "√2, √3 method of contradiction" },
+        ],
+      },
+      {
+        id: "ch-polynomials",
+        name: "Polynomials",
+        topics: [
+          { id: "zeroes", name: "Zeroes of a polynomial", focus: "Relationship between zeroes and coefficients" },
+          { id: "division", name: "Division algorithm", focus: "p(x) = g(x)·q(x) + r(x)" },
+        ],
+      },
+      {
+        id: "ch-pair-linear",
+        name: "Pair of Linear Equations in Two Variables",
+        topics: [
+          { id: "methods", name: "Substitution, elimination, cross-multiplication", focus: "Solving pairs of equations" },
+          { id: "graphical", name: "Graphical representation", focus: "Consistent / inconsistent / dependent" },
+          { id: "word-problems", name: "Word problems", focus: "Setting up equations from situations" },
+        ],
+      },
+      {
+        id: "ch-quadratic",
+        name: "Quadratic Equations",
+        topics: [
+          { id: "factorisation", name: "Solving by factorisation", focus: "Splitting the middle term" },
+          { id: "formula", name: "Quadratic formula and discriminant", focus: "x = (−b ± √(b²−4ac))/2a; nature of roots" },
+          { id: "apps", name: "Applications of quadratic equations", focus: "Area / time / distance problems" },
+        ],
+      },
+      {
+        id: "ch-ap",
+        name: "Arithmetic Progressions",
+        topics: [
+          { id: "nth-term", name: "nth term of an AP", focus: "a + (n−1)d" },
+          { id: "sum", name: "Sum of first n terms", focus: "Sₙ = n/2 [2a + (n−1)d] and applications" },
+        ],
+      },
+      {
+        id: "ch-triangles",
+        name: "Triangles",
+        topics: [
+          { id: "similarity", name: "Criteria for similarity", focus: "AA, SAS, SSS" },
+          { id: "bpt", name: "Basic Proportionality Theorem", focus: "Thales' theorem and its converse" },
+          { id: "pythagoras", name: "Pythagoras theorem", focus: "Proof and applications" },
+        ],
+      },
+      {
+        id: "ch-coord",
+        name: "Coordinate Geometry",
+        topics: [
+          { id: "distance", name: "Distance formula", focus: "√((x₂−x₁)² + (y₂−y₁)²)" },
+          { id: "section", name: "Section formula and midpoint", focus: "Finding points dividing a segment" },
+          { id: "area", name: "Area of a triangle from coordinates", focus: "Determinant formula" },
+        ],
+      },
+      {
+        id: "ch-trig",
+        name: "Introduction to Trigonometry",
+        topics: [
+          { id: "ratios", name: "Trigonometric ratios", focus: "sin, cos, tan, cosec, sec, cot" },
+          { id: "identities", name: "Trigonometric identities", focus: "sin²θ + cos²θ = 1 and related" },
+          { id: "standard-angles", name: "Values for standard angles", focus: "0°, 30°, 45°, 60°, 90°" },
+        ],
+      },
+      {
+        id: "ch-trig-apps",
+        name: "Some Applications of Trigonometry",
+        topics: [
+          { id: "elevation", name: "Angle of elevation and depression", focus: "Setting right triangles from word problems" },
+        ],
+      },
+      {
+        id: "ch-circles",
+        name: "Circles",
+        topics: [
+          { id: "tangents", name: "Tangents to a circle", focus: "Tangent ⊥ radius; lengths from an external point" },
+        ],
+      },
+      {
+        id: "ch-areas-circles",
+        name: "Areas Related to Circles",
+        topics: [
+          { id: "sector-segment", name: "Sector and segment", focus: "Area of sector Θ/360 × πr²; segment area" },
+        ],
+      },
+      {
+        id: "ch-surface-vol",
+        name: "Surface Areas and Volumes",
+        topics: [
+          { id: "solids", name: "Combination of solids", focus: "Cuboid, cylinder, cone, sphere, hemisphere" },
+          { id: "conversion", name: "Conversion and frustum", focus: "Melting/recasting; frustum of a cone" },
+        ],
+      },
+      {
+        id: "ch-statistics",
+        name: "Statistics",
+        topics: [
+          { id: "mean", name: "Mean of grouped data", focus: "Direct, assumed-mean, step-deviation" },
+          { id: "median-mode", name: "Median and mode", focus: "Formulae; graphical (ogive) determination" },
+        ],
+      },
+      {
+        id: "ch-probability",
+        name: "Probability",
+        topics: [
+          { id: "classical", name: "Classical probability", focus: "favourable outcomes / total outcomes" },
+          { id: "experiments", name: "Dice, coins, cards problems", focus: "Sample spaces and counting" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "social-science",
+    name: "Social Science",
+    icon: "🌏",
+    tagline: "History · Geography · Civics · Economics",
+    accent: "#b45309", // amber-brown
+    chapters: [
+      {
+        id: "ch-nationalism-europe",
+        name: "The Rise of Nationalism in Europe",
+        branch: "History",
+        topics: [
+          { id: "french-impact", name: "Nationalism before and after the French Revolution", focus: "Ideas of the nation-state" },
+          { id: "germany-italy", name: "Unification of Germany and Italy", focus: "Bismarck and Cavour" },
+          { id: "visualising", name: "Visualising the nation", focus: "Allegory and symbols" },
+        ],
+      },
+      {
+        id: "ch-nationalism-india",
+        name: "Nationalism in India",
+        branch: "History",
+        topics: [
+          { id: "non-cooperation", name: "Non-Cooperation and Civil Disobedience", focus: "Gandhian methods of protest" },
+          { id: "salt-march", name: "The Salt March", focus: "Dandi March, 1930" },
+          { id: "dalit-movts", name: "Limits and participation", focus: "Dalit and peasant involvement" },
+        ],
+      },
+      {
+        id: "ch-global-world",
+        name: "The Making of a Global World",
+        branch: "History",
+        topics: [
+          { id: "premodern", name: "Pre-modern world and silk routes", focus: "Early global connections" },
+          { id: "great-depression", name: "Nineteenth century and the Great Depression", focus: "Trade, migration, crisis" },
+        ],
+      },
+      {
+        id: "ch-industrialisation",
+        name: "The Age of Industrialisation",
+        branch: "History",
+        topics: [
+          { id: "factory", name: "Before and onset of factories", focus: "Handicrafts vs machine industry" },
+          { id: "indian-industry", name: "Industrialisation in the colonies", focus: "Indian textiles in the world market" },
+        ],
+      },
+      {
+        id: "ch-print-culture",
+        name: "Print Culture and the Modern World",
+        branch: "History",
+        topics: [
+          { id: "print-genesis", name: "The first printed books", focus: "China, Japan, Europe (Gutenberg)" },
+          { id: "print-india", name: "Print and the growth of a reading public in India", focus: "Press and reform" },
+        ],
+      },
+      {
+        id: "ch-resources",
+        name: "Resources and Development",
+        branch: "Geography",
+        topics: [
+          { id: "resource-types", name: "Types of resources", focus: "Renewable / non-renewable; ownership" },
+          { id: "soil", name: "Soil as a resource", focus: "Soil types and erosion; conservation" },
+          { id: "land-use", name: "Land use and land degradation", focus: "Patterns and remedies" },
+        ],
+      },
+      {
+        id: "ch-forests",
+        name: "Forest and Wildlife Resources",
+        branch: "Geography",
+        topics: [
+          { id: "biodiversity", name: "Biodiversity in India", focus: "Threatened species and conservation" },
+        ],
+      },
+      {
+        id: "ch-water",
+        name: "Water Resources",
+        branch: "Geography",
+        topics: [
+          { id: "water-scarce", name: "Water scarcity and conservation", focus: "Rainwater harvesting" },
+          { id: "dams", name: "Multipurpose river projects", focus: "Benefits and drawbacks; Narmada examples" },
+        ],
+      },
+      {
+        id: "ch-agriculture",
+        name: "Agriculture",
+        branch: "Geography",
+        topics: [
+          { id: "crops", name: "Major food and cash crops", focus: "Rice, wheat, sugarcane, jute, cotton" },
+          { id: "reform", name: "Agricultural reforms", focus: "Institutional and technological changes" },
+        ],
+      },
+      {
+        id: "ch-minerals",
+        name: "Minerals and Energy Resources",
+        branch: "Geography",
+        topics: [
+          { id: "minerals", name: "Minerals and mining", focus: "Ferrous, non-ferrous; distribution" },
+          { id: "energy", name: "Conventional and non-conventional energy", focus: "Coal, petroleum vs solar, wind, biogas" },
+        ],
+      },
+      {
+        id: "ch-manufacturing",
+        name: "Manufacturing Industries",
+        branch: "Geography",
+        topics: [
+          { id: "location", name: "Factors for industrial location", focus: "Agro, mineral, textile and IT industries" },
+        ],
+      },
+      {
+        id: "ch-lifelines",
+        name: "Lifelines of National Economy",
+        branch: "Geography",
+        topics: [
+          { id: "transport", name: "Transport — land, water, air", focus: "Road vs rail; trade routes" },
+          { id: "trade", name: "International trade", focus: "Imports and exports of India" },
+        ],
+      },
+      {
+        id: "ch-power-sharing",
+        name: "Power-sharing",
+        branch: "Civics",
+        topics: [
+          { id: "belgium-sri", name: "Belgium and Sri Lanka", focus: "Majoritarianism and accommodation" },
+          { id: "forms", name: "Forms of power-sharing", focus: "Horizontal, vertical, community, federated" },
+        ],
+      },
+      {
+        id: "ch-federalism",
+        name: "Federalism",
+        branch: "Civics",
+        topics: [
+          { id: "federal-union", name: "What makes India a federation", focus: "Union, state, concurrent lists" },
+          { id: "decentralisation", name: "Decentralisation and Panchayati Raj", focus: "Local self-government" },
+        ],
+      },
+      {
+        id: "ch-gender-caste",
+        name: "Gender, Religion and Caste",
+        branch: "Civics",
+        topics: [
+          { id: "gender", name: "Gender and politics", focus: "Women's political representation" },
+          { id: "caste", name: "Caste and politics", focus: "Caste in election and reservation" },
+        ],
+      },
+      {
+        id: "ch-parties",
+        name: "Political Parties",
+        branch: "Civics",
+        topics: [
+          { id: "party-system", name: "Parties and party system in India", focus: "National and state parties; coalitions" },
+          { id: "reforms", name: "Challenges and reforms", focus: "Money and muscle power; internal democracy" },
+        ],
+      },
+      {
+        id: "ch-democracy-outcomes",
+        name: "Outcomes of Democracy",
+        branch: "Civics",
+        topics: [
+          { id: "accountability", name: "Accountable and responsive government", focus: "How democracy fares on outcomes" },
+          { id: "inequality", name: "Economic growth and inequality", focus: "Evidence-based comparison" },
+        ],
+      },
+      {
+        id: "ch-development",
+        name: "Development",
+        branch: "Economics",
+        topics: [
+          { id: "development-ideas", name: "What development means", focus: "Goals and conflicting notions" },
+          { id: "indicators", name: "Income and other criteria", focus: "GDP, HDI, literacy" },
+          { id: "sustainability", name: "Sustainability of development", focus: "Non-renewable resources and future" },
+        ],
+      },
+      {
+        id: "ch-sectors",
+        name: "Sectors of the Indian Economy",
+        branch: "Economics",
+        topics: [
+          { id: "three-sectors", name: "Primary, secondary and tertiary sectors", focus: "GDP and employment shares" },
+          { id: "unorganised", name: "Organised vs unorganised sectors", focus: "Employment terms and protection" },
+        ],
+      },
+      {
+        id: "ch-money",
+        name: "Money and Credit",
+        branch: "Economics",
+        topics: [
+          { id: "money-forms", name: "Money and modern forms", focus: "Barter to currency; digital money" },
+          { id: "credit", name: "Credit and the role of banks", focus: "Terms of credit; formal vs informal lenders" },
+        ],
+      },
+      {
+        id: "ch-globalisation",
+        name: "Globalisation and the Indian Economy",
+        branch: "Economics",
+        topics: [
+          { id: "multinationals", name: "Production across countries", focus: "MNCs and global chains" },
+          { id: "trade-barriers", name: "Trade barriers and liberalisation", focus: "WTO and its impact" },
+        ],
+      },
+      {
+        id: "ch-consumer-rights",
+        name: "Consumer Rights",
+        branch: "Economics",
+        topics: [
+          { id: "consumer", name: "Consumer rights and COPRA", focus: "Rights, responsibilities, redressal" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "english",
+    name: "English",
+    icon: "📖",
+    tagline: "First Flight · Footprints Without Feet",
+    accent: "#be185d", // rose
+    chapters: [
+      {
+        id: "ch-letter-god",
+        name: "A Letter to God",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "faith", name: "Faith and irony — Lencho's faith", focus: "Comprehension and values" },
+        ],
+      },
+      {
+        id: "ch-nelson",
+        name: "Nelson Mandela: Long Walk to Freedom",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "freedom", name: "Freedom and courage", focus: "Apartheid; inaugural address" },
+        ],
+      },
+      {
+        id: "ch-two-stories",
+        name: "Two Stories about Flying",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "courage", name: "'His First Flight' and 'The Black Aeroplane'", focus: "Fear, courage, trust" },
+        ],
+      },
+      {
+        id: "ch-anne-frank",
+        name: "From the Diary of Anne Frank",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "diary", name: "Anne's diary and loneliness", focus: "Diary-entry writing; character study" },
+        ],
+      },
+      {
+        id: "ch-glimpses",
+        name: "Glimpses of India",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "culture", name: "A Baker from Goa · Coorg · Tea from Assam", focus: "Cultural notes and connectives" },
+        ],
+      },
+      {
+        id: "ch-mijbil",
+        name: "Mijbil the Otter",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "otter", name: "Gavin Maxwell and Mijbil", focus: "Bond with an animal" },
+        ],
+      },
+      {
+        id: "ch-madam-bus",
+        name: "Madam Rides the Bus",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "valli", name: "Valli's journey and innocence", focus: "Character; 'tight-lipped' maturity" },
+        ],
+      },
+      {
+        id: "ch-sermon",
+        name: "The Sermon at Benares",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "buddha", name: "Buddha's sermon on grief", focus: "Kisa Gotami's lamp story" },
+        ],
+      },
+      {
+        id: "ch-proposal",
+        name: "The Proposal",
+        branch: "First Flight (Prose)",
+        topics: [
+          { id: "farce", name: "A one-act farce by Chekhov", focus: "Drama, humour, characters" },
+        ],
+      },
+      {
+        id: "ch-poetry",
+        name: "First Flight Poetry",
+        branch: "First Flight (Poetry)",
+        topics: [
+          { id: "poems", name: "Key poems — Dust of Snow, Fire and Ice, Tiger in the Zoo, Amanda", focus: "Themes and poetic devices" },
+        ],
+      },
+      {
+        id: "ch-triumph-surgery",
+        name: "A Triumph of Surgery",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "tricki", name: "Mr Herriot and Tricki", focus: "Oversized love vs discipline" },
+        ],
+      },
+      {
+        id: "ch-thief-story",
+        name: "The Thief's Story",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "hari", name: "Anil and Hari Singh", focus: "Redemption and trust" },
+        ],
+      },
+      {
+        id: "ch-midnight-visitor",
+        name: "The Midnight Visitor",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "ausable", name: "Ausable and Max", focus: "Quick thinking, irony" },
+        ],
+      },
+      {
+        id: "ch-question-trust",
+        name: "A Question of Trust",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "horace", name: "Horace Danby", focus: "Crime and its cost" },
+        ],
+      },
+      {
+        id: "ch-footprints",
+        name: "Footprints Without Feet",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "griffin", name: "Griffin the invisible scientist", focus: "Science fiction; homelessness of genius" },
+        ],
+      },
+      {
+        id: "ch-making-scientist",
+        name: "The Making of a Scientist",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "richard", name: "Richard Ebright", focus: "Curiosity, dedication, research" },
+        ],
+      },
+      {
+        id: "ch-necklace",
+        name: "The Necklace",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "mathilde", name: "Mathilde Loisel", focus: "Pride and the price of vanity" },
+        ],
+      },
+      {
+        id: "ch-bholi",
+        name: "Bholi",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "bholi-char", name: "Bholi's transformation", focus: "Education, self-respect, speech" },
+        ],
+      },
+      {
+        id: "ch-book-earth",
+        name: "The Book that Saved the Earth",
+        branch: "Footprints Without Feet",
+        topics: [
+          { id: "play", name: "Fantasy play and the power of books", focus: "Drama; imagination" },
+        ],
+      },
+    ],
+  },
+];
+
+/* ---------------------------------- Lookups ---------------------------------- */
+
+export function getSubject(id: string): Subject | undefined {
+  return SUBJECTS.find((s) => s.id === id);
+}
+
+export function getChapter(subjectId: string, chapterId: string): Chapter | undefined {
+  return getSubject(subjectId)?.chapters.find((c) => c.id === chapterId);
+}
+
+export function getTopic(
+  subjectId: string,
+  chapterId: string,
+  topicId: string
+): { subject: Subject; chapter: Chapter; topic: NonNullable<Chapter["topics"][number]> } | null {
+  const subject = getSubject(subjectId);
+  const chapter = getChapter(subjectId, chapterId);
+  const topic = chapter?.topics.find((t) => t.id === topicId);
+  if (!subject || !chapter || !topic) return null;
+  return { subject, chapter, topic };
+}
+
+export function chapterBranches(subjectId: string): { branch: string; chapters: Chapter[] }[] {
+  const subject = getSubject(subjectId);
+  if (!subject) return [];
+  const groups = new Map<string, Chapter[]>();
+  for (const ch of subject.chapters) {
+    const key = ch.branch ?? "Chapters";
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(ch);
+  }
+  return [...groups.entries()].map(([branch, chapters]) => ({ branch, chapters }));
+}
+
+export function allTopics(): { subjectId: string; chapterId: string; topic: Chapter["topics"][number] }[] {
+  const out: { subjectId: string; chapterId: string; topic: Chapter["topics"][number] }[] = [];
+  for (const s of SUBJECTS) for (const c of s.chapters) for (const t of c.topics) out.push({ subjectId: s.id, chapterId: c.id, topic: t });
+  return out;
+}
+
+export function subjectOptions(): { id: SubjectId; name: string; icon: string }[] {
+  return SUBJECTS.map((s) => ({ id: s.id, name: s.name, icon: s.icon }));
+}
