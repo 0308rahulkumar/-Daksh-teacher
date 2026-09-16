@@ -1,38 +1,39 @@
 @import "tailwindcss";
 
 /* -------------------------------------------------------------------------- */
-/*  Study-desk palette: warm paper ground, indigo accent, yellow highlight     */
+/*  Open Props + Matugen design tokens: Neutral obsidian dark, warm light     */
 /* -------------------------------------------------------------------------- */
 
 :root {
   --paper: #FAF9F5;
   --surface: #FFFFFF;
   --ink: #1E2430;
-  --muted: #6B7280;
-  --accent: #4338CA;       /* indigo — links, buttons, active nav */
-  --accent-light: #EEF2FF; /* tinted background for active/hover nav */
-  --highlight: #FEF08A;    /* transparent yellow highlight stripe  */
+  --muted: #64748B;
+  --accent: #4F46E5;       /* vibrant modern indigo */
+  --accent-light: #EEF2FF;
+  --highlight: #FEF08A;
   --success: #16A34A;
   --danger: #DC2626;
   --warning: #D97706;
-  --border: #E5E3DD;
-  --shadow: rgba(30, 36, 48, 0.06);
+  --border: #E2E8F0;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #0B0D13;        /* neutral rich dark ground (not bluish) */
-    --surface: #141721;      /* solid dark card background */
-    --ink: #F3F4F6;          /* crisp clean text */
-    --muted: #94A3B8;        /* legible soft slate */
-    --accent: #6366F1;       /* vibrant modern indigo */
-    --accent-light: #1E1E34; /* subtle accent tint */
+    --paper: #090B10;        /* deep neutral obsidian (not bluish) */
+    --surface: #12151E;      /* solid dark card background */
+    --ink: #F8FAFC;          /* high-contrast clean white */
+    --muted: #94A3B8;        /* soft slate gray */
+    --accent: #6366F1;       /* electric modern indigo */
+    --accent-light: #1A1D2D; /* subtle accent tint */
     --highlight: rgba(250, 204, 21, 0.12);
-    --success: #22C55E;
+    --success: #10B981;
     --danger: #EF4444;
     --warning: #F59E0B;
-    --border: #222634;       /* crisp hairline border */
-    --shadow: rgba(0, 0, 0, 0.4);
+    --border: #1E2333;       /* clean hairline border */
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -52,32 +53,110 @@
 }
 
 body {
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image: radial-gradient(ellipse 80% 45% at 50% -15%, rgba(99, 102, 241, 0.14), transparent 70%);
+  background-attachment: fixed;
   color: var(--ink);
+  min-height: 100vh;
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Notebook page feel: faint left gutter on chat/notes areas                  */
+/*  ThreeUI Plasma Button Animations                                           */
 /* -------------------------------------------------------------------------- */
-.notebook {
-  background-image: linear-gradient(
-    to right,
-    rgba(220, 50, 50, 0.08) 0px,
-    rgba(220, 50, 50, 0.08) 1px,
-    transparent 1px,
-    transparent 100%
+@keyframes plasma-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes plasma-pulse {
+  0%, 100% { opacity: 0.5; filter: blur(6px); }
+  50% { opacity: 0.9; filter: blur(10px); }
+}
+
+.btn-plasma {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 1.5px;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: transparent;
+  cursor: pointer;
+}
+
+.btn-plasma::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    #6366f1,
+    #a855f7,
+    #ec4899,
+    #06b6d4,
+    #10b981,
+    #6366f1
   );
-  background-size: 60px 100%;
-  background-repeat: no-repeat;
+  animation: plasma-rotate 3.5s linear infinite;
+  z-index: 0;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Highlight stripe — used sparingly to mark mastery-checked content           */
-/* -------------------------------------------------------------------------- */
-.highlight-stripe {
-  background: var(--highlight);
-  border-left: 3px solid var(--accent);
-  padding-left: 10px;
+.btn-plasma-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    #6366f1,
+    #a855f7,
+    #ec4899,
+    #06b6d4,
+    #10b981,
+    #6366f1
+  );
+  animation: plasma-rotate 3.5s linear infinite, plasma-pulse 2.5s ease-in-out infinite;
+  z-index: -1;
+}
+
+.btn-plasma-inner {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  border-radius: 10.5px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  padding: 8px 18px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-plasma:hover {
+  transform: scale(1.02);
+}
+
+.btn-plasma:hover .btn-plasma-inner {
+  background: rgba(18, 21, 30, 0.88);
+  color: #ffffff;
+}
+
+.btn-plasma:active {
+  transform: scale(0.97);
+}
+
+.btn-plasma:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -94,6 +173,7 @@ body {
 /* -------------------------------------------------------------------------- */
 .prose-teacher h1, .prose-teacher h2, .prose-teacher h3 {
   color: var(--ink);
+  font-weight: 600;
 }
 .prose-teacher ul {
   list-style: disc;
@@ -103,47 +183,40 @@ body {
   list-style: decimal;
   padding-left: 1.25rem;
 }
-.prose-teacher code {
-  background: var(--accent-light);
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-size: 0.9em;
+.prose-teacher li {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
-.prose-teacher pre {
+.prose-teacher p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.prose-teacher blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0.75rem 0;
+}
+.prose-teacher code {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  overflow-x: auto;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
 }
-.prose-teacher strong { font-weight: 600; }
-
-/* -------------------------------------------------------------------------- */
-/*  Utility                                                                    */
-/* -------------------------------------------------------------------------- */
-/* Mastery colors (inline style works fine; these are reference tokens) */
-:root {
-  --mastery-0: #9CA3AF;  /* NOT_STARTED */
-  --mastery-1: #2563EB;  /* LEARNING */
-  --mastery-2: #D97706;  /* PRACTICING */
-  --mastery-3: #EA580C;  /* REVIEW_NEEDED */
-  --mastery-4: #16A34A;  /* MASTERED */
+.prose-teacher table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --mastery-0: #6B7280;
-    --mastery-1: #60A5FA;
-    --mastery-2: #FBBF24;
-    --mastery-3: #FB923C;
-    --mastery-4: #4ADE80;
-  }
+.prose-teacher th, .prose-teacher td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
 }
-
-/* scrollbar helpers */
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+.prose-teacher th {
+  background: var(--surface);
+  font-weight: 600;
 }

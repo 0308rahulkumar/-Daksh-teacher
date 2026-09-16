@@ -154,9 +154,12 @@ export default function DashboardPage() {
             <button
               type="submit"
               disabled={!quickInput.trim()}
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition-all hover:bg-accent/90 disabled:opacity-50"
+              className="btn-plasma shrink-0"
             >
-              Ask Daksh ⚡
+              <span className="btn-plasma-glow" aria-hidden="true" />
+              <span className="btn-plasma-inner text-sm py-2 px-4">
+                Ask Daksh ⚡
+              </span>
             </button>
           </form>
 

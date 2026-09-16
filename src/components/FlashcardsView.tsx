@@ -38,7 +38,7 @@ export function FlashcardsView({ subjectId, chapterId, topicId, topicName }: Fla
       <EmptyState
         title="Active-Recall Flashcards"
         action={
-          <Button onClick={() => generate()} className="text-sm px-6 py-2.5 font-semibold shadow-xs">
+          <Button variant="plasma" onClick={() => generate()}>
             🃏 Generate Flashcards
           </Button>
         }

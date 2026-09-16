@@ -61,7 +61,7 @@ export function NotesView({ subjectId, chapterId, topicId, topicName }: NotesVie
       <EmptyState
         title="Revision Notes"
         action={
-          <Button onClick={() => generate()} className="text-sm px-6 py-2.5 font-semibold shadow-xs">
+          <Button variant="plasma" onClick={() => generate()}>
             ✨ Generate Revision Notes
           </Button>
         }
