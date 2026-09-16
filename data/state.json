@@ -1,0 +1,21 @@
+{
+  "profile": {
+    "name": "Student",
+    "klass": "Class 10",
+    "board": "CBSE",
+    "medium": "English",
+    "subjects": [
+      "science",
+      "maths",
+      "social-science",
+      "english"
+    ],
+    "dailyMinutes": 60,
+    "createdAt": "2026-09-16T04:16:53.935Z"
+  },
+  "progress": {},
+  "mistakes": [],
+  "quizHistory": [],
+  "studySessions": [],
+  "updatedAt": "2026-09-16T04:16:53.935Z"
+}

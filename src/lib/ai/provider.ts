@@ -27,9 +27,9 @@ const ANTHROPIC_IDS: Record<ModelRole, string> = {
 };
 
 const GOOGLE_IDS: Record<ModelRole, string> = {
-  teacher: "gemini-2.0-flash",
-  deep: "gemini-2.5-flash-preview-05-20",
-  fast: "gemini-2.0-flash-lite",
+  teacher: "gemini-3.6-flash",
+  deep: "gemini-3.6-flash",
+  fast: "gemini-3.6-flash",
 };
 
 /* -------------------------------------------------------------------------- */
@@ -41,8 +41,11 @@ export type ProviderName = "gateway" | "anthropic" | "google" | "none";
 /** Returns which AI provider is configured (first match wins). */
 export function activeProvider(): ProviderName {
   if (process.env.AI_GATEWAY_API_KEY) return "gateway";
-  if (process.env.ANTHROPIC_API_KEY) return "anthropic";
+  // Check Gemini BEFORE Anthropic because the @ai-sdk/anthropic package can
+  // auto-inject ANTHROPIC_API_KEY pointing at a local proxy that may not be
+  // running. We only trust an explicit Anthropic key (starts with "sk-ant-").
   if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) return "google";
+  if (process.env.ANTHROPIC_API_KEY?.startsWith("sk-ant-")) return "anthropic";
   return "none";
 }
 
