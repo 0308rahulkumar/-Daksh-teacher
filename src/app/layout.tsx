@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
+import { Rubik, Newsreader } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { ThreeCanvas } from "@/components/ThreeCanvas";
@@ -10,6 +10,12 @@ const rubik = Rubik({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const newsreader = Newsreader({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
   title: "Daksh — Class 10 AI Teacher",
   description: "A personal AI teacher for Class 10 board exam preparation.",
@@ -17,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={rubik.variable}>
+    <html lang="en" className={`${rubik.variable} ${newsreader.variable}`}>
       <body className="min-h-svh font-sans antialiased relative">
         {/* ThreeUI Interactive 3D Ambient WebGL Background */}
         <ThreeCanvas />

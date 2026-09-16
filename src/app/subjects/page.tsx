@@ -4,6 +4,34 @@ import Link from "next/link";
 import { useStateBundle } from "@/hooks/useAppState";
 import { SUBJECTS, subjectOptions } from "@/lib/syllabus";
 import { Button, Card, CardHeader, EmptyState, ProgressBar, SectionTitle } from "@/components/ui";
+import { SubjectBookShowcase } from "@/components/SubjectBookShowcase";
+
+const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: string; bg: string }> = {
+  science: {
+    icon: "🔬",
+    badge: "Physics • Chemistry • Biology",
+    color: "#059669",
+    bg: "from-emerald-500/10 to-teal-500/5",
+  },
+  mathematics: {
+    icon: "📐",
+    badge: "Algebra • Geometry • Trig",
+    color: "#D97706",
+    bg: "from-amber-500/10 to-orange-500/5",
+  },
+  "social-science": {
+    icon: "🌍",
+    badge: "History • Civics • Geo • Eco",
+    color: "#D97706",
+    bg: "from-amber-500/10 to-orange-500/5",
+  },
+  english: {
+    icon: "📖",
+    badge: "First Flight • Footprints",
+    color: "#E11D48",
+    bg: "from-rose-500/10 to-pink-500/5",
+  },
+};
 
 export default function SubjectsIndexPage() {
   const { state, loading, error, refresh } = useStateBundle();
@@ -36,14 +64,20 @@ export default function SubjectsIndexPage() {
       }
     }
     const pct = total ? Math.round((mastered / total) * 100) : 0;
-    return { ...s, ...subject, total, mastered, practicing, pct };
+    const theme = SUBJECT_THEMES[s.id] ?? {
+      icon: "📚",
+      badge: "Class 10",
+      color: "#4338CA",
+      bg: "from-accent/10 to-transparent",
+    };
+    return { ...s, ...subject, total, mastered, practicing, pct, theme };
   });
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-ink">Subjects</h1>
+          <h1 className="text-3xl font-serif font-bold text-ink">Class 10 Subject Volumes</h1>
           <p className="text-sm text-muted">{state.profile.board} · {state.profile.medium} · {state.profile.klass}</p>
         </div>
         <div className="flex gap-2">
@@ -51,20 +85,11 @@ export default function SubjectsIndexPage() {
         </div>
       </div>
 
-      <SectionTitle title="Choose a subject" action={<span className="text-sm text-muted">{cards.length} subjects</span>} />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map((c) => (
-          <Link key={c.id} href={`/subjects/${c.id}`}>
-            <Card accent={c.accent}>
-              <CardHeader title={c.name} action={<span className="text-xs text-muted">{c.chapters.length} chapters</span>} />
-              <p className="text-sm text-muted mb-2">{c.tagline}</p>
-              <ProgressBar value={c.mastered} max={c.total} color={c.accent} height={8} />
-              <p className="mt-2 text-sm text-ink font-medium">{c.pct}% mastered</p>
-              <p className="text-xs text-muted">{c.mastered} mastered · {c.practicing} learning · {c.total - c.mastered - c.practicing} not started</p>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      <SectionTitle
+        title="Physical Volumes & NCERT Guides"
+        action={<span className="text-xs text-muted">Click any book to open and read chapters</span>}
+      />
+      <SubjectBookShowcase subjects={cards} />
     </div>
   );
 }

@@ -110,7 +110,7 @@ export function ProgressBar({
 export function SectionTitle({ title, action }: { title: string; action?: ReactNode }) {
   return (
     <div className="mb-4 flex items-end justify-between gap-4">
-      <h2 className="text-xl font-semibold tracking-tight text-ink">{title}</h2>
+      <h2 className="text-xl font-serif font-bold tracking-tight text-ink">{title}</h2>
       {action}
     </div>
   );

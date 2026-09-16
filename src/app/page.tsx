@@ -8,6 +8,7 @@ import { SUBJECTS, subjectOptions } from "@/lib/syllabus";
 import { Button, Card, CardHeader, EmptyState, MasteryBadge, ProgressBar, SectionTitle } from "@/components/ui";
 import { Interactive3DCard } from "@/components/Interactive3DCard";
 import { Scene } from "@/components/Scene";
+import { SubjectBookShowcase } from "@/components/SubjectBookShowcase";
 
 const QUICK_DOUBTS = [
   { label: "⚡ Ohm's Law Analogy", prompt: "Explain Ohm's Law (V = IR) using a simple real-life analogy from zero." },
@@ -262,55 +263,13 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Interactive Subject Cards */}
+      {/* Interactive 3D Subject Book Showcase */}
       <div>
         <SectionTitle
-          title="Class 10 CBSE Subjects"
-          action={<span className="text-xs text-muted">Select a subject to practice topics & quizzes</span>}
+          title="CBSE Class 10 Volumes & Curriculum"
+          action={<span className="text-xs text-muted">Click any book to open and flip through chapters</span>}
         />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {subjStats.map((s) => (
-            <Interactive3DCard key={s.id} maxRotation={6}>
-              <Link href={`/subjects/${s.id}`} className="group block">
-                <div
-                  className="relative overflow-hidden rounded-xl border border-border bg-surface/90 backdrop-blur-xs p-5 transition-all duration-200 hover:border-opacity-100 hover:shadow-lg"
-                  style={{ borderLeftWidth: "4px", borderLeftColor: s.theme.color }}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <span className="grid h-12 w-12 place-items-center rounded-xl bg-paper text-2xl shadow-2xs group-hover:scale-110 transition-transform">
-                        {s.theme.icon}
-                      </span>
-                      <div>
-                        <h3 className="text-lg font-bold text-ink group-hover:text-accent transition-colors">
-                          {s.name}
-                        </h3>
-                        <p className="text-xs text-muted">{s.theme.badge}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-base font-extrabold" style={{ color: s.theme.color }}>
-                        {s.pct}%
-                      </span>
-                      <p className="text-[11px] text-muted">{s.mastered}/{s.total} mastered</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4">
-                    <ProgressBar value={s.mastered} max={s.total} color={s.theme.color} height={6} />
-                  </div>
-
-                  <div className="mt-3 flex items-center justify-between text-xs">
-                    <span className="text-muted">{s.chapters.length} Chapters • NCERT Syllabus</span>
-                    <span className="font-semibold transition-transform group-hover:translate-x-1.5" style={{ color: s.theme.color }}>
-                      Open Subject →
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </Interactive3DCard>
-          ))}
-        </div>
+        <SubjectBookShowcase subjects={subjStats} />
       </div>
 
       {/* Quick Launch Power Actions */}
