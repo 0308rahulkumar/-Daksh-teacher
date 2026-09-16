@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import Link from "next/link";
 import { useStateBundle } from "@/hooks/useAppState";
 import { getSubject, chapterBranches } from "@/lib/syllabus";
@@ -10,8 +11,8 @@ interface SubjectPageProps {
   params: Promise<{ subjectId: string }>;
 }
 
-export default async function SubjectPage({ params }: SubjectPageProps) {
-  const { subjectId } = await params;
+export default function SubjectPage({ params }: SubjectPageProps) {
+  const { subjectId } = use(params);
   const subject = getSubject(subjectId);
   if (!subject) notFound();
 

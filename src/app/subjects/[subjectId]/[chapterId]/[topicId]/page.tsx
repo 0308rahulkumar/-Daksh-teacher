@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import Link from "next/link";
 import { useStateBundle, postResult } from "@/hooks/useAppState";
 import { getTopic } from "@/lib/syllabus";
@@ -17,8 +17,8 @@ interface TopicHubPageProps {
   params: Promise<{ subjectId: string; chapterId: string; topicId: string }>;
 }
 
-export default async function TopicHubPage({ params }: TopicHubPageProps) {
-  const { subjectId, chapterId, topicId } = await params;
+export default function TopicHubPage({ params }: TopicHubPageProps) {
+  const { subjectId, chapterId, topicId } = use(params);
   const found = getTopic(subjectId, chapterId, topicId);
   if (!found) notFound();
 

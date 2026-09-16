@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import Link from "next/link";
 import { useStateBundle } from "@/hooks/useAppState";
 import { getChapter, getSubject } from "@/lib/syllabus";
@@ -10,8 +11,8 @@ interface ChapterPageProps {
   params: Promise<{ subjectId: string; chapterId: string }>;
 }
 
-export default async function ChapterPage({ params }: ChapterPageProps) {
-  const { subjectId, chapterId } = await params;
+export default function ChapterPage({ params }: ChapterPageProps) {
+  const { subjectId, chapterId } = use(params);
   const subject = getSubject(subjectId);
   const chapter = getChapter(subjectId, chapterId);
   if (!subject || !chapter) notFound();
