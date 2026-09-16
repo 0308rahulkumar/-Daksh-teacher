@@ -58,7 +58,7 @@ export function ThreeCanvas() {
     // Warm, diverse subject colors (Emerald, Violet, Warm Amber, Rose)
     const subjectColors = [
       new THREE.Color("#10B981"), // Science
-      new THREE.Color("#6366F1"), // Math
+      new THREE.Color("#D97706"), // Math
       new THREE.Color("#F59E0B"), // History/Social
       new THREE.Color("#EC4899"), // English
     ];

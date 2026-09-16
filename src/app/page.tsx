@@ -27,8 +27,8 @@ const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: strin
   mathematics: {
     icon: "📐",
     badge: "Algebra • Geometry • Trig",
-    color: "#4F46E5",
-    bg: "from-indigo-500/10 to-blue-500/5",
+    color: "#D97706",
+    bg: "from-amber-500/10 to-orange-500/5",
   },
   "social-science": {
     icon: "🌍",
@@ -354,9 +354,9 @@ export default function DashboardPage() {
           </Link>
 
           <Link href="/profile" className="group">
-            <div className="h-full rounded-xl border border-border bg-surface p-4 transition-all hover:border-blue-500/60 hover:shadow-xs">
+            <div className="h-full rounded-xl border border-border bg-surface p-4 transition-all hover:border-amber-500/60 hover:shadow-xs">
               <span className="text-2xl">⚙️</span>
-              <h4 className="mt-2 font-semibold text-ink group-hover:text-blue-600 transition-colors">
+              <h4 className="mt-2 font-semibold text-ink group-hover:text-amber-500 transition-colors">
                 My Target & Goals
               </h4>
               <p className="mt-1 text-xs text-muted">
@@ -379,7 +379,7 @@ export default function DashboardPage() {
           </span>
         </div>
         <p className="mb-4 text-xs text-muted">
-          A deep-blue laboratory field with a luminous plasma control button from ThreeUI. Hover and interact with the quantum field below:
+          Interactive WebGL plasma control field from ThreeUI with physics-reactive luminous canvas. Hover and interact with the quantum control below:
         </p>
         <div className="h-[360px] w-full overflow-hidden rounded-xl border border-border/80 shadow-inner">
           <Scene />

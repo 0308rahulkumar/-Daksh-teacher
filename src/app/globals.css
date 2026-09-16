@@ -5,35 +5,35 @@
 /* -------------------------------------------------------------------------- */
 
 :root {
-  --paper: #FAF9F5;
-  --surface: #FFFFFF;
-  --ink: #1E2430;
-  --muted: #64748B;
-  --accent: #4F46E5;       /* vibrant modern indigo */
-  --accent-light: #EEF2FF;
-  --highlight: #FEF08A;
+  --paper: #FAF8F5;        /* warm natural study parchment */
+  --surface: #FFFFFF;      /* clean crisp card background */
+  --ink: #1C1917;          /* warm stone dark text (neutral 900) */
+  --muted: #78716C;        /* warm stone muted text */
+  --accent: #D97706;       /* rich warm amber/saffron gold (scholastic focus) */
+  --accent-light: #FEF3C7; /* warm golden glow */
+  --highlight: rgba(245, 158, 11, 0.15);
   --success: #16A34A;
   --danger: #DC2626;
   --warning: #D97706;
-  --border: #E2E8F0;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --border: #E7E5E4;       /* clean warm neutral stone border */
+  --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -2px rgba(0, 0, 0, 0.03);
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #090B10;        /* deep neutral obsidian (not bluish) */
-    --surface: #12151E;      /* solid dark card background */
-    --ink: #F8FAFC;          /* high-contrast clean white */
-    --muted: #94A3B8;        /* soft slate gray */
-    --accent: #6366F1;       /* electric modern indigo */
-    --accent-light: #1A1D2D; /* subtle accent tint */
-    --highlight: rgba(250, 204, 21, 0.12);
+    --paper: #0C0D10;        /* true obsidian charcoal - zero blue hue */
+    --surface: #14161B;      /* deep neutral card surface - zero blue */
+    --ink: #F4F4F5;          /* crisp off-white */
+    --muted: #9496A1;        /* neutral stone gray */
+    --accent: #F59E0B;       /* vibrant golden amber / ember flame */
+    --accent-light: rgba(245, 158, 11, 0.12); /* warm golden ambient tint */
+    --highlight: rgba(245, 158, 11, 0.18);
     --success: #10B981;
     --danger: #EF4444;
     --warning: #F59E0B;
-    --border: #1E2333;       /* clean hairline border */
-    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+    --border: #23262E;       /* crisp neutral hairline border - zero blue */
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 4px 10px -4px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -54,7 +54,7 @@
 
 body {
   background-color: var(--paper);
-  background-image: radial-gradient(ellipse 80% 45% at 50% -15%, rgba(99, 102, 241, 0.14), transparent 70%);
+  background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(245, 158, 11, 0.05), transparent 70%);
   background-attachment: fixed;
   color: var(--ink);
   min-height: 100vh;
@@ -95,12 +95,12 @@ body {
   height: 200%;
   background: conic-gradient(
     from 0deg,
-    #6366f1,
-    #a855f7,
-    #ec4899,
-    #06b6d4,
+    #f59e0b,
+    #ea580c,
+    #ef4444,
+    #8b5cf6,
     #10b981,
-    #6366f1
+    #f59e0b
   );
   animation: plasma-rotate 3.5s linear infinite;
   z-index: 0;
@@ -112,12 +112,12 @@ body {
   border-radius: inherit;
   background: conic-gradient(
     from 0deg,
-    #6366f1,
-    #a855f7,
-    #ec4899,
-    #06b6d4,
+    #f59e0b,
+    #ea580c,
+    #ef4444,
+    #8b5cf6,
     #10b981,
-    #6366f1
+    #f59e0b
   );
   animation: plasma-rotate 3.5s linear infinite, plasma-pulse 2.5s ease-in-out infinite;
   z-index: -1;

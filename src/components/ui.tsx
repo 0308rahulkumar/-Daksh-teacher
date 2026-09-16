@@ -40,11 +40,11 @@ export function CardHeader({ title, action }: { title: string; action?: ReactNod
 /* -------------------------------------------------------------------------- */
 
 const MASTERY_STYLES: Record<MasteryLevel, string> = {
-  NOT_STARTED: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
-  LEARNING: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  NOT_STARTED: "bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-400",
+  LEARNING: "bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300",
   PRACTICING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
   REVIEW_NEEDED: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300",
-  MASTERED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+  MASTERED: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
 };
 
 export function MasteryBadge({
