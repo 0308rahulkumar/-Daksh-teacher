@@ -1,6 +1,14 @@
 # Daksh — Class 10 AI Teacher
 
-A personal AI teacher for Class 10 board exam preparation in India (CBSE / ICSE / State Board). Built with Next.js 15, Vercel AI SDK 7, and the Anthropic Claude models.
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Gemini](https://img.shields.io/badge/Gemini-Free-4285F4)
+![Claude](https://img.shields.io/badge/Claude-Optional-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+A personal AI teacher for Class 10 board exam preparation in India (CBSE / ICSE / State Board). Built with Next.js 15, Vercel AI SDK 7, and multi-provider AI support (Google Gemini free tier + Anthropic Claude).
+
+> **🆓 Runs for FREE** — uses Google Gemini's free API tier. No billing or credit card needed.
 
 ## Features
 
@@ -13,14 +21,47 @@ A personal AI teacher for Class 10 board exam preparation in India (CBSE / ICSE 
 - **Learning engine**: Mastery scoring, mistake notebook, spaced-repetition scheduler
 - **Local-first persistence**: JSON file store (`data/state.json`) — zero setup, swappable for Postgres
 - **Exam-oriented**: Board-level questions, marking-scheme guidance, keyword coaching
+- **Multi-provider AI**: Works with Google Gemini (free) or Anthropic Claude (paid) — your choice
 
 ## Quick Start
 
 ```bash
 cd teaching-agent
-cp .env.example .env.local   # add your ANTHROPIC_API_KEY (or AI_GATEWAY_API_KEY)
+cp .env.example .env.local   # add your API key (see below)
+npm install
 npm run dev                  # http://localhost:3000
 ```
+
+### Getting a Free API Key (2 minutes)
+
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+2. Sign in with your Google account
+3. Click **"Create API Key"**
+4. Paste it in `.env.local`:
+   ```
+   GOOGLE_GENERATIVE_AI_API_KEY=AIzaSy...your-key-here
+   ```
+5. Run `npm run dev` — done! 🎉
+
+## AI Configuration
+
+The app supports **multiple AI providers** with automatic fallback:
+
+```
+Priority (first match wins):
+  1. AI_GATEWAY_API_KEY    →  Vercel AI Gateway
+  2. ANTHROPIC_API_KEY     →  Claude (Sonnet/Opus/Haiku)
+  3. GOOGLE_GENERATIVE_AI_API_KEY  →  Gemini (Flash/Flash-Lite)  ← FREE
+  4. None set              →  friendly setup banner
+```
+
+### Model Mapping
+
+| Role | Google Gemini (Free) | Anthropic Claude (Paid) | Use case |
+|------|---------------------|------------------------|----------|
+| teacher | `gemini-2.0-flash` | `claude-sonnet-5` | Interactive teaching, explanations, chat |
+| deep | `gemini-2.5-flash-preview-05-20` | `claude-opus-5` | Hard math, deep analysis, answer evaluation |
+| fast | `gemini-2.0-flash-lite` | `claude-haiku-4.5` | Quick lookups, simple MCQs, flashcards |
 
 ## Project Structure
 
@@ -53,7 +94,7 @@ teaching-agent/
 │   │   └── useGenerator.ts          # cached AI generation hook
 │   ├── lib/
 │   │   ├── ai/
-│   │   │   ├── provider.ts          # model router (Sonnet 5 / Opus 5 / Haiku 4.5)
+│   │   │   ├── provider.ts          # model router (Gemini / Claude / Gateway)
 │   │   │   ├── prompts.ts           # master teacher system prompt + mode tags
 │   │   │   └── generators.ts        # typed AI generators (Output.object / array)
 │   │   ├── learning.ts              # mastery scoring, spaced repetition, due topics
@@ -65,23 +106,9 @@ teaching-agent/
 ├── .env.example                     # copy to .env.local
 ├── next.config.ts
 ├── package.json
+├── LICENSE
 └── tsconfig.json
 ```
-
-## AI Configuration
-
-The app uses **Vercel AI SDK 7** streaming with `useChat` and `DefaultChatTransport`.
-
-| Role | Model (Gateway) | Model (Direct) | Use case |
-|------|-----------------|----------------|----------|
-| teacher | `anthropic/claude-sonnet-5` | `claude-sonnet-5` | Interactive teaching, explanations, chat |
-| deep | `anthropic/claude-opus-5` | `claude-opus-5` | Hard math, deep analysis, answer evaluation |
-| fast | `anthropic/claude-haiku-4.5` | `claude-haiku-4-5-20251001` | Quick lookups, simple MCQs, flashcards |
-
-**Provider selection**:
-- If `AI_GATEWAY_API_KEY` is set → uses Vercel AI Gateway (`gateway('anthropic/…')`).
-- Else if `ANTHROPIC_API_KEY` is set → uses direct Anthropic (`anthropic('claude-…')`).
-- Neither set → chat shows a friendly setup banner; generators return a clear error.
 
 ## Design System (globals.css)
 
@@ -102,14 +129,14 @@ The app uses **Vercel AI SDK 7** streaming with `useChat` and `DefaultChatTransp
 
 ## Deployment
 
-Deploy to **Vercel** for the best experience (AI Gateway, Fluid Compute, zero-config deploy):
+Deploy to **Vercel** for the best experience (zero-config deploy):
 
 ```bash
 npm i -g vercel
 vercel
 ```
 
-On Vercel, add `AI_GATEWAY_API_KEY` (Project Settings → Environment Variables) for production AI access.
+On Vercel, add `GOOGLE_GENERATIVE_AI_API_KEY` (Project Settings → Environment Variables) for free AI access. Optionally add `ANTHROPIC_API_KEY` or `AI_GATEWAY_API_KEY` for Claude.
 
 ## Extending the Syllabus
 

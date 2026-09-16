@@ -10,13 +10,18 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 function missingKeyResponse(): Response {
-  const where = process.env.AI_GATEWAY_API_KEY ? "The AI Gateway call failed." : "No AI API key found.";
-  const message = `${where}
+  const message = `No AI API key found.
 
 To enable the AI teacher, create a file named \`.env.local\` in the project root and add one of:
-  ANTHROPIC_API_KEY=sk-ant-<your key>        (direct Anthropic)
-  # or, when deploying on Vercel (AI Gateway):
-  AI_GATEWAY_API_KEY=<your gateway key>
+
+  # FREE (recommended) — get a key at https://aistudio.google.com/apikey
+  GOOGLE_GENERATIVE_AI_API_KEY=AIza...
+
+  # OR, paid — get a key at https://console.anthropic.com/
+  # ANTHROPIC_API_KEY=sk-ant-...
+
+  # OR, Vercel AI Gateway (for Vercel deployments):
+  # AI_GATEWAY_API_KEY=vg_...
 
 Then restart the dev server and refresh. Until then, this teaching app runs without AI.`;
   return new Response(message, { status: 503, headers: { "content-type": "text/plain" } });
