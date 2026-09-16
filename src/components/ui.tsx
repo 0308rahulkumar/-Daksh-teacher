@@ -151,11 +151,20 @@ export function Button({
 /*  Empty state                                                                */
 /* -------------------------------------------------------------------------- */
 
-export function EmptyState({ title, children }: { title: string; children: ReactNode }) {
+export function EmptyState({
+  title,
+  children,
+  action,
+}: {
+  title: string;
+  children: ReactNode;
+  action?: ReactNode;
+}) {
   return (
-    <div className="rounded-xl border border-dashed border-border bg-surface/50 px-6 py-10 text-center">
-      <h3 className="mb-1 text-lg font-semibold text-ink">{title}</h3>
-      <p className="text-sm text-muted max-w-md mx-auto">{children}</p>
+    <div className="rounded-xl border border-border bg-surface px-6 py-10 text-center shadow-xs">
+      <h3 className="mb-2 text-xl font-bold text-ink">{title}</h3>
+      <div className="text-sm text-muted max-w-md mx-auto leading-relaxed">{children}</div>
+      {action && <div className="mt-5 flex justify-center">{action}</div>}
     </div>
   );
 }

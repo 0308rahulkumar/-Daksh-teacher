@@ -35,9 +35,18 @@ export function FlashcardsView({ subjectId, chapterId, topicId, topicName }: Fla
 
   if (!cards.length && !loading && !error) {
     return (
-      <EmptyState title="Flashcards">
-        Generate active-recall flashcards for <strong>{topicName ?? "this topic"}</strong>.
-        One concept per card — flip to check, then tell the teacher you know it or need to revisit.
+      <EmptyState
+        title="Active-Recall Flashcards"
+        action={
+          <Button onClick={() => generate()} className="text-sm px-6 py-2.5 font-semibold shadow-xs">
+            🃏 Generate Flashcards
+          </Button>
+        }
+      >
+        <p>
+          Generate active-recall flashcards for <strong>{topicName ?? "this topic"}</strong>.
+          One concept per card — flip to test your memory and strengthen weak areas.
+        </p>
       </EmptyState>
     );
   }

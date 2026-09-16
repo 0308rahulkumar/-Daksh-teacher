@@ -21,18 +21,18 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #151922;
-    --surface: #1E2430;
-    --ink: #F1F0EE;
-    --muted: #9CA3AF;
-    --accent: #818CF8;
-    --accent-light: #1E1B4B;
+    --paper: #0B0D13;        /* neutral rich dark ground (not bluish) */
+    --surface: #141721;      /* solid dark card background */
+    --ink: #F3F4F6;          /* crisp clean text */
+    --muted: #94A3B8;        /* legible soft slate */
+    --accent: #6366F1;       /* vibrant modern indigo */
+    --accent-light: #1E1E34; /* subtle accent tint */
     --highlight: rgba(250, 204, 21, 0.12);
     --success: #22C55E;
-    --danger: #F87171;
-    --warning: #FBBF24;
-    --border: #2D3442;
-    --shadow: rgba(0, 0, 0, 0.25);
+    --danger: #EF4444;
+    --warning: #F59E0B;
+    --border: #222634;       /* crisp hairline border */
+    --shadow: rgba(0, 0, 0, 0.4);
   }
 }
 

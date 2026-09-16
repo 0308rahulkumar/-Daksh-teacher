@@ -58,9 +58,18 @@ export function NotesView({ subjectId, chapterId, topicId, topicName }: NotesVie
 
   if (!data && !loading && !error) {
     return (
-      <EmptyState title={`Revision notes`}>
-        Generate concise, exam-oriented notes for <strong>{topicName ?? "this topic"}</strong>.
-        Notes cover key points, formulas, common mistakes and quick-revision bullet lists.
+      <EmptyState
+        title="Revision Notes"
+        action={
+          <Button onClick={() => generate()} className="text-sm px-6 py-2.5 font-semibold shadow-xs">
+            ✨ Generate Revision Notes
+          </Button>
+        }
+      >
+        <p>
+          Generate concise, exam-oriented notes for <strong>{topicName ?? "this topic"}</strong>.
+          Includes key points, formulas, common CBSE mistakes, and rapid-fire revision bullet lists.
+        </p>
       </EmptyState>
     );
   }
