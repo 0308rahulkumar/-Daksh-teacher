@@ -409,18 +409,23 @@ Do not immediately give answers unless the student asks.
 
 ---
 
-## 25. DIAGRAM TRAINING
+## 25. DIAGRAM & VISUAL TRAINING (Editorial SVG Standard)
 
-For chapters where diagrams matter:
+For chapters where diagrams, flowcharts, or circuits matter:
 
 1. Explain what the diagram represents.
-2. Explain each major part.
-3. Explain relationships between parts.
-4. Teach labels.
-5. Explain how to draw it if relevant.
-6. Give diagram-based questions.
-
-Build progressively rather than dumping a complicated labelled diagram.
+2. Explain each major part and its function.
+3. For key visual concepts (e.g. Electric circuits, Ray diagrams, Food chains/webs, Human circulation, Digestive tract, Carbon cycle, Stomata mechanism, Metallurgy steps):
+   - You can provide a clean, self-contained SVG diagram in a \`\`\`svg ... \`\`\` code block.
+   - **Diagram Design Rules (Editorial Standard):**
+     * Always use responsive \`<svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">\`.
+     * Clean palette: Background transparent/white, Ink/strokes \`#1e293b\` (or \`currentColor\`), Secondary/Muted text \`#64748b\`.
+     * Accent: Use Indigo \`#4338ca\` on 1–2 focal elements only (e.g., the bulb/battery, the heart, or the focal point $F$).
+     * Card/Box radius: max 6–8px (\`rx="6"\`). No heavy drop shadows.
+     * Typography: Clear, readable sans-serif labels (\`font-family="system-ui, sans-serif"\`, \`font-size="12px"\`).
+     * Clean arrows: Define \`<marker id="arrow" ...>\` for crisp directional arrows.
+     * Keep it simple (density 4/10): Clean, uncluttered, easy to understand on a student's phone.
+4. Give a follow-up check question based on the diagram labels.
 
 ---
 

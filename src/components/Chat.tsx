@@ -82,9 +82,9 @@ export function Chat({ subjectId, chapterId, topicId, topicName, placeholder }: 
         <div className="mx-4 mt-3 rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
           {/API key/i.test(error.message) ? (
             <span>
-              <span className="font-semibold">The AI teacher isn't configured yet.</span> Add
-              <code className="mx-1 rounded bg-surface px-1">ANTHROPIC_API_KEY</code> or
-              <code className="mx-1 rounded bg-surface px-1">AI_GATEWAY_API_KEY</code> to{" "}
+              <span className="font-semibold">The AI teacher isn&apos;t configured yet.</span> Add
+              <code className="mx-1 rounded bg-surface px-1">GOOGLE_GENERATIVE_AI_API_KEY</code> (free) or
+              <code className="mx-1 rounded bg-surface px-1">ANTHROPIC_API_KEY</code> to{" "}
               <code className="mx-1 rounded bg-surface px-1">.env.local</code>, restart the dev server, and refresh.
             </span>
           ) : (
@@ -136,7 +136,36 @@ export function Chat({ subjectId, chapterId, topicId, topicName, placeholder }: 
           ) : (
             <div key={m.id} className="mb-4">
               <div className="prose-teacher max-w-full rounded-2xl rounded-bl-sm border border-border bg-paper px-4 py-3 text-[15px] leading-relaxed">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    code({ className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      const lang = match ? match[1] : "";
+                      const raw = String(children).replace(/\n$/, "");
+                      if (lang === "svg" || (raw.trim().startsWith("<svg") && raw.trim().endsWith("</svg>"))) {
+                        return (
+                          <div className="my-3 overflow-x-auto rounded-xl border border-border bg-white p-3 text-ink">
+                            <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-border/60 text-[11px] font-medium tracking-wider text-muted uppercase">
+                              <span>📐 CBSE Visual Diagram</span>
+                            </div>
+                            <div
+                              className="flex justify-center [&>svg]:max-w-full [&>svg]:h-auto"
+                              dangerouslySetInnerHTML={{ __html: raw }}
+                            />
+                          </div>
+                        );
+                      }
+                      return (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                >
+                  {text}
+                </ReactMarkdown>
               </div>
             </div>
           );
