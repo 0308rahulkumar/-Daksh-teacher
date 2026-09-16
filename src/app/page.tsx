@@ -1,13 +1,52 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useStateBundle } from "@/hooks/useAppState";
 import { SUBJECTS, subjectOptions } from "@/lib/syllabus";
 import { Button, Card, CardHeader, EmptyState, MasteryBadge, ProgressBar, SectionTitle } from "@/components/ui";
-import type { MasteryLevel } from "@/lib/types";
+import { Interactive3DCard } from "@/components/Interactive3DCard";
+
+const QUICK_DOUBTS = [
+  { label: "⚡ Ohm's Law Analogy", prompt: "Explain Ohm's Law (V = IR) using a simple real-life analogy from zero." },
+  { label: "🧬 Heart Circulation Flow", prompt: "Explain the double circulation of blood in the human heart with a simple visual flow." },
+  { label: "🧪 Balancing Equations", prompt: "How do I easily balance chemical equations in Class 10 Chemistry? Teach me step by step." },
+  { label: "📐 Quadratic Roots", prompt: "Explain why quadratic equations have at most 2 roots, and how to find them using the quadratic formula." },
+  { label: "🌍 Nationalism in India", prompt: "Give me the key events and dates of the Non-Cooperation Movement for CBSE board exams." },
+];
+
+const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: string; bg: string }> = {
+  science: {
+    icon: "🔬",
+    badge: "Physics • Chemistry • Biology",
+    color: "#059669",
+    bg: "from-emerald-500/10 to-teal-500/5",
+  },
+  mathematics: {
+    icon: "📐",
+    badge: "Algebra • Geometry • Trig",
+    color: "#4F46E5",
+    bg: "from-indigo-500/10 to-blue-500/5",
+  },
+  "social-science": {
+    icon: "🌍",
+    badge: "History • Civics • Geo • Eco",
+    color: "#D97706",
+    bg: "from-amber-500/10 to-orange-500/5",
+  },
+  english: {
+    icon: "📖",
+    badge: "First Flight • Footprints",
+    color: "#E11D48",
+    bg: "from-rose-500/10 to-pink-500/5",
+  },
+};
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { state, dueNow, loading, error, refresh } = useStateBundle();
+  const [quickInput, setQuickInput] = useState("");
 
   if (loading) {
     return (
@@ -27,16 +66,24 @@ export default function DashboardPage() {
   /* Subject progress */
   const subjStats = subjectOptions().map((s) => {
     const full = SUBJECTS.find((x) => x.id === s.id)!;
-    let total = 0, mastered = 0;
+    let total = 0, mastered = 0, practicing = 0;
     for (const ch of full.chapters) {
       total += ch.topics.length;
       for (const t of ch.topics) {
-        if (progress[s.id]?.[ch.id]?.[t.id]?.mastery === "MASTERED") mastered++;
+        const m = progress[s.id]?.[ch.id]?.[t.id]?.mastery;
+        if (m === "MASTERED") mastered++;
+        else if (m === "PRACTICING" || m === "LEARNING") practicing++;
       }
     }
     const pct = total ? Math.round((mastered / total) * 100) : 0;
-    return { ...s, ...full, total, mastered, pct };
+    const theme = SUBJECT_THEMES[s.id] ?? { icon: "📚", badge: "Class 10", color: "#4338CA", bg: "from-accent/10 to-transparent" };
+    return { ...s, ...full, total, mastered, practicing, pct, theme };
   });
+
+  /* Calculate Total Mastery */
+  const totalMasteredAll = subjStats.reduce((acc, curr) => acc + curr.mastered, 0);
+  const totalTopicsAll = subjStats.reduce((acc, curr) => acc + curr.total, 0);
+  const overallPercentage = totalTopicsAll ? Math.round((totalMasteredAll / totalTopicsAll) * 100) : 0;
 
   /* Study streak */
   const dates = new Set(studySessions.map((s) => s.date).sort());
@@ -51,118 +98,269 @@ export default function DashboardPage() {
     cursor = d.toISOString().slice(0, 10);
   }
 
-  /* Next action: the most recent topic the student was on */
-  const lastQuiz = state.quizHistory.at(-1);
-  const lastTopicLink = lastQuiz
-    ? `/subjects/${lastQuiz.subjectId}/${lastQuiz.chapterId}${lastQuiz.topicId ? `/${lastQuiz.topicId}` : ""}`
-    : null;
+  const handleQuickAsk = (textToAsk?: string) => {
+    const query = (textToAsk || quickInput).trim();
+    if (!query) return;
+    router.push(`/teacher?q=${encodeURIComponent(query)}`);
+  };
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-ink">
-            Welcome back, {profile.name === "Student" ? "there" : profile.name}! 👋
-          </h1>
-          <p className="text-sm text-muted">
-            {profile.board} · {profile.medium} · {profile.dailyMinutes} min/day goal
-          </p>
+    <div className="space-y-8 pb-12">
+      {/* Hero: Welcome + Live Student Motivation Header */}
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface via-surface to-accent-light/30 p-6 shadow-xs">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 rounded-full bg-accent-light px-3 py-1 text-xs font-semibold text-accent">
+              <span>🎯 CBSE Class 10 Boards 2026</span>
+              <span>•</span>
+              <span>Level {Math.floor(totalMasteredAll / 5) + 1}: {totalMasteredAll < 5 ? "Board Explorer 🚀" : totalMasteredAll < 15 ? "Concept Builder ⚡" : "Board Ranker 🏆"}</span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+              Namaste, {profile.name === "Student" ? "Future Board Topper" : profile.name}! 👋
+            </h1>
+            <p className="text-sm text-muted">
+              {profile.board} Board • {profile.medium} Medium • Daily Target: {profile.dailyMinutes} mins/day
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" onClick={refresh} disabled={loading} className="text-xs">
+              🔄 Refresh Data
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="secondary" onClick={refresh} disabled={loading}>Refresh</Button>
+
+        {/* Interactive Instant Doubt Launcher */}
+        <div className="mt-6 rounded-xl border border-border/80 bg-paper p-3 sm:p-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleQuickAsk();
+            }}
+            className="flex flex-col gap-2 sm:flex-row sm:items-center"
+          >
+            <div className="relative flex-1">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+                💬
+              </span>
+              <input
+                type="text"
+                value={quickInput}
+                onChange={(e) => setQuickInput(e.target.value)}
+                placeholder="Ask any doubt or topic... (e.g. 'Explain reflection ray rules' or 'What is an exothermic reaction?')"
+                className="w-full rounded-lg border border-border bg-surface py-2.5 pl-9 pr-4 text-sm text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={!quickInput.trim()}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition-all hover:bg-accent/90 disabled:opacity-50"
+            >
+              Ask Daksh ⚡
+            </button>
+          </form>
+
+          {/* Interactive Suggestion Chips */}
+          <div className="mt-3 flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-medium text-muted">Quick doubts:</span>
+            {QUICK_DOUBTS.map((q, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => handleQuickAsk(q.prompt)}
+                className="rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium text-ink transition-all hover:border-accent hover:bg-accent-light hover:text-accent active:scale-95"
+              >
+                {q.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Streak + quick stats */}
+      {/* Gamified Stat Meters */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card accent="#16A34A">
-          <CardHeader title="Current streak" />
-          <p className="text-3xl font-bold text-success">{streak}</p>
-          <p className="text-xs text-muted">consecutive days</p>
-        </Card>
-        <Card accent="#4338CA">
-          <CardHeader title="Sessions this week" />
-          <p className="text-3xl font-bold text-accent">
-            {studySessions.filter((s) => {
-              const d = new Date(s.date);
-              const weekAgo = new Date();
-              weekAgo.setDate(weekAgo.getDate() - 7);
-              return d >= weekAgo;
-            }).length}
+        {/* Streak */}
+        <div className="rounded-xl border border-emerald-500/30 bg-surface p-5 shadow-xs transition-all hover:border-emerald-500/60">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted">Daily Streak</span>
+            <span className="text-2xl">🔥</span>
+          </div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">{streak}</span>
+            <span className="text-xs text-muted">Days Active</span>
+          </div>
+          <p className="mt-2 text-xs text-muted">
+            {streak === 0 ? "⚡ Complete 1 quiz or chat today to start your streak!" : "🎯 Great consistency! Keep learning daily."}
           </p>
-          <p className="text-xs text-muted">study sessions logged</p>
-        </Card>
-        <Card accent="#D97706">
-          <CardHeader title="Mistakes logged" />
-          <p className="text-3xl font-bold text-warning">{state.mistakes.length}</p>
-          <p className="text-xs text-muted">to review in your notebook</p>
-        </Card>
+        </div>
+
+        {/* Mastery Progress */}
+        <div className="rounded-xl border border-indigo-500/30 bg-surface p-5 shadow-xs transition-all hover:border-indigo-500/60">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted">Overall Syllabus Mastery</span>
+            <span className="text-2xl">📊</span>
+          </div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">{overallPercentage}%</span>
+            <span className="text-xs text-muted">({totalMasteredAll}/{totalTopicsAll} topics)</span>
+          </div>
+          <div className="mt-3">
+            <ProgressBar value={totalMasteredAll} max={totalTopicsAll} color="#4F46E5" height={6} />
+          </div>
+        </div>
+
+        {/* Mistakes to Polish */}
+        <Link href="/mistakes" className="block group">
+          <div className="rounded-xl border border-amber-500/30 bg-surface p-5 shadow-xs transition-all hover:border-amber-500/60 hover:-translate-y-0.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted">Mistake Notebook</span>
+              <span className="text-2xl group-hover:scale-110 transition-transform">⚠️</span>
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-amber-600 dark:text-amber-400">{state.mistakes.length}</span>
+              <span className="text-xs text-muted">Logged Doubts</span>
+            </div>
+            <p className="mt-2 text-xs text-amber-700 dark:text-amber-300 font-medium">
+              Click to review & turn weaknesses into marks →
+            </p>
+          </div>
+        </Link>
       </div>
 
-      {/* Due for revision today */}
+      {/* Due for revision today banner */}
       {dueNow.length > 0 && (
-        <>
-          <SectionTitle title="Due for revision today" action={<span className="text-sm text-muted">{dueNow.length} topic{dueNow.length !== 1 ? "s" : ""}</span>} />
+        <div className="rounded-xl border border-accent/40 bg-accent-light/20 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">⏰</span>
+              <h2 className="text-base font-semibold text-ink">Spaced Repetition: Due for Revision Today</h2>
+            </div>
+            <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-white">
+              {dueNow.length} Due
+            </span>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {dueNow.slice(0, 9).map((d) => (
-              <Link key={`${d.subjectId}-${d.chapterId}-${d.topicId}`} href={`/subjects/${d.subjectId}/${d.chapterId}/${d.topicId}`}>
-                <Card accent={SUBJECTS.find((s) => s.id === d.subjectId)?.accent}>
-                  <p className="font-medium text-ink">{d.topicName}</p>
-                  <p className="text-xs text-muted">{d.subjectName} → {d.chapterName}</p>
-                  <MasteryBadge level={d.mastery} className="mt-2 inline-block" />
-                </Card>
+            {dueNow.slice(0, 6).map((d) => (
+              <Link
+                key={`${d.subjectId}-${d.chapterId}-${d.topicId}`}
+                href={`/subjects/${d.subjectId}/${d.chapterId}/${d.topicId}`}
+                className="group rounded-lg border border-border bg-surface p-3.5 transition-all hover:border-accent hover:shadow-xs"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-semibold text-ink group-hover:text-accent transition-colors">{d.topicName}</p>
+                  <MasteryBadge level={d.mastery} />
+                </div>
+                <p className="mt-1 text-xs text-muted">{d.subjectName} • {d.chapterName}</p>
+                <span className="mt-2 inline-block text-xs font-medium text-accent">Quick 2-min recall →</span>
               </Link>
             ))}
           </div>
-        </>
+        </div>
       )}
 
-      {/* Subject progress bars */}
-      <SectionTitle title="Your subjects" />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {subjStats.map((s) => (
-          <Link key={s.id} href={`/subjects/${s.id}`}>
-            <Card accent={s.accent}>
-              <CardHeader title={s.name} action={<span className="text-xs text-muted">{s.mastered}/{s.total} mastered</span>} />
-              <ProgressBar value={s.mastered} max={s.total} color={s.accent} height={8} />
-              <p className="mt-2 text-sm font-medium text-ink">{s.pct}% mastered</p>
-              <p className="text-xs text-muted">{s.tagline}</p>
-            </Card>
-          </Link>
-        ))}
+      {/* Interactive Subject Cards */}
+      <div>
+        <SectionTitle
+          title="Class 10 CBSE Subjects"
+          action={<span className="text-xs text-muted">Select a subject to practice topics & quizzes</span>}
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {subjStats.map((s) => (
+            <Interactive3DCard key={s.id} maxRotation={6}>
+              <Link href={`/subjects/${s.id}`} className="group block">
+                <div
+                  className="relative overflow-hidden rounded-xl border border-border bg-surface/90 backdrop-blur-xs p-5 transition-all duration-200 hover:border-opacity-100 hover:shadow-lg"
+                  style={{ borderLeftWidth: "4px", borderLeftColor: s.theme.color }}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="grid h-12 w-12 place-items-center rounded-xl bg-paper text-2xl shadow-2xs group-hover:scale-110 transition-transform">
+                        {s.theme.icon}
+                      </span>
+                      <div>
+                        <h3 className="text-lg font-bold text-ink group-hover:text-accent transition-colors">
+                          {s.name}
+                        </h3>
+                        <p className="text-xs text-muted">{s.theme.badge}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-base font-extrabold" style={{ color: s.theme.color }}>
+                        {s.pct}%
+                      </span>
+                      <p className="text-[11px] text-muted">{s.mastered}/{s.total} mastered</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <ProgressBar value={s.mastered} max={s.total} color={s.theme.color} height={6} />
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-between text-xs">
+                    <span className="text-muted">{s.chapters.length} Chapters • NCERT Syllabus</span>
+                    <span className="font-semibold transition-transform group-hover:translate-x-1.5" style={{ color: s.theme.color }}>
+                      Open Subject →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </Interactive3DCard>
+          ))}
+        </div>
       </div>
 
-      {/* Quick actions */}
-      <SectionTitle title="Quick actions" />
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {lastTopicLink && (
-          <Link href={lastTopicLink}>
-            <Card accent="#4338CA">
-              <CardHeader title="Continue where you left off" />
-              <p className="text-sm text-muted">{lastQuiz!.topicId ? `Topic: ${lastQuiz!.topicId}` : `Chapter: ${lastQuiz!.chapterId}`}</p>
-              <p className="mt-2 text-xs text-muted">Your last practice session</p>
-            </Card>
+      {/* Quick Launch Power Actions */}
+      <div>
+        <SectionTitle title="Student Power Tools" />
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Link href="/teacher" className="group">
+            <div className="h-full rounded-xl border border-border bg-surface p-4 transition-all hover:border-purple-500/60 hover:shadow-xs">
+              <span className="text-2xl">🤖</span>
+              <h4 className="mt-2 font-semibold text-ink group-hover:text-purple-600 transition-colors">
+                AI Personal Tutor
+              </h4>
+              <p className="mt-1 text-xs text-muted">
+                Teach from zero, explain tricky doubts, and give real-life analogies.
+              </p>
+            </div>
           </Link>
-        )}
-        <Link href="/teacher">
-          <Card accent="#BE185D">
-            <CardHeader title="Ask the AI teacher" />
-            <p className="text-sm text-muted">Free-form chat — doubts, explanations, anything</p>
-          </Card>
-        </Link>
-        <Link href="/mistakes">
-          <Card accent="#DC2626">
-            <CardHeader title="Review mistakes" />
-            <p className="text-sm text-muted">{state.mistakes.length} logged mistake{state.mistakes.length !== 1 ? "s" : ""}</p>
-          </Card>
-        </Link>
-        <Link href="/profile">
-          <Card accent="#0D9488">
-            <CardHeader title="My profile" />
-            <p className="text-sm text-muted">Edit name, board, goals, study time</p>
-          </Card>
-        </Link>
+
+          <Link href="/subjects/science/chemical-reactions/chemical-equations" className="group">
+            <div className="h-full rounded-xl border border-border bg-surface p-4 transition-all hover:border-emerald-500/60 hover:shadow-xs">
+              <span className="text-2xl">🎯</span>
+              <h4 className="mt-2 font-semibold text-ink group-hover:text-emerald-600 transition-colors">
+                Quick Practice Quiz
+              </h4>
+              <p className="mt-1 text-xs text-muted">
+                Test yourself with 5 instant MCQs and short board questions.
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/mistakes" className="group">
+            <div className="h-full rounded-xl border border-border bg-surface p-4 transition-all hover:border-amber-500/60 hover:shadow-xs">
+              <span className="text-2xl">📓</span>
+              <h4 className="mt-2 font-semibold text-ink group-hover:text-amber-600 transition-colors">
+                Mistake Notebook
+              </h4>
+              <p className="mt-1 text-xs text-muted">
+                Review past quiz errors and see correct explanations with marking scheme.
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/profile" className="group">
+            <div className="h-full rounded-xl border border-border bg-surface p-4 transition-all hover:border-blue-500/60 hover:shadow-xs">
+              <span className="text-2xl">⚙️</span>
+              <h4 className="mt-2 font-semibold text-ink group-hover:text-blue-600 transition-colors">
+                My Target & Goals
+              </h4>
+              <p className="mt-1 text-xs text-muted">
+                Customize board, language medium, and daily target study minutes.
+              </p>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

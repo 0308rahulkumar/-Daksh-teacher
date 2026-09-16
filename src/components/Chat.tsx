@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import ReactMarkdown from "react-markdown";
@@ -13,6 +13,7 @@ export interface ChatProps {
   topicId?: string;
   topicName?: string;
   placeholder?: string;
+  initialPrompt?: string;
 }
 
 const SUGGESTIONS: { mode: string; label: string; prompt: string }[] = [
@@ -31,8 +32,9 @@ function getMessageText(message: { role?: string; content?: unknown; parts?: { t
   return "";
 }
 
-export function Chat({ subjectId, chapterId, topicId, topicName, placeholder }: ChatProps) {
+export function Chat({ subjectId, chapterId, topicId, topicName, placeholder, initialPrompt }: ChatProps) {
   const [input, setInput] = useState("");
+  const initialSentRef = useRef(false);
   const transport = new DefaultChatTransport({
     api: "/api/chat",
     body: { subjectId, chapterId, topicId },
@@ -41,6 +43,14 @@ export function Chat({ subjectId, chapterId, topicId, topicName, placeholder }: 
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const busy = status === "submitted" || status === "streaming";
+
+  // Auto-send initial prompt if provided and not yet sent
+  useEffect(() => {
+    if (initialPrompt && !initialSentRef.current && messages.length === 0) {
+      initialSentRef.current = true;
+      sendMessage({ text: initialPrompt });
+    }
+  }, [initialPrompt, messages.length, sendMessage]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scrollToBottom = useRef(() => {
