@@ -1,7 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  turbopack: {
+    rules: {
+      "*.html": {
+        loaders: ["raw-loader"],
+        as: "*.js",
+      },
+    },
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.html$/,
+      type: "asset/source",
+    });
+    return config;
+  },
 };
 
 export default nextConfig;

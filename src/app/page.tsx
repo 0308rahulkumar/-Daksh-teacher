@@ -7,6 +7,7 @@ import { useStateBundle } from "@/hooks/useAppState";
 import { SUBJECTS, subjectOptions } from "@/lib/syllabus";
 import { Button, Card, CardHeader, EmptyState, MasteryBadge, ProgressBar, SectionTitle } from "@/components/ui";
 import { Interactive3DCard } from "@/components/Interactive3DCard";
+import { Scene } from "@/components/Scene";
 
 const QUICK_DOUBTS = [
   { label: "⚡ Ohm's Law Analogy", prompt: "Explain Ohm's Law (V = IR) using a simple real-life analogy from zero." },
@@ -363,6 +364,25 @@ export default function DashboardPage() {
               </p>
             </div>
           </Link>
+        </div>
+      </div>
+
+      {/* ThreeUI Interactive Plasma Shader Laboratory */}
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface p-5 shadow-xs">
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-accent">ThreeUI Interactive Laboratory</span>
+            <h3 className="text-lg font-bold text-ink">Plasma Quantum Field</h3>
+          </div>
+          <span className="rounded-full bg-accent-light px-3 py-1 text-xs font-semibold text-accent">
+            Raw WebGL + Canvas 2D
+          </span>
+        </div>
+        <p className="mb-4 text-xs text-muted">
+          A deep-blue laboratory field with a luminous plasma control button from ThreeUI. Hover and interact with the quantum field below:
+        </p>
+        <div className="h-[360px] w-full overflow-hidden rounded-xl border border-border/80 shadow-inner">
+          <Scene />
         </div>
       </div>
     </div>
