@@ -1,5 +1,5 @@
 import { getTopic } from "./syllabus";
-import type { MindmapDoc, NoteDoc, Flashcard } from "./types";
+import type { MindmapDoc, NoteDoc, Flashcard, GeneratedQuizQuestion } from "./types";
 
 /**
  * Handcrafted high-yield concept maps for key CBSE Class 10 board topics.
@@ -1133,6 +1133,181 @@ export function getCuratedFlashcards(subjectId: string, chapterId: string, topic
     {
       front: `How can you easily remember the key takeaways of ${topicName}?`,
       back: "Break down the concept into Definition, Formula/Reaction, and 1 Real-Life Example.",
+    },
+  ];
+}
+
+/**
+ * High-yield curated CBSE Board Exam quiz questions for core Class 10 topics.
+ * Acts as an offline / fallback question bank if Gemini API is unavailable or rate-limited.
+ */
+export function getCuratedQuiz(subjectId: string, chapterId: string, topicId: string): GeneratedQuizQuestion[] {
+  const found = getTopic(subjectId, chapterId, topicId);
+  const topicName = found?.topic.name ?? topicId;
+  const focus = found?.topic.focus ?? "NCERT Class 10 Board syllabus concepts";
+
+  // Specific high-yield Physics Electricity
+  if (topicId.includes("ohm") || topicId.includes("circuit") || chapterId.includes("phy2")) {
+    return [
+      {
+        id: "curated-ohm-1",
+        topicId,
+        prompt: "Which of the following mathematical equations represents Ohm's Law correctly under constant temperature?",
+        type: "mcq",
+        options: ["V = I × R", "V = I / R", "I = V × R", "R = V × I"],
+        answer: "A",
+        explanation: "Ohm's Law states that electric current through a conductor is directly proportional to potential difference across its ends: V = IR.",
+        difficulty: "Easy",
+      },
+      {
+        id: "curated-ohm-2",
+        topicId,
+        prompt: "If a 12 V battery is connected across a circuit and a current of 2.5 A flows, calculate the resistance of the circuit in ohms.",
+        type: "numerical",
+        answer: "4.8",
+        explanation: "Using Ohm's law: R = V / I = 12 V / 2.5 A = 4.8 Ω.",
+        difficulty: "Medium",
+      },
+      {
+        id: "curated-ohm-3",
+        topicId,
+        prompt: "The slope of a Potential Difference (V) versus Current (I) graph for an ohmic conductor represents:",
+        type: "mcq",
+        options: ["Resistance (R)", "Resistivity (ρ)", "Electric Power (P)", "Electric Charge (Q)"],
+        answer: "A",
+        explanation: "Slope of the V-I characteristic graph is ΔV / ΔI, which gives the electrical Resistance R.",
+        difficulty: "Medium",
+      },
+      {
+        id: "curated-ohm-4",
+        topicId,
+        prompt: "Two resistors of 6 Ω and 3 Ω are connected in parallel. What is their effective equivalent resistance?",
+        type: "mcq",
+        options: ["2 Ω", "9 Ω", "18 Ω", "0.5 Ω"],
+        answer: "A",
+        explanation: "1/Rp = 1/R1 + 1/R2 = 1/6 + 1/3 = 3/6 = 1/2 => Rp = 2 Ω.",
+        difficulty: "Board Level",
+      },
+      {
+        id: "curated-ohm-5",
+        topicId,
+        prompt: "State the SI unit of electrical resistivity (ρ).",
+        type: "short",
+        answer: "Ohm-meter (Ω·m)",
+        explanation: "Resistivity ρ = R × A / l. Units: Ω × m² / m = Ω·m.",
+        difficulty: "Board Level",
+      },
+    ];
+  }
+
+  // Specific high-yield Physics Optics / Light
+  if (topicId.includes("mirror") || topicId.includes("lens") || chapterId.includes("phy1")) {
+    return [
+      {
+        id: "curated-optics-1",
+        topicId,
+        prompt: "Where must an object be placed in front of a concave mirror so that the image formed is real, inverted, and of the same size as the object?",
+        type: "mcq",
+        options: ["At Center of Curvature (C)", "At Focus (F)", "Between Focus and Center of Curvature", "Beyond C"],
+        answer: "A",
+        explanation: "When placed at C (2F), light rays reflect to intersect at C itself, forming an inverted image of magnification m = -1.",
+        difficulty: "Easy",
+      },
+      {
+        id: "curated-optics-2",
+        topicId,
+        prompt: "Which optical element is used as a rear-view mirror in automobiles, and what type of image does it always form?",
+        type: "mcq",
+        options: ["Convex mirror (always virtual, erect, and diminished)", "Concave mirror (real and inverted)", "Plane mirror (same size)", "Concave lens"],
+        answer: "A",
+        explanation: "Convex mirrors provide a much wider field of view and always produce an erect, diminished virtual image.",
+        difficulty: "Board Level",
+      },
+      {
+        id: "curated-optics-3",
+        topicId,
+        prompt: "Write the Mirror Formula relating object distance (u), image distance (v), and focal length (f).",
+        type: "short",
+        answer: "1/v + 1/u = 1/f",
+        explanation: "The mirror formula is 1/v + 1/u = 1/f (whereas the lens formula uses a minus sign: 1/v - 1/u = 1/f).",
+        difficulty: "Easy",
+      },
+      {
+        id: "curated-optics-4",
+        topicId,
+        prompt: "An object is placed at 20 cm in front of a concave mirror of focal length 15 cm. Find the image distance (v) using the Cartesian sign convention.",
+        type: "numerical",
+        answer: "-60",
+        explanation: "1/v = 1/f - 1/u = 1/(-15) - 1/(-20) = -1/15 + 1/20 = -1/60 => v = -60 cm.",
+        difficulty: "Board Level",
+      },
+      {
+        id: "curated-optics-5",
+        topicId,
+        prompt: "The power of a corrective lens is -2.0 Dioptres. What is its focal length in centimeters and what type of lens is it?",
+        type: "short",
+        answer: "-50 cm, Concave (diverging) lens",
+        explanation: "P = 1/f(m) => f = 1 / (-2.0) = -0.5 m = -50 cm. Negative focal length indicates a concave lens.",
+        difficulty: "Board Level",
+      },
+    ];
+  }
+
+  // Universal NCERT Board Practice Fallback for all other topics
+  return [
+    {
+      id: `curated-${topicId}-1`,
+      topicId,
+      prompt: `Which of the following statements best describes the core principle of ${topicName}?`,
+      type: "mcq",
+      options: [
+        `${focus}`,
+        `It operates independently of standard NCERT CBSE Class 10 rules.`,
+        `It is solely a theoretical concept with zero real-world physical applications.`,
+        `None of the above.`,
+      ],
+      answer: "A",
+      explanation: `${topicName} is fundamentally defined by: ${focus}.`,
+      difficulty: "Easy",
+    },
+    {
+      id: `curated-${topicId}-2`,
+      topicId,
+      prompt: `In CBSE Board exam answers for ${topicName}, what must a student always explicitly mention?`,
+      type: "mcq",
+      options: [
+        "Core scientific definitions, correct SI units, and governing laws",
+        "Only rough diagrams without labels or annotations",
+        "Only numerical values without intermediate formula steps",
+        "Only colloquial descriptions",
+      ],
+      answer: "A",
+      explanation: "CBSE step-wise marking guidelines strictly award marks for correct definitions, standard formula steps, and SI units.",
+      difficulty: "Board Level",
+    },
+    {
+      id: `curated-${topicId}-3`,
+      topicId,
+      prompt: `State the primary definition and significance of ${topicName} in one concise sentence.`,
+      type: "short",
+      answer: `${focus}`,
+      explanation: `Mastering this definition ensures full marks in 1-mark and 2-mark CBSE board questions.`,
+      difficulty: "Medium",
+    },
+    {
+      id: `curated-${topicId}-4`,
+      topicId,
+      prompt: `Why is ${topicName} a high-priority topic in the Class 10 curriculum?`,
+      type: "mcq",
+      options: [
+        "It forms foundational concepts frequently tested in CBSE case-based and application questions",
+        "It has been completely omitted from the syllabus",
+        "It only contains arbitrary definitions without conceptual reasoning",
+        "It carries negative marks in the board exam",
+      ],
+      answer: "A",
+      explanation: "Class 10 board exams focus on competency-based understanding and practical applications of this topic.",
+      difficulty: "Easy",
     },
   ];
 }

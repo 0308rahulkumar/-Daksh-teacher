@@ -89,7 +89,7 @@ function TopicHubClient({
   ) ?? [];
 
   async function handleRecord(input: { total: number; correct: number; answers: import("@/lib/types").QuizAnswerRecord[] }) {
-    const result = await postResult({ subjectId, chapterId, topicId, ...input });
+    const result = await recordResult({ subjectId, chapterId, topicId, ...input });
     if (result.newMistakes.length) setMistakes(result.newMistakes);
   }
 
@@ -149,7 +149,8 @@ function TopicHubClient({
 
       {/* Tab panels */}
       <div className="min-h-[50vh]">
-        {activeTab === "learn" && (
+        {/* Chat preserved in DOM so tab switches do not erase the conversation */}
+        <div className={activeTab === "learn" ? "block" : "hidden"}>
           <Chat
             key={`${subjectId}-${chapterId}-${topicId}`}
             subjectId={subjectId}
@@ -157,7 +158,7 @@ function TopicHubClient({
             topicId={topicId}
             topicName={topicName}
           />
-        )}
+        </div>
 
         {activeTab === "notes" && (
           <NotesView subjectId={subjectId} chapterId={chapterId} topicId={topicId} topicName={topicName} />
@@ -174,6 +175,7 @@ function TopicHubClient({
             topicId={topicId}
             topicName={topicName}
             onRecorded={setMistakes}
+            onRecord={recordResult}
           />
         )}
 

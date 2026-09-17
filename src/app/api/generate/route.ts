@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { isAiConfigured } from "@/lib/ai/provider";
 import { generate, type GenInput } from "@/lib/ai/generators";
-import { getCuratedMindmap, getCuratedNotes, getCuratedFlashcards } from "@/lib/curatedContent";
+import { getCuratedMindmap, getCuratedNotes, getCuratedFlashcards, getCuratedQuiz } from "@/lib/curatedContent";
 import type { GeneratorKind } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -18,6 +18,7 @@ function getFallback(kind: GeneratorKind, subjectId: string, chapterId: string, 
   if (kind === "mindmap") return getCuratedMindmap(subjectId, chapterId, topicId);
   if (kind === "notes") return getCuratedNotes(subjectId, chapterId, topicId);
   if (kind === "flashcards") return getCuratedFlashcards(subjectId, chapterId, topicId);
+  if (kind === "quiz" || kind === "mcq") return getCuratedQuiz(subjectId, chapterId, topicId);
   return null;
 }
 

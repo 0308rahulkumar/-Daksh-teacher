@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { GeneratedQuizQuestion, Mistake, QuizAnswerRecord } from "@/lib/types";
 import { Button, EmptyState, ProgressBar } from "@/components/ui";
-import { postResult } from "@/hooks/useAppState";
+import { useStateBundle, postResult } from "@/hooks/useAppState";
 
 interface QuizRunnerProps {
   subjectId: string;
@@ -11,6 +11,15 @@ interface QuizRunnerProps {
   topicId: string;
   topicName?: string;
   onRecorded?: (mistakes: Mistake[]) => void;
+  onRecord?: (input: {
+    subjectId: string;
+    chapterId: string;
+    topicId?: string;
+    total: number;
+    correct: number;
+    answers: QuizAnswerRecord[];
+    minutes?: number;
+  }) => Promise<{ newMistakes: Mistake[] }>;
 }
 
 type Phase = "loading" | "answering" | "reveal" | "summary";
@@ -21,7 +30,8 @@ function normalize(s: string): string {
 
 const LETTERS = ["A", "B", "C", "D"];
 
-export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorded }: QuizRunnerProps) {
+export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorded, onRecord }: QuizRunnerProps) {
+  const { recordResult } = useStateBundle();
   const [phase, setPhase] = useState<Phase>("loading");
   const [error, setError] = useState<string | null>(null);
   const [questions, setQuestions] = useState<GeneratedQuizQuestion[]>([]);
@@ -124,7 +134,8 @@ export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorde
     setSaving(true);
     const correct = all.filter((r) => r.correct).length;
     try {
-      const result = await postResult({
+      const recordFn = onRecord ?? recordResult ?? postResult;
+      const result = await recordFn({
         subjectId,
         chapterId,
         topicId,
@@ -134,6 +145,22 @@ export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorde
         minutes: Math.max(1, Math.round(all.length / 2)),
       });
       onRecorded?.(result.newMistakes);
+    } catch {
+      // Fallback
+      try {
+        const result = await postResult({
+          subjectId,
+          chapterId,
+          topicId,
+          total: all.length,
+          correct,
+          answers: all,
+          minutes: Math.max(1, Math.round(all.length / 2)),
+        });
+        onRecorded?.(result.newMistakes);
+      } catch {
+        // Continue to summary
+      }
     } finally {
       setSaving(false);
       setPhase("summary");

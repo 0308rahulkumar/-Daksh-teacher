@@ -6,6 +6,7 @@ import { DefaultChatTransport } from "ai";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui";
+import { getCurrentUser } from "@/lib/auth";
 
 export interface ChatProps {
   subjectId?: string;
@@ -24,6 +25,38 @@ const SUGGESTIONS: { mode: string; label: string; prompt: string }[] = [
   { mode: "exam", label: "Board practice", prompt: "Give me board-level practice questions on this topic." },
 ];
 
+function formatMathFormulas(text: string): string {
+  if (!text) return "";
+  return text
+    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, "($1 / $2)")
+    .replace(/\\sqrt\{([^}]+)\}/g, "√($1)")
+    .replace(/\\pm/g, "±")
+    .replace(/\\times/g, "×")
+    .replace(/\\div/g, "÷")
+    .replace(/\\theta/g, "θ")
+    .replace(/\\pi/g, "π")
+    .replace(/\\Delta/g, "Δ")
+    .replace(/\\alpha/g, "α")
+    .replace(/\\beta/g, "β")
+    .replace(/\\lambda/g, "λ")
+    .replace(/\\omega/g, "ω")
+    .replace(/\\le(q)?/g, "≤")
+    .replace(/\\ge(q)?/g, "≥")
+    .replace(/\\ne(q)?/g, "≠")
+    .replace(/\\approx/g, "≈")
+    .replace(/\\infty/g, "∞")
+    .replace(/\\sin/g, "sin")
+    .replace(/\\cos/g, "cos")
+    .replace(/\\tan/g, "tan")
+    .replace(/\^2\b/g, "²")
+    .replace(/\^3\b/g, "³")
+    .replace(/_1\b/g, "₁")
+    .replace(/_2\b/g, "₂")
+    .replace(/_3\b/g, "₃")
+    .replace(/\$\$([\s\S]*?)\$\$/g, "$1")
+    .replace(/\$(.*?)\$/g, "$1");
+}
+
 function getMessageText(message: { role?: string; content?: unknown; parts?: { type: string; text?: string }[] }): string {
   if (typeof message.content === "string") return message.content;
   if (Array.isArray(message.parts)) {
@@ -34,10 +67,28 @@ function getMessageText(message: { role?: string; content?: unknown; parts?: { t
 
 export function Chat({ subjectId, chapterId, topicId, topicName, placeholder, initialPrompt }: ChatProps) {
   const [input, setInput] = useState("");
+  const [currentUser, setCurrentUser] = useState<ReturnType<typeof getCurrentUser>>(null);
   const initialSentRef = useRef(false);
+
+  useEffect(() => {
+    setCurrentUser(getCurrentUser());
+    const onAuth = () => setCurrentUser(getCurrentUser());
+    if (typeof window !== "undefined") {
+      window.addEventListener("daksh-auth-changed", onAuth);
+      return () => window.removeEventListener("daksh-auth-changed", onAuth);
+    }
+  }, []);
+
   const transport = new DefaultChatTransport({
     api: "/api/chat",
-    body: { subjectId, chapterId, topicId },
+    body: {
+      subjectId,
+      chapterId,
+      topicId,
+      studentName: currentUser?.name,
+      board: currentUser?.board,
+      medium: currentUser?.medium,
+    },
   });
   const { messages, sendMessage, status, error, stop } = useChat({ transport });
 
@@ -174,7 +225,7 @@ export function Chat({ subjectId, chapterId, topicId, topicName, placeholder, in
                     },
                   }}
                 >
-                  {text}
+                  {formatMathFormulas(text)}
                 </ReactMarkdown>
               </div>
             </div>

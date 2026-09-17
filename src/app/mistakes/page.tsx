@@ -8,7 +8,7 @@ import type { Mistake } from "@/lib/types";
 import Link from "next/link";
 
 export default function MistakesPage() {
-  const { state } = useStateBundle();
+  const { state, resolveMistake } = useStateBundle();
 
   if (!state) {
     return (
@@ -130,6 +130,32 @@ export default function MistakesPage() {
                     <p className="mt-1 text-sm text-danger">Your answer: {m.studentAnswer}</p>
                     <p className="mt-1 text-sm text-success">Correct: {m.correctAnswer}</p>
                     {m.explanation && <p className="mt-2 text-sm text-muted">{m.explanation}</p>}
+
+                    <div className="mt-3 pt-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const originalIdx = mistakes.findIndex((x) => x === m || (x.date === m.date && x.question === m.question));
+                            if (originalIdx !== -1) resolveMistake(originalIdx);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 transition cursor-pointer"
+                        >
+                          <span>✅</span>
+                          <span>Mark as Understood</span>
+                        </button>
+                      </div>
+
+                      {m.topic && (
+                        <Link
+                          href={`/subjects/${m.subjectId}/${m.chapterId}/${m.topic}`}
+                          className="text-xs font-medium text-accent hover:underline flex items-center gap-1"
+                        >
+                          <span>Retest in Topic Lab</span>
+                          <span>→</span>
+                        </Link>
+                      )}
+                    </div>
                   </div>
                   <div className="shrink-0 flex flex-col items-end gap-1">
                     <span className="text-xs text-muted">{new Date(m.date).toLocaleDateString()}</span>

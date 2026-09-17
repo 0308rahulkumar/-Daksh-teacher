@@ -58,7 +58,7 @@ export function signUp(data: {
     return { success: false, error: "Username already exists on this device." };
   }
   if (!data.name.trim()) return { success: false, error: "Full name is required." };
-  if (!/^d{4}$/.test(data.pin)) return { success: false, error: "PIN must be exactly 4 digits." };
+  if (!/^\d{4}$/.test(data.pin)) return { success: false, error: "PIN must be exactly 4 digits." };
 
   const newAccount: StudentAccount = {
     id: "student_" + Math.random().toString(36).substring(2, 9),

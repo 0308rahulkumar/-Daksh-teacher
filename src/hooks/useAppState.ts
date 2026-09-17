@@ -25,6 +25,7 @@ export interface StateBundle {
     answers: QuizAnswerRecord[];
     minutes?: number;
   }) => Promise<{ newMistakes: Mistake[] }>;
+  resolveMistake: (indexToRemove: number) => void;
 }
 
 function getInitialStateForUser(currentUser: ReturnType<typeof getCurrentUser>): AppState {
@@ -226,7 +227,25 @@ export function useStateBundle(): StateBundle {
     []
   );
 
-  return { state, dueNow, loading, error, refresh, saveProfile, recordResult };
+  const resolveMistake = useCallback((indexToRemove: number) => {
+    const currentUser = getCurrentUser();
+    const storageKey = getStorageKey(currentUser);
+
+    setState((prev) => {
+      if (!prev) return prev;
+      const next: AppState = {
+        ...prev,
+        mistakes: prev.mistakes.filter((_, i) => i !== indexToRemove),
+        updatedAt: new Date().toISOString(),
+      };
+      if (typeof window !== "undefined") {
+        localStorage.setItem(storageKey, JSON.stringify(next));
+      }
+      return next;
+    });
+  }, []);
+
+  return { state, dueNow, loading, error, refresh, saveProfile, recordResult, resolveMistake };
 }
 
 export async function postResult(input: {

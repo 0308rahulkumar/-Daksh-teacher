@@ -71,15 +71,19 @@ export async function POST(req: NextRequest) {
   const due = dueTopics(state);
   const foundTopic = topicId ? getTopic(subjectId, chapterId, topicId) : null;
 
+  const clientStudentName = typeof body.studentName === "string" && body.studentName.trim() ? body.studentName.trim() : undefined;
+  const clientBoard = typeof body.board === "string" && body.board.trim() ? body.board.trim() : undefined;
+  const clientMedium = typeof body.medium === "string" && body.medium.trim() ? body.medium.trim() : undefined;
+
   const ctx: ChatContext = {
     subjectName: subjectId ? getSubject(subjectId)?.name : undefined,
     chapterName: chapterId ? getChapter(subjectId, chapterId)?.name : undefined,
     topicName: foundTopic?.topic.name,
     topicFocus: foundTopic?.topic.focus,
     mode,
-    board: state.profile.board,
-    medium: state.profile.medium,
-    studentName: state.profile.name !== "Student" ? state.profile.name : undefined,
+    board: clientBoard ?? state.profile.board,
+    medium: clientMedium ?? state.profile.medium,
+    studentName: clientStudentName ?? (state.profile.name !== "Student" ? state.profile.name : undefined),
     dueRevision: due.slice(0, 5).map((d) => d.topicName),
     mastery: foundTopic ? state.progress[subjectId]?.[chapterId]?.[topicId]?.mastery : undefined,
   };

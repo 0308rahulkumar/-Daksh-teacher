@@ -145,10 +145,13 @@ export default function DashboardPage() {
   const todaySessions = studySessions.filter((s) => s.date === today);
   const minutesToday = todaySessions.reduce((acc, s) => acc + s.minutes, 0);
 
-  // CBSE 2026 Countdown
-  const targetExamDate = new Date("2026-02-15T09:00:00Z");
-  const diffTime = targetExamDate.getTime() - Date.now();
-  const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+  // Dynamic CBSE Board Exam Countdown (Upcoming February 15th)
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const examYear = (now.getMonth() > 1 || (now.getMonth() === 1 && now.getDate() >= 15)) ? currentYear + 1 : currentYear;
+  const targetExamDate = new Date(`${examYear}-02-15T09:00:00Z`);
+  const diffTime = targetExamDate.getTime() - now.getTime();
+  const daysRemaining = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
 
   const studentLevel = Math.floor(totalMasteredAll / 5) + 1;
   const studentRank = totalMasteredAll < 5 ? "Board Explorer 🚀" : totalMasteredAll < 15 ? "Concept Builder ⚡" : "Board Ranker 🏆";
@@ -260,7 +263,7 @@ export default function DashboardPage() {
           <div className="flex flex-row md:flex-col items-center md:items-end justify-between gap-2.5 shrink-0">
             <div className="rounded-xl border border-border/80 bg-paper/60 px-4 py-2 text-right">
               <span className="block text-[11px] font-mono uppercase tracking-wider text-muted font-semibold">
-                CBSE 2026 Board Exam
+                CBSE {examYear} Board Exam
               </span>
               <span className="text-lg font-extrabold text-ink font-mono">
                 ⏳ {daysRemaining} Days Remaining
