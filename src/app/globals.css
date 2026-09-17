@@ -37,6 +37,51 @@
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/*  ThreeUI Kage Temple Theme (Japanese sanctuary, charcoal & vermilion/gold) */
+/* -------------------------------------------------------------------------- */
+html[data-theme="kage"] {
+  --paper: #090c0f;
+  --surface: #101419;
+  --ink: #dfe7e0;
+  --muted: #78837c;
+  --accent: #e0231c;       /* authentic Kage vermilion */
+  --accent-light: rgba(224, 35, 28, 0.14);
+  --highlight: rgba(201, 162, 74, 0.18); /* Kage gold */
+  --border: rgba(223, 231, 224, 0.12);
+  --shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.8);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  ThreeUI Field Manuals Theme (Earth-toned editorial parchment & antique)   */
+/* -------------------------------------------------------------------------- */
+html[data-theme="field-manuals"] {
+  --paper: #1d1a15;
+  --surface: #29251d;
+  --ink: #eee2ca;
+  --muted: #c5b79e;
+  --accent: #c3a47b;       /* authentic Field Manuals ochre foil */
+  --accent-light: rgba(195, 164, 123, 0.15);
+  --highlight: rgba(219, 195, 156, 0.2);
+  --border: rgba(195, 164, 123, 0.22);
+  --shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.7);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Warm Obsidian Amber Theme                                                 */
+/* -------------------------------------------------------------------------- */
+html[data-theme="obsidian"] {
+  --paper: #0C0D10;
+  --surface: #14161B;
+  --ink: #F4F4F5;
+  --muted: #9496A1;
+  --accent: #F59E0B;
+  --accent-light: rgba(245, 158, 11, 0.12);
+  --highlight: rgba(245, 158, 11, 0.18);
+  --border: #23262E;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-surface: var(--surface);

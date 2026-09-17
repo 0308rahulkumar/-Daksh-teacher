@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 function Icon({ d, extra }: { d: string; extra?: string }) {
   return (
@@ -74,9 +75,13 @@ export function Sidebar() {
           ))}
         </nav>
 
-        <div className="mt-auto rounded-lg border border-border p-3 text-xs text-muted">
-          <p className="font-medium text-ink mb-1">Tip of the day</p>
-          <p>Explain today's topic aloud, then quiz yourself. Retrieval beats re-reading.</p>
+        <div className="mt-auto space-y-3">
+          <ThemeSwitcher />
+
+          <div className="rounded-lg border border-border p-3 text-xs text-muted">
+            <p className="font-medium text-ink mb-1">Tip of the day</p>
+            <p>Explain today's topic aloud, then quiz yourself. Retrieval beats re-reading.</p>
+          </div>
         </div>
       </aside>
 
