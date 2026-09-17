@@ -1,8 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { AuthModal } from "./AuthModal";
+import { getCurrentUser, type StudentAccount } from "@/lib/auth";
 
 function Icon({ d, extra }: { d: string; extra?: string }) {
   return (
@@ -42,16 +45,35 @@ const NAV = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [currentUser, setCurrentUser] = useState<StudentAccount | null>(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authInitialTab, setAuthInitialTab] = useState<"signup" | "signin" | "switch">("signup");
+
+  useEffect(() => {
+    setCurrentUser(getCurrentUser());
+
+    const handleAuthChange = (e: Event) => {
+      setCurrentUser((e as CustomEvent).detail);
+    };
+    window.addEventListener("daksh-auth-changed", handleAuthChange);
+    return () => window.removeEventListener("daksh-auth-changed", handleAuthChange);
+  }, []);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <>
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        initialTab={authInitialTab}
+      />
+
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-border/70 bg-surface/75 backdrop-blur-2xl px-4 py-6">
         <Link href="/" className="flex items-center gap-2 px-2 mb-8">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-white text-lg">📚</span>
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-white text-lg select-none">📚</span>
           <span>
             <span className="block font-semibold leading-tight">Daksh</span>
             <span className="block text-xs text-muted">Class 10 AI Teacher</span>
@@ -76,10 +98,54 @@ export function Sidebar() {
         </nav>
 
         <div className="mt-auto space-y-3">
+          {/* Active Student Profile & Auth Status */}
+          {currentUser ? (
+            <div className="rounded-xl border border-border/80 bg-surface/85 backdrop-blur-xl p-2.5 shadow-xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-xl select-none">{currentUser.avatar || "🎓"}</span>
+                  <div className="min-w-0">
+                    <span className="block text-xs font-bold text-ink truncate">{currentUser.name}</span>
+                    <span className="block text-[10px] text-muted">@{currentUser.username} • {currentUser.targetScore}% Goal</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setAuthInitialTab("switch"); setIsAuthOpen(true); }}
+                  title="Switch / Log Out"
+                  className="text-xs p-1 rounded hover:bg-paper text-muted hover:text-ink cursor-pointer"
+                >
+                  ⇄
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-accent/40 bg-accent-light/30 backdrop-blur-xl p-2.5 text-center">
+              <span className="block text-xs font-bold text-ink mb-0.5">Student Account</span>
+              <p className="text-[10px] text-muted mb-2">Sign in to isolate streaks & score goals</p>
+              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => { setAuthInitialTab("signup"); setIsAuthOpen(true); }}
+                  className="flex-1 py-1 rounded-lg bg-accent text-white text-xs font-semibold hover:bg-accent/90 transition-all cursor-pointer shadow-2xs"
+                >
+                  Sign Up
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setAuthInitialTab("signin"); setIsAuthOpen(true); }}
+                  className="flex-1 py-1 rounded-lg border border-border bg-paper text-ink text-xs font-semibold hover:border-accent transition-all cursor-pointer"
+                >
+                  Sign In
+                </button>
+              </div>
+            </div>
+          )}
+
           <ThemeSwitcher />
 
-          <div className="rounded-lg border border-border p-3 text-xs text-muted">
-            <p className="font-medium text-ink mb-1">Tip of the day</p>
+          <div className="rounded-lg border border-border/60 p-2.5 text-[11px] text-muted">
+            <p className="font-semibold text-ink mb-0.5">Tip of the day</p>
             <p>Explain today's topic aloud, then quiz yourself. Retrieval beats re-reading.</p>
           </div>
         </div>
@@ -87,22 +153,34 @@ export function Sidebar() {
 
       {/* Mobile top bar */}
       <div className="sticky top-0 z-20 md:hidden w-full bg-surface/85 backdrop-blur-xl border-b border-border/70 px-3 py-2">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-          <Link href="/" className="flex items-center gap-1.5 font-semibold mr-2 shrink-0">
-            <span className="grid h-7 w-7 place-items-center rounded-md bg-accent text-white text-sm">📚</span>
-            Daksh
-          </Link>
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium ${
-                isActive(item.href) ? "bg-accent-light text-accent" : "text-muted"
-              }`}
-            >
-              {item.label}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <Link href="/" className="flex items-center gap-1.5 font-semibold mr-2 shrink-0">
+              <span className="grid h-7 w-7 place-items-center rounded-md bg-accent text-white text-sm select-none">📚</span>
+              Daksh
             </Link>
-          ))}
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium ${
+                  isActive(item.href) ? "bg-accent-light text-accent" : "text-muted"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Mobile Auth Button */}
+          <button
+            type="button"
+            onClick={() => { setAuthInitialTab(currentUser ? "switch" : "signin"); setIsAuthOpen(true); }}
+            className="ml-2 shrink-0 text-xs px-2 py-1 rounded-lg border border-accent/40 bg-accent-light/40 text-accent font-semibold flex items-center gap-1 cursor-pointer"
+          >
+            <span>{currentUser ? currentUser.avatar : "👤"}</span>
+            <span className="hidden sm:inline">{currentUser ? currentUser.name.split(" ")[0] : "Sign In"}</span>
+          </button>
         </div>
       </div>
     </>
