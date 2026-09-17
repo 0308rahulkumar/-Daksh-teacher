@@ -3,7 +3,16 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 
-export type SimId = "circuits" | "optics" | "ph-scale" | "parabola" | "heart-circulation" | "punnett-square";
+export type SimId =
+  | "circuits"
+  | "geometric-optics"
+  | "optics"
+  | "ph-scale"
+  | "build-an-atom"
+  | "parabola"
+  | "trig-tour"
+  | "heart-circulation"
+  | "punnett-square";
 
 export interface SimMeta {
   id: SimId;
@@ -39,6 +48,25 @@ export const SIMULATIONS: SimMeta[] = [
     ],
     cbseExamQuestion: "CBSE Board: State Ohm's Law. Draw a circuit diagram to verify it with voltmeter and ammeter.",
     embedUrl: "https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_all.html",
+  },
+  {
+    id: "geometric-optics",
+    title: "Spherical Mirrors & Lenses Optics Lab",
+    subject: "Physics",
+    subjectColor: "#0ea5e9",
+    badge: "PhET Interactive",
+    icon: "🪞",
+    ncertChapter: "Light — Reflection & Refraction (Ch-10)",
+    tagline: "Ray tracing through concave/convex mirrors & lenses with real/virtual images.",
+    description: "Adjust object position, focal length, and mirror curvature. Observe real vs virtual images and verify the mirror formula (1/v + 1/u = 1/f).",
+    experimentSteps: [
+      "1. Choose between Mirror or Lens at the top.",
+      "2. Select Concave or Convex optical element.",
+      "3. Drag the pencil object closer to and further from the focus F.",
+      "4. Observe ray paths: parallel rays converge at Focus, and rays through 2F reflect back.",
+    ],
+    cbseExamQuestion: "CBSE Board: An object is placed at 20 cm in front of a concave mirror of focal length 15 cm. Find the position, nature, and magnification of the image.",
+    embedUrl: "https://phet.colorado.edu/sims/html/geometric-optics/latest/geometric-optics_all.html",
   },
   {
     id: "optics",
@@ -78,6 +106,24 @@ export const SIMULATIONS: SimMeta[] = [
     embedUrl: "https://phet.colorado.edu/sims/html/ph-scale/latest/ph-scale_all.html",
   },
   {
+    id: "build-an-atom",
+    title: "Bohr Model & Atomic Shells Lab",
+    subject: "Chemistry",
+    subjectColor: "#059669",
+    badge: "PhET Interactive",
+    icon: "⚛️",
+    ncertChapter: "Metals and Non-metals (Ch-3)",
+    tagline: "Build atoms with protons, neutrons, and electrons in Bohr energy shells.",
+    description: "Add protons, neutrons, and electrons to observe the Bohr orbits (K, L, M shells), mass number, net charge, and ionic formation.",
+    experimentSteps: [
+      "1. Drag Protons into the nucleus to choose your element (Z = 1 to 10).",
+      "2. Add Electrons into the K and L energy shells and observe the 2n² capacity rule.",
+      "3. Create positive cations (loss of e⁻) and negative anions (gain of e⁻) to understand ionic bonding in NaCl.",
+    ],
+    cbseExamQuestion: "CBSE Board: Show the formation of sodium chloride (NaCl) by the transfer of electrons between Na and Cl.",
+    embedUrl: "https://phet.colorado.edu/sims/html/build-an-atom/latest/build-an-atom_all.html",
+  },
+  {
     id: "parabola",
     title: "Quadratic Parabola & Roots Visualizer",
     subject: "Mathematics",
@@ -93,6 +139,24 @@ export const SIMULATIONS: SimMeta[] = [
       "3. When D < 0, the curve never touches the x-axis (no real roots).",
     ],
     cbseExamQuestion: "CBSE Board: Find the discriminant of 2x² - 4x + 3 = 0 and discuss the nature of its roots.",
+  },
+  {
+    id: "trig-tour",
+    title: "Trigonometry Tour & Unit Circle Lab",
+    subject: "Mathematics",
+    subjectColor: "#d97706",
+    badge: "PhET Interactive",
+    icon: "📐",
+    ncertChapter: "Introduction to Trigonometry (Ch-8 & 9)",
+    tagline: "Drag angle θ on the unit circle to see live values of sin, cos, and tan.",
+    description: "Visual exploration of trigonometric functions on the unit circle. Shows right triangles, projections on x and y axes, and identities.",
+    experimentSteps: [
+      "1. Drag the angle pointer around the circle to test 30°, 45°, and 60°.",
+      "2. Observe how the vertical projection represents sin(θ) and horizontal represents cos(θ).",
+      "3. Verify the identity: sin²(θ) + cos²(θ) = 1 at any angle.",
+    ],
+    cbseExamQuestion: "CBSE Board: If sin θ + cos θ = √3, prove that tan θ + cot θ = 1.",
+    embedUrl: "https://phet.colorado.edu/sims/html/trig-tour/latest/trig-tour_all.html",
   },
   {
     id: "heart-circulation",
@@ -132,17 +196,26 @@ export const SIMULATIONS: SimMeta[] = [
 
 export function getSimForTopic(chapterId?: string, topicId?: string): SimMeta | undefined {
   if (!chapterId) return undefined;
-  if (chapterId.includes("phy1") || topicId?.includes("mirror") || topicId?.includes("refraction") || topicId?.includes("lens")) {
+  if (topicId?.includes("mirror")) {
+    return SIMULATIONS.find((s) => s.id === "geometric-optics");
+  }
+  if (chapterId.includes("phy1") || topicId?.includes("refraction") || topicId?.includes("lens")) {
     return SIMULATIONS.find((s) => s.id === "optics");
   }
   if (chapterId.includes("phy2") || topicId?.includes("ohm") || topicId?.includes("circuit") || topicId?.includes("resistance")) {
     return SIMULATIONS.find((s) => s.id === "circuits");
+  }
+  if (chapterId.includes("chem3") || topicId?.includes("metal") || topicId?.includes("ionic") || topicId?.includes("atom")) {
+    return SIMULATIONS.find((s) => s.id === "build-an-atom");
   }
   if (chapterId.includes("chem2") || topicId?.includes("acid") || topicId?.includes("ph") || topicId?.includes("salt")) {
     return SIMULATIONS.find((s) => s.id === "ph-scale");
   }
   if (chapterId.includes("alg2") || topicId?.includes("quadratic") || topicId?.includes("polynomial") || topicId?.includes("roots")) {
     return SIMULATIONS.find((s) => s.id === "parabola");
+  }
+  if (chapterId.includes("trig") || topicId?.includes("trig") || topicId?.includes("height") || topicId?.includes("angle")) {
+    return SIMULATIONS.find((s) => s.id === "trig-tour");
   }
   if (chapterId.includes("bio1") || topicId?.includes("transport") || topicId?.includes("heart") || topicId?.includes("excretion") || topicId?.includes("respiration")) {
     return SIMULATIONS.find((s) => s.id === "heart-circulation");
@@ -670,7 +743,7 @@ export function InteractiveSimLab({
             href="/labs"
             className="text-xs inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/30 text-amber-300 font-semibold transition"
           >
-            <span>🔬 Browse All 6 Labs</span>
+            <span>🔬 Browse All 9 Labs</span>
             <span>→</span>
           </Link>
         )}
