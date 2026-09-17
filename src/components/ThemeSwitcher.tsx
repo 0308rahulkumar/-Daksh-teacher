@@ -2,42 +2,66 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-export type ThemeOption = "obsidian" | "kage" | "field-manuals";
+export type ThemeOption = "obsidian" | "kage" | "field-manuals" | "cyberpunk" | "matrix";
+export type BgMode = "constellation" | "cybergrid" | "embers";
 
 const THEMES: { id: ThemeOption; label: string; icon: string; desc: string; accentColor: string }[] = [
   {
     id: "obsidian",
-    label: "Obsidian Amber",
+    label: "Obsidian",
     icon: "🔥",
     desc: "Warm neutral obsidian charcoal & amber gold",
     accentColor: "#F59E0B",
   },
   {
     id: "kage",
-    label: "ThreeUI Kage",
+    label: "Kage",
     icon: "⛩️",
     desc: "Japanese shrine sanctuary, charcoal & vermilion",
     accentColor: "#e0231c",
   },
   {
     id: "field-manuals",
-    label: "Field Manuals",
+    label: "Manuals",
     icon: "📚",
     desc: "Earth-toned antique library & gold foil",
     accentColor: "#c3a47b",
   },
+  {
+    id: "cyberpunk",
+    label: "Cyber",
+    icon: "⚡",
+    desc: "Electric neon violet & cyber cyan",
+    accentColor: "#8b5cf6",
+  },
+  {
+    id: "matrix",
+    label: "Matrix",
+    icon: "🟩",
+    desc: "Classic terminal hacker green & deep slate",
+    accentColor: "#10b981",
+  },
+];
+
+const BG_MODES: { id: BgMode; label: string; icon: string }[] = [
+  { id: "constellation", label: "Neural", icon: "🌌" },
+  { id: "cybergrid", label: "Grid", icon: "🌐" },
+  { id: "embers", label: "Embers", icon: "✨" },
 ];
 
 export function ThemeSwitcher() {
   const [currentTheme, setCurrentTheme] = useState<ThemeOption>("obsidian");
+  const [bgMode, setBgMode] = useState<BgMode>("constellation");
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
 
   useEffect(() => {
-    const saved = (localStorage.getItem("daksh-app-theme") as ThemeOption) || "obsidian";
-    setCurrentTheme(saved);
-    applyTheme(saved);
+    const savedTheme = (localStorage.getItem("daksh-app-theme") as ThemeOption) || "obsidian";
+    const savedBgMode = (localStorage.getItem("daksh-bg-mode") as BgMode) || "constellation";
+    setCurrentTheme(savedTheme);
+    setBgMode(savedBgMode);
+    applyTheme(savedTheme);
 
     return () => {
       if (audioCtxRef.current) {
@@ -52,6 +76,14 @@ export function ThemeSwitcher() {
     setCurrentTheme(theme);
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("daksh-theme-changed", { detail: theme }));
+    }
+  };
+
+  const applyBgMode = (mode: BgMode) => {
+    setBgMode(mode);
+    localStorage.setItem("daksh-bg-mode", mode);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("daksh-bg-mode-changed", { detail: mode }));
     }
   };
 
@@ -71,7 +103,6 @@ export function ThemeSwitcher() {
         const ctx = new AudioCtx();
         audioCtxRef.current = ctx;
 
-        // Master Gain
         const masterGain = ctx.createGain();
         masterGain.gain.setValueAtTime(0.045, ctx.currentTime);
         masterGain.connect(ctx.destination);
@@ -84,7 +115,7 @@ export function ThemeSwitcher() {
         oscGain.gain.setValueAtTime(0.015, ctx.currentTime);
 
         osc1.type = "sine";
-        osc1.frequency.setValueAtTime(108, ctx.currentTime); // Sub-harmonic anchor
+        osc1.frequency.setValueAtTime(108, ctx.currentTime);
         osc2.type = "sine";
         osc2.frequency.setValueAtTime(112, ctx.currentTime); // 4Hz binaural theta beat
 
@@ -113,7 +144,6 @@ export function ThemeSwitcher() {
         whiteNoise.buffer = noiseBuffer;
         whiteNoise.loop = true;
 
-        // Lowpass filter for warm rain tone
         const filter = ctx.createBiquadFilter();
         filter.type = "lowpass";
         filter.frequency.setValueAtTime(450, ctx.currentTime);
@@ -134,15 +164,16 @@ export function ThemeSwitcher() {
   };
 
   return (
-    <div className="rounded-xl border border-border/80 bg-surface/80 backdrop-blur-xl p-3 space-y-2.5 shadow-sm">
+    <div className="rounded-xl border border-border/80 bg-surface/85 backdrop-blur-xl p-3 space-y-2.5 shadow-sm">
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-mono uppercase tracking-wider text-muted font-semibold">
-          Vibe Theme
+          Vibe Palette
         </span>
-        <span className="text-xs">✨</span>
+        <span className="text-xs">🎨</span>
       </div>
 
-      <div className="grid grid-cols-3 gap-1.5">
+      {/* 5 Themes Grid */}
+      <div className="grid grid-cols-5 gap-1">
         {THEMES.map((t) => {
           const isActive = currentTheme === t.id;
           return (
@@ -151,24 +182,54 @@ export function ThemeSwitcher() {
               type="button"
               onClick={() => applyTheme(t.id)}
               title={t.desc}
-              className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all text-center select-none cursor-pointer ${
+              className={`flex flex-col items-center justify-center p-1.5 rounded-lg border transition-all text-center select-none cursor-pointer ${
                 isActive
-                  ? "border-accent bg-accent-light/50 text-accent font-semibold shadow-2xs scale-[1.02]"
+                  ? "border-accent bg-accent-light/50 text-accent font-semibold shadow-2xs scale-[1.04]"
                   : "border-border/60 bg-paper/50 text-muted hover:border-border hover:text-ink"
               }`}
             >
               <span className="text-sm">{t.icon}</span>
-              <span className="text-[10px] mt-1 leading-tight line-clamp-1">{t.label}</span>
+              <span className="text-[9px] mt-0.5 leading-tight line-clamp-1">{t.label}</span>
             </button>
           );
         })}
       </div>
 
+      {/* Background Mode Selector */}
+      <div className="pt-1.5 border-t border-border/40">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-medium">
+            3D Canvas
+          </span>
+          <span className="text-[10px] text-muted">Click anywhere to ripple ✨</span>
+        </div>
+        <div className="grid grid-cols-3 gap-1">
+          {BG_MODES.map((m) => {
+            const isActive = bgMode === m.id;
+            return (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => applyBgMode(m.id)}
+                className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-md text-[10px] font-medium border transition-all cursor-pointer ${
+                  isActive
+                    ? "border-accent bg-accent-light/60 text-accent font-semibold"
+                    : "border-border/50 text-muted hover:text-ink hover:border-border"
+                }`}
+              >
+                <span>{m.icon}</span>
+                <span>{m.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Ambient Lo-Fi Study Frequency Generator */}
-      <div className="pt-1 border-t border-border/40 flex items-center justify-between">
+      <div className="pt-1.5 border-t border-border/40 flex items-center justify-between">
         <span className="text-[10px] text-muted flex items-center gap-1.5">
           <span>🎧</span>
-          <span>Focus Ambience</span>
+          <span>Focus Rain Drone</span>
         </span>
         <button
           type="button"

@@ -29,6 +29,18 @@ const PALETTES: Record<string, ThemePalette> = {
     tertiary: new THREE.Color("#9A7B4F"), // Vintage Leather
     gridColor: new THREE.Color("#B48A54"),
   },
+  cyberpunk: {
+    primary: new THREE.Color("#8B5CF6"), // Electric Violet
+    secondary: new THREE.Color("#06B6D4"), // Cyber Cyan
+    tertiary: new THREE.Color("#EC4899"), // Neon Magenta
+    gridColor: new THREE.Color("#7C3AED"),
+  },
+  matrix: {
+    primary: new THREE.Color("#10B981"), // Terminal Emerald
+    secondary: new THREE.Color("#34D399"), // Spring Green
+    tertiary: new THREE.Color("#059669"), // Deep Code Green
+    gridColor: new THREE.Color("#059669"),
+  },
 };
 
 export function ThreeCanvas() {
@@ -43,7 +55,7 @@ export function ThreeCanvas() {
 
     // --- Scene, Camera, Renderer ---
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0a0c10, 0.016);
+    scene.fog = new THREE.FogExp2(0x090b0e, 0.016);
 
     const camera = new THREE.PerspectiveCamera(
       55,
@@ -61,7 +73,7 @@ export function ThreeCanvas() {
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.3;
     container.appendChild(renderer.domElement);
 
     // --- Texture for Glowing Circular Nodes ---
@@ -72,8 +84,8 @@ export function ThreeCanvas() {
     if (ctx) {
       const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
       grad.addColorStop(0, "rgba(255, 255, 255, 1)");
-      grad.addColorStop(0.25, "rgba(255, 255, 255, 0.85)");
-      grad.addColorStop(0.6, "rgba(255, 255, 255, 0.3)");
+      grad.addColorStop(0.25, "rgba(255, 255, 255, 0.9)");
+      grad.addColorStop(0.6, "rgba(255, 255, 255, 0.35)");
       grad.addColorStop(1, "rgba(255, 255, 255, 0)");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 64, 64);
@@ -93,14 +105,17 @@ export function ThreeCanvas() {
     let currentPalette = { ...PALETTES[currentThemeId] };
     let targetPalette = { ...PALETTES[currentThemeId] };
 
+    // --- Background Vibe Mode State ---
+    let bgMode = (typeof localStorage !== "undefined" && localStorage.getItem("daksh-bg-mode")) || "constellation";
+
     // --- 1. NEURAL CONSTELLATION NODES ---
-    const PARTICLE_COUNT = 150;
+    const PARTICLE_COUNT = 160;
     const pGeometry = new THREE.BufferGeometry();
     const pPositions = new Float32Array(PARTICLE_COUNT * 3);
     const pVelocities: { x: number; y: number; z: number; ox: number; oy: number; oz: number }[] = [];
     const pColors = new Float32Array(PARTICLE_COUNT * 3);
 
-    const spreadX = 46;
+    const spreadX = 48;
     const spreadY = 32;
     const spreadZ = 20;
 
@@ -132,11 +147,11 @@ export function ThreeCanvas() {
     pGeometry.setAttribute("color", new THREE.BufferAttribute(pColors, 3));
 
     const pMaterial = new THREE.PointsMaterial({
-      size: 1.15,
+      size: 1.2,
       map: nodeTexture,
       vertexColors: true,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.95,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
@@ -145,7 +160,7 @@ export function ThreeCanvas() {
     scene.add(particles);
 
     // --- 2. DYNAMIC CONSTELLATION LASER CONNECTIONS ---
-    const MAX_LINES = 320;
+    const MAX_LINES = 360;
     const linePositions = new Float32Array(MAX_LINES * 2 * 3);
     const lineColors = new Float32Array(MAX_LINES * 2 * 3);
 
@@ -171,7 +186,7 @@ export function ThreeCanvas() {
     // --- 3. RETRO-CYBER HORIZON GRID (Undulating Synthwave Wave) ---
     const gridSegmentsX = 32;
     const gridSegmentsY = 20;
-    const gridGeometry = new THREE.PlaneGeometry(70, 44, gridSegmentsX, gridSegmentsY);
+    const gridGeometry = new THREE.PlaneGeometry(72, 44, gridSegmentsX, gridSegmentsY);
     gridGeometry.rotateX(-Math.PI / 2.2);
     gridGeometry.translate(0, -10, -2);
 
@@ -179,7 +194,7 @@ export function ThreeCanvas() {
     const gridMaterial = new THREE.LineBasicMaterial({
       color: currentPalette.gridColor,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.3,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
@@ -194,7 +209,7 @@ export function ThreeCanvas() {
     }
 
     // --- 4. FLOATING STUDY CODING EMBERS ---
-    const DUST_COUNT = 70;
+    const DUST_COUNT = 80;
     const dustGeometry = new THREE.BufferGeometry();
     const dustPositions = new Float32Array(DUST_COUNT * 3);
     for (let i = 0; i < DUST_COUNT; i++) {
@@ -205,16 +220,27 @@ export function ThreeCanvas() {
     dustGeometry.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
 
     const dustMaterial = new THREE.PointsMaterial({
-      size: 0.7,
+      size: 0.75,
       map: nodeTexture,
       color: currentPalette.primary,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.75,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
     const dustParticles = new THREE.Points(dustGeometry, dustMaterial);
     scene.add(dustParticles);
+
+    // --- 5. INTERACTIVE CLICK SHOCKWAVES ---
+    interface Shockwave {
+      x: number;
+      y: number;
+      z: number;
+      radius: number;
+      maxRadius: number;
+      strength: number;
+    }
+    const shockwaves: Shockwave[] = [];
 
     // --- Mouse & Touch Coordinates in 3D Space ---
     let mouseX = 0;
@@ -232,9 +258,23 @@ export function ThreeCanvas() {
       mouse3D.set(normX * 20, normY * 14, 2);
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    const handlePointerDown = (e: MouseEvent) => {
+      const normX = (e.clientX / window.innerWidth) * 2 - 1;
+      const normY = -(e.clientY / window.innerHeight) * 2 + 1;
+      shockwaves.push({
+        x: normX * 20,
+        y: normY * 14,
+        z: 2,
+        radius: 0.5,
+        maxRadius: 18,
+        strength: 0.65,
+      });
+    };
 
-    // --- Theme Listener & Smooth Color Lerp ---
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+
+    // --- Theme & Mode Listeners ---
     const updateThemeFromDOM = () => {
       const themeId = getActiveThemeId();
       if (PALETTES[themeId]) {
@@ -251,7 +291,12 @@ export function ThreeCanvas() {
       }
     };
 
+    const handleBgModeChange = (e: Event) => {
+      bgMode = (e as CustomEvent).detail;
+    };
+
     window.addEventListener("daksh-theme-changed", handleCustomThemeChange);
+    window.addEventListener("daksh-bg-mode-changed", handleBgModeChange);
 
     const observer = new MutationObserver(() => {
       updateThemeFromDOM();
@@ -294,6 +339,22 @@ export function ThreeCanvas() {
       gridMaterial.color.copy(currentPalette.gridColor);
       dustMaterial.color.copy(currentPalette.primary);
 
+      // Visibility adjustments based on bgMode
+      if (bgMode === "cybergrid") {
+        gridMaterial.opacity = 0.55;
+        pMaterial.opacity = 0.5;
+        lineMaterial.opacity = 0.3;
+      } else if (bgMode === "embers") {
+        gridMaterial.opacity = 0.1;
+        pMaterial.opacity = 0.98;
+        lineMaterial.opacity = 0.15;
+      } else {
+        // default constellation
+        gridMaterial.opacity = 0.3;
+        pMaterial.opacity = 0.95;
+        lineMaterial.opacity = 0.55;
+      }
+
       // Smooth Camera Parallax
       targetCameraX += (mouseX - targetCameraX) * 0.035;
       targetCameraY += (1.5 + mouseY - targetCameraY) * 0.035;
@@ -301,7 +362,17 @@ export function ThreeCanvas() {
       camera.position.y = targetCameraY;
       camera.lookAt(0, 0, 0);
 
-      // Update Node positions & Mouse Physics
+      // Expand and apply shockwaves
+      for (let s = shockwaves.length - 1; s >= 0; s--) {
+        const sw = shockwaves[s];
+        sw.radius += 0.45;
+        sw.strength *= 0.96;
+        if (sw.radius > sw.maxRadius || sw.strength < 0.02) {
+          shockwaves.splice(s, 1);
+        }
+      }
+
+      // Update Node positions, Mouse Physics & Shockwaves
       const positions = pGeometry.attributes.position.array as Float32Array;
       const colors = pGeometry.attributes.color.array as Float32Array;
 
@@ -328,6 +399,23 @@ export function ThreeCanvas() {
           const force = (1 - distToMouse / MOUSE_REPEL_RADIUS) * 0.035;
           positions[idx] += (dx / distToMouse) * force;
           positions[idx + 1] += (dy / distToMouse) * force;
+        }
+
+        // Apply expanding click shockwaves
+        for (let s = 0; s < shockwaves.length; s++) {
+          const sw = shockwaves[s];
+          const sdx = positions[idx] - sw.x;
+          const sdy = positions[idx + 1] - sw.y;
+          const sdz = positions[idx + 2] - sw.z;
+          const sDist = Math.sqrt(sdx * sdx + sdy * sdy + sdz * sdz);
+          const ringDist = Math.abs(sDist - sw.radius);
+
+          if (ringDist < 2.5 && sDist > 0.01) {
+            const shockForce = (1 - ringDist / 2.5) * sw.strength * 0.08;
+            positions[idx] += (sdx / sDist) * shockForce;
+            positions[idx + 1] += (sdy / sDist) * shockForce;
+            positions[idx + 2] += (sdz / sDist) * shockForce;
+          }
         }
 
         const col = i % 3 === 0 ? currentPalette.primary : i % 3 === 1 ? currentPalette.secondary : currentPalette.tertiary;
@@ -408,7 +496,7 @@ export function ThreeCanvas() {
       lineGeometry.attributes.position.needsUpdate = true;
       lineGeometry.attributes.color.needsUpdate = true;
 
-      // Cyber Grid Undulation every other frame for peak 60fps performance
+      // Cyber Grid Undulation every other frame
       if (frameCount % 2 === 0) {
         const gridPositions = gridGeometry.attributes.position;
         for (let i = 0; i < gridPositions.count; i++) {
@@ -436,8 +524,10 @@ export function ThreeCanvas() {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("daksh-theme-changed", handleCustomThemeChange);
+      window.removeEventListener("daksh-bg-mode-changed", handleBgModeChange);
       observer.disconnect();
 
       pGeometry.dispose();

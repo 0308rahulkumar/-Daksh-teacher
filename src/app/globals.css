@@ -1,75 +1,62 @@
 @import "tailwindcss";
 
-/* -------------------------------------------------------------------------- */
-/*  Open Props + Matugen design tokens: Neutral obsidian dark, warm light     */
-/* -------------------------------------------------------------------------- */
-
 :root {
-  --paper: #FAF8F5;        /* warm natural study parchment */
-  --surface: rgba(255, 255, 255, 0.88); /* clean crisp card background */
-  --ink: #1C1917;          /* warm stone dark text (neutral 900) */
-  --muted: #78716C;        /* warm stone muted text */
-  --accent: #D97706;       /* rich warm amber/saffron gold (scholastic focus) */
-  --accent-light: #FEF3C7; /* warm golden glow */
+  --paper: #FAF8F5;
+  --surface: rgba(255, 255, 255, 0.88);
+  --ink: #1C1917;
+  --muted: #78716C;
+  --accent: #D97706;
+  --accent-light: #FEF3C7;
   --highlight: rgba(245, 158, 11, 0.15);
   --success: #16A34A;
   --danger: #DC2626;
   --warning: #D97706;
-  --border: #E7E5E4;       /* clean warm neutral stone border */
+  --border: #E7E5E4;
   --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -2px rgba(0, 0, 0, 0.03);
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #090B0E;        /* true obsidian charcoal - zero blue hue */
-    --surface: rgba(18, 20, 26, 0.78);      /* frosted glass obsidian */
-    --ink: #F4F4F5;          /* crisp off-white */
-    --muted: #9496A1;        /* neutral stone gray */
-    --accent: #F59E0B;       /* vibrant golden amber / ember flame */
-    --accent-light: rgba(245, 158, 11, 0.14); /* warm golden ambient tint */
+    --paper: #090B0E;
+    --surface: rgba(18, 20, 26, 0.78);
+    --ink: #F4F4F5;
+    --muted: #9496A1;
+    --accent: #F59E0B;
+    --accent-light: rgba(245, 158, 11, 0.14);
     --highlight: rgba(245, 158, 11, 0.18);
     --success: #10B981;
     --danger: #EF4444;
     --warning: #F59E0B;
-    --border: rgba(255, 255, 255, 0.09);       /* crisp neutral hairline border */
+    --border: rgba(255, 255, 255, 0.09);
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 4px 10px -4px rgba(0, 0, 0, 0.4);
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*  ThreeUI Kage Temple Theme (Japanese sanctuary, charcoal & vermilion/gold) */
-/* -------------------------------------------------------------------------- */
 html[data-theme="kage"] {
   --paper: #080A0D;
   --surface: rgba(16, 20, 26, 0.78);
   --ink: #dfe7e0;
   --muted: #78837c;
-  --accent: #e0231c;       /* authentic Kage vermilion */
+  --accent: #e0231c;
   --accent-light: rgba(224, 35, 28, 0.16);
-  --highlight: rgba(201, 162, 74, 0.2); /* Kage gold */
+  --highlight: rgba(201, 162, 74, 0.2);
   --border: rgba(224, 35, 28, 0.18);
   --shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.8);
 }
 
-/* -------------------------------------------------------------------------- */
-/*  ThreeUI Field Manuals Theme (Earth-toned editorial parchment & antique)   */
-/* -------------------------------------------------------------------------- */
 html[data-theme="field-manuals"] {
   --paper: #16130e;
   --surface: rgba(33, 28, 22, 0.8);
   --ink: #eee2ca;
   --muted: #c5b79e;
-  --accent: #c3a47b;       /* authentic Field Manuals ochre foil */
+  --accent: #c3a47b;
   --accent-light: rgba(195, 164, 123, 0.16);
   --highlight: rgba(219, 195, 156, 0.22);
   --border: rgba(195, 164, 123, 0.22);
   --shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.7);
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Warm Obsidian Amber Theme                                                 */
-/* -------------------------------------------------------------------------- */
 html[data-theme="obsidian"] {
   --paper: #090B0E;
   --surface: rgba(18, 20, 26, 0.78);
@@ -80,6 +67,30 @@ html[data-theme="obsidian"] {
   --highlight: rgba(245, 158, 11, 0.18);
   --border: rgba(255, 255, 255, 0.09);
   --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+html[data-theme="cyberpunk"] {
+  --paper: #0B0813;
+  --surface: rgba(22, 17, 34, 0.78);
+  --ink: #F3EEFF;
+  --muted: #A39BB8;
+  --accent: #8B5CF6;
+  --accent-light: rgba(139, 92, 246, 0.18);
+  --highlight: rgba(6, 182, 212, 0.22);
+  --border: rgba(139, 92, 246, 0.24);
+  --shadow: 0 12px 32px -6px rgba(11, 8, 19, 0.85);
+}
+
+html[data-theme="matrix"] {
+  --paper: #050A07;
+  --surface: rgba(10, 20, 14, 0.8);
+  --ink: #E0F2E9;
+  --muted: #729683;
+  --accent: #10B981;
+  --accent-light: rgba(16, 185, 129, 0.18);
+  --highlight: rgba(52, 211, 153, 0.22);
+  --border: rgba(16, 185, 129, 0.22);
+  --shadow: 0 12px 30px -6px rgba(5, 10, 7, 0.85);
 }
 
 @theme inline {
@@ -108,9 +119,6 @@ body {
   min-height: 100vh;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Frosted Glass Primitives for Vibe Coding Aesthetics                       */
-/* -------------------------------------------------------------------------- */
 .glass-panel {
   background-color: var(--surface);
   backdrop-filter: blur(16px);
@@ -118,9 +126,6 @@ body {
   border: 1px solid var(--border);
 }
 
-/* -------------------------------------------------------------------------- */
-/*  ThreeUI Plasma Button Animations                                           */
-/* -------------------------------------------------------------------------- */
 @keyframes plasma-rotate {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -219,18 +224,12 @@ body {
   transform: none;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Focus ring (accessibility)                                                 */
-/* -------------------------------------------------------------------------- */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Typography                                                                 */
-/* -------------------------------------------------------------------------- */
 .prose-teacher h1, .prose-teacher h2, .prose-teacher h3 {
   color: var(--ink);
   font-weight: 600;
@@ -281,7 +280,6 @@ body {
   font-weight: 600;
 }
 
-/* ThreeUI Shader Frame */
 .shader-frame {
   position: relative;
   width: 100%;
@@ -291,37 +289,16 @@ body {
   border-radius: 1rem;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Interactive 3D Book & Chapter Page Turn Styles                            */
-/* -------------------------------------------------------------------------- */
 @keyframes page-turn-forward {
-  0% {
-    transform: rotateY(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: rotateY(-35deg) skewY(-2deg);
-    opacity: 0.7;
-  }
-  100% {
-    transform: rotateY(0deg);
-    opacity: 1;
-  }
+  0% { transform: rotateY(0deg); opacity: 1; }
+  50% { transform: rotateY(-35deg) skewY(-2deg); opacity: 0.7; }
+  100% { transform: rotateY(0deg); opacity: 1; }
 }
 
 @keyframes page-turn-backward {
-  0% {
-    transform: rotateY(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: rotateY(35deg) skewY(2deg);
-    opacity: 0.7;
-  }
-  100% {
-    transform: rotateY(0deg);
-    opacity: 1;
-  }
+  0% { transform: rotateY(0deg); opacity: 1; }
+  50% { transform: rotateY(35deg) skewY(2deg); opacity: 0.7; }
+  100% { transform: rotateY(0deg); opacity: 1; }
 }
 
 .anim-page-turn-forward {
@@ -334,28 +311,21 @@ body {
   transform-origin: right center;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Print / PDF Revision Cheat-Sheet Styles                                   */
-/* -------------------------------------------------------------------------- */
 @media print {
   body {
     background: #ffffff !important;
     color: #1c1917 !important;
   }
-
   aside, nav, button, .no-print, .shader-frame, .threeui-background, canvas {
     display: none !important;
   }
-
   .prose-teacher {
     font-size: 11pt !important;
     line-height: 1.4 !important;
   }
-
   .prose-teacher table {
     page-break-inside: avoid;
   }
-
   .print-page-break {
     page-break-before: always;
   }

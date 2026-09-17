@@ -17,6 +17,40 @@ const QUICK_DOUBTS = [
   { label: "🌍 Nationalism in India", prompt: "Give me the key events and dates of the Non-Cooperation Movement for CBSE board exams." },
 ];
 
+const FORMULA_VAULT = [
+  {
+    category: "Physics — Electricity & Light",
+    items: [
+      { name: "Ohm's Law", formula: "V = I × R (Potential = Current × Resistance)" },
+      { name: "Electric Power", formula: "P = V × I = I²R = V² / R" },
+      { name: "Joule's Heating Law", formula: "H = I² × R × t" },
+      { name: "Mirror Formula", formula: "1/f = 1/v + 1/u  (m = -v/u = h'/h)" },
+      { name: "Lens Formula", formula: "1/f = 1/v - 1/u  (m = +v/u = h'/h)" },
+      { name: "Power of Lens", formula: "P = 1/f (in meters), Unit: Dioptre (D)" },
+    ],
+  },
+  {
+    category: "Chemistry — Important Reactions & Colors",
+    items: [
+      { name: "Lead Nitrate Heating", formula: "2Pb(NO₃)₂ → 2PbO (yellow) + 4NO₂ (brown fumes) + O₂" },
+      { name: "Ferrous Sulphate Heating", formula: "2FeSO₄ (green) → Fe₂O₃ (red-brown) + SO₂ + SO₃" },
+      { name: "Precipitation (Double Disp.)", formula: "Pb(NO₃)₂ + 2KI → PbI₂ ↓ (Yellow ppt) + 2KNO₃" },
+      { name: "Quick Lime Slaking", formula: "CaO (quicklime) + H₂O → Ca(OH)₂ (slaked lime) + Heat" },
+      { name: "Chlor-Alkali Process", formula: "2NaCl + 2H₂O → 2NaOH + Cl₂ (anode) + H₂ (cathode)" },
+    ],
+  },
+  {
+    category: "Mathematics — Core Board Formulas",
+    items: [
+      { name: "Quadratic Formula", formula: "x = (-b ± √(b² - 4ac)) / (2a)  [D = b² - 4ac]" },
+      { name: "Arithmetic Progression (AP)", formula: "aₙ = a + (n-1)d  |  Sₙ = n/2 [2a + (n-1)d]" },
+      { name: "Trig Fundamental Identity", formula: "sin²θ + cos²θ = 1  |  1 + tan²θ = sec²θ" },
+      { name: "Distance & Section Formula", formula: "d = √((x₂-x₁)² + (y₂-y₁)²), P = ((m₁x₂+m₂x₁)/(m₁+m₂), ...)" },
+      { name: "Surface Area & Volume", formula: "Cone: πrl, Sphere: 4πr², Cylinder: 2πrh" },
+    ],
+  },
+];
+
 const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: string; bg: string }> = {
   science: {
     icon: "🔬",
@@ -46,8 +80,11 @@ const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: strin
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { state, dueNow, loading, error, refresh } = useStateBundle();
+  const { state, dueNow, loading, error, refresh, saveProfile } = useStateBundle();
   const [quickInput, setQuickInput] = useState("");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState("");
+  const [showFormulaVault, setShowFormulaVault] = useState(false);
 
   if (loading) {
     return (
@@ -62,7 +99,7 @@ export default function DashboardPage() {
     return <EmptyState title="Couldn't load dashboard">{error ?? "No state found."}</EmptyState>;
   }
 
-  const { profile, progress, studySessions } = state;
+  const { profile, progress, studySessions, quizHistory } = state;
 
   /* Subject progress */
   const subjStats = subjectOptions().map((s) => {
@@ -99,40 +136,191 @@ export default function DashboardPage() {
     cursor = d.toISOString().slice(0, 10);
   }
 
+  /* Detailed Student Statistics */
+  const totalQuizzes = quizHistory.length;
+  const totalQuestionsAnswered = quizHistory.reduce((acc, q) => acc + q.total, 0);
+  const totalQuestionsCorrect = quizHistory.reduce((acc, q) => acc + q.correct, 0);
+  const quizAccuracy = totalQuestionsAnswered > 0 ? Math.round((totalQuestionsCorrect / totalQuestionsAnswered) * 100) : 0;
+
+  const todaySessions = studySessions.filter((s) => s.date === today);
+  const minutesToday = todaySessions.reduce((acc, s) => acc + s.minutes, 0);
+
+  // CBSE 2026 Countdown
+  const targetExamDate = new Date("2026-02-15T09:00:00Z");
+  const diffTime = targetExamDate.getTime() - Date.now();
+  const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+
+  const studentLevel = Math.floor(totalMasteredAll / 5) + 1;
+  const studentRank = totalMasteredAll < 5 ? "Board Explorer 🚀" : totalMasteredAll < 15 ? "Concept Builder ⚡" : "Board Ranker 🏆";
+
   const handleQuickAsk = (textToAsk?: string) => {
     const query = (textToAsk || quickInput).trim();
     if (!query) return;
     router.push(`/teacher?q=${encodeURIComponent(query)}`);
   };
 
+  const handleStartEditName = () => {
+    setNameInput(profile.name === "Student" ? "" : profile.name);
+    setIsEditingName(true);
+  };
+
+  const handleSaveName = async () => {
+    const trimmed = nameInput.trim();
+    if (trimmed) {
+      await saveProfile({ name: trimmed });
+    }
+    setIsEditingName(false);
+  };
+
   return (
     <div className="space-y-8 pb-12">
-      {/* Hero: Welcome + Live Student Motivation Header */}
-      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-br from-surface via-surface to-accent-light/20 backdrop-blur-xl p-6 shadow-xs">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 rounded-full bg-accent-light px-3 py-1 text-xs font-semibold text-accent">
-              <span>🎯 CBSE Class 10 Boards 2026</span>
-              <span>•</span>
-              <span>Level {Math.floor(totalMasteredAll / 5) + 1}: {totalMasteredAll < 5 ? "Board Explorer 🚀" : totalMasteredAll < 15 ? "Concept Builder ⚡" : "Board Ranker 🏆"}</span>
+      {/* ==================================================================== */}
+      {/*  STUDENT COMMAND CENTER: NAME, STATS & EXAM GOAL                     */}
+      {/* ==================================================================== */}
+      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-surface/90 backdrop-blur-2xl p-6 shadow-sm">
+        {/* Header Strip: Name, Avatar & Live Countdown */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/50">
+          <div className="flex items-start gap-4">
+            {/* Student Avatar with Level Badge */}
+            <div className="relative shrink-0">
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-accent to-amber-300 grid place-items-center text-3xl shadow-md select-none">
+                🎓
+              </div>
+              <span className="absolute -bottom-1 -right-1 text-[11px] bg-surface border border-border rounded-full px-1.5 py-0.5 font-bold shadow-xs">
+                Lvl {studentLevel}
+              </span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-              Namaste, {profile.name === "Student" ? "Future Board Topper" : profile.name}! 👋
-            </h1>
-            <p className="text-sm text-muted">
-              {profile.board} Board • {profile.medium} Medium • Daily Target: {profile.dailyMinutes} mins/day
-            </p>
+
+            <div className="space-y-1">
+              {/* Student Name with Inline Quick Edit */}
+              <div className="flex items-center gap-2">
+                {isEditingName ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={nameInput}
+                      onChange={(e) => setNameInput(e.target.value)}
+                      placeholder="Enter student name"
+                      className="rounded-lg border border-accent bg-paper px-3 py-1 text-base font-bold text-ink focus:outline-none focus:ring-1 focus:ring-accent"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSaveName();
+                        if (e.key === "Escape") setIsEditingName(false);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleSaveName}
+                      className="rounded-md bg-accent text-white px-2.5 py-1 text-xs font-semibold hover:bg-accent/90 cursor-pointer"
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingName(false)}
+                      className="rounded-md border border-border px-2 py-1 text-xs text-muted hover:text-ink cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+                      {profile.name === "Student" ? "Board Scholar" : profile.name}
+                    </h1>
+                    <button
+                      type="button"
+                      onClick={handleStartEditName}
+                      title="Click to edit your name"
+                      className="text-muted hover:text-accent p-1 rounded-md transition-colors text-sm cursor-pointer"
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                )}
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 text-xs font-semibold">
+                  ● Class 10 Scholar
+                </span>
+              </div>
+
+              {/* Badges & Meta */}
+              <p className="text-sm text-muted flex flex-wrap items-center gap-2">
+                <span>CBSE Class 10 ({profile.medium} Medium)</span>
+                <span>•</span>
+                <span className="text-accent font-medium">Target: 95%+ Board Exam</span>
+                <span>•</span>
+                <span className="font-mono text-xs bg-accent-light/60 text-accent px-2 py-0.5 rounded-md font-semibold">
+                  {studentRank}
+                </span>
+              </p>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="secondary" onClick={refresh} disabled={loading} className="text-xs">
-              🔄 Refresh Data
-            </Button>
+          {/* Live CBSE 2026 Countdown & Tools */}
+          <div className="flex flex-row md:flex-col items-center md:items-end justify-between gap-2.5 shrink-0">
+            <div className="rounded-xl border border-border/80 bg-paper/60 px-4 py-2 text-right">
+              <span className="block text-[11px] font-mono uppercase tracking-wider text-muted font-semibold">
+                CBSE 2026 Board Exam
+              </span>
+              <span className="text-lg font-extrabold text-ink font-mono">
+                ⏳ {daysRemaining} Days Remaining
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowFormulaVault(!showFormulaVault)}
+                className="text-xs px-2.5 py-1.5 rounded-lg border border-accent/40 bg-accent-light/30 text-accent font-medium hover:bg-accent-light/60 transition-all cursor-pointer flex items-center gap-1"
+              >
+                <span>📐</span>
+                <span>{showFormulaVault ? "Close Formulas" : "Formulas Vault"}</span>
+              </button>
+              <Button variant="secondary" onClick={refresh} disabled={loading} className="text-xs py-1.5 px-2.5">
+                🔄 Refresh
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Interactive Instant Doubt Launcher */}
-        <div className="mt-6 rounded-xl border border-border/80 bg-paper p-3 sm:p-4">
+        {/* Student KPI Performance Strip */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-5">
+          <div className="rounded-xl border border-border/70 bg-paper/50 backdrop-blur-md p-3 text-center">
+            <span className="block text-xs text-muted mb-1 font-medium">Syllabus Mastered</span>
+            <span className="text-xl font-black text-ink font-mono">{totalMasteredAll} / {totalTopicsAll}</span>
+            <span className="block text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-semibold">
+              {overallPercentage}% Complete
+            </span>
+          </div>
+
+          <div className="rounded-xl border border-border/70 bg-paper/50 backdrop-blur-md p-3 text-center">
+            <span className="block text-xs text-muted mb-1 font-medium">Questions Solved</span>
+            <span className="text-xl font-black text-ink font-mono">{totalQuestionsAnswered}</span>
+            <span className="block text-[10px] text-muted mt-0.5 font-medium">
+              across {totalQuizzes} quizzes
+            </span>
+          </div>
+
+          <div className="rounded-xl border border-border/70 bg-paper/50 backdrop-blur-md p-3 text-center">
+            <span className="block text-xs text-muted mb-1 font-medium">Quiz Accuracy</span>
+            <span className="text-xl font-black text-ink font-mono">{quizAccuracy}%</span>
+            <span className="block text-[10px] text-accent mt-0.5 font-semibold">
+              {totalQuestionsCorrect} correct answers
+            </span>
+          </div>
+
+          <div className="rounded-xl border border-border/70 bg-paper/50 backdrop-blur-md p-3 text-center">
+            <span className="block text-xs text-muted mb-1 font-medium">Daily Study Goal</span>
+            <span className="text-xl font-black text-ink font-mono">{minutesToday}m / {profile.dailyMinutes}m</span>
+            <span className="block text-[10px] text-muted mt-0.5 font-medium">
+              {profile.dailyMinutes - minutesToday > 0
+                ? `${profile.dailyMinutes - minutesToday}m to reach goal`
+                : "Daily Goal Achieved! 🎯"}
+            </span>
+          </div>
+        </div>
+
+        {/* Instant Doubt AI Launcher */}
+        <div className="mt-6 rounded-xl border border-border/80 bg-paper/70 p-3 sm:p-4">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -155,7 +343,7 @@ export default function DashboardPage() {
             <button
               type="submit"
               disabled={!quickInput.trim()}
-              className="btn-plasma shrink-0"
+              className="btn-plasma shrink-0 cursor-pointer"
             >
               <span className="btn-plasma-glow" aria-hidden="true" />
               <span className="btn-plasma-inner text-sm py-2 px-4">
@@ -172,7 +360,7 @@ export default function DashboardPage() {
                 key={i}
                 type="button"
                 onClick={() => handleQuickAsk(q.prompt)}
-                className="rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium text-ink transition-all hover:border-accent hover:bg-accent-light hover:text-accent active:scale-95"
+                className="rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium text-ink transition-all hover:border-accent hover:bg-accent-light hover:text-accent active:scale-95 cursor-pointer"
               >
                 {q.label}
               </button>
@@ -180,6 +368,48 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* ==================================================================== */}
+      {/*  FORMULA & REACTION VAULT (1-CLICK DRAWER)                           */}
+      {/* ==================================================================== */}
+      {showFormulaVault && (
+        <div className="rounded-2xl border border-accent/40 bg-surface/95 backdrop-blur-2xl p-6 shadow-lg animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="flex items-center justify-between pb-4 mb-4 border-b border-border">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">📐</span>
+              <div>
+                <h3 className="text-lg font-bold text-ink">Class 10 CBSE Formula & Key Reaction Vault</h3>
+                <p className="text-xs text-muted">High-frequency formulas and equations tested in Board Exams</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowFormulaVault(false)}
+              className="rounded-lg border border-border px-3 py-1 text-xs text-muted hover:text-ink hover:border-accent cursor-pointer"
+            >
+              ✕ Close
+            </button>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {FORMULA_VAULT.map((sec, idx) => (
+              <div key={idx} className="rounded-xl border border-border/70 bg-paper/60 p-4 space-y-2.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-accent font-mono">
+                  {sec.category}
+                </h4>
+                <div className="space-y-2">
+                  {sec.items.map((it, i) => (
+                    <div key={i} className="text-xs border-b border-border/30 pb-1.5 last:border-0 last:pb-0">
+                      <span className="font-semibold text-ink block">{it.name}:</span>
+                      <span className="font-mono text-muted text-[11px] block mt-0.5">{it.formula}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Gamified Stat Meters */}
       <div className="grid gap-4 sm:grid-cols-3">
