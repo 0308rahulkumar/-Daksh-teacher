@@ -41,6 +41,14 @@ export function FlashcardsView({ subjectId, chapterId, topicId, topicName }: Fla
     setRevealed(false);
   }
 
+  function speakText(text: string) {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95; // clear instructional pacing
+    window.speechSynthesis.speak(utterance);
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -131,9 +139,22 @@ export function FlashcardsView({ subjectId, chapterId, topicId, topicName }: Fla
             className="group min-h-[220px] cursor-pointer rounded-2xl border-2 border-border bg-surface p-8 shadow-xs transition-all hover:border-accent/60 flex flex-col justify-between select-none"
           >
             <div>
-              <span className="inline-block rounded-full bg-paper px-3 py-1 text-xs font-semibold text-muted border border-border">
-                {revealed ? "Answer" : "Question • Click card to flip"}
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="inline-block rounded-full bg-paper px-3 py-1 text-xs font-semibold text-muted border border-border">
+                  {revealed ? "Answer" : "Question • Click card to flip"}
+                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    speakText(revealed ? current.back : current.front);
+                  }}
+                  className="p-1.5 rounded-lg border border-border bg-paper hover:border-accent hover:text-accent text-xs flex items-center gap-1 text-muted transition-all"
+                  title="Listen to pronunciation / read aloud"
+                >
+                  🔊 Listen
+                </button>
+              </div>
               <p className="mt-4 text-lg font-bold text-ink leading-snug">
                 {revealed ? current.back : current.front}
               </p>

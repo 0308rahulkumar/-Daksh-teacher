@@ -102,6 +102,15 @@ export function NotesView({ subjectId, chapterId, topicId, topicName }: NotesVie
             📋 Copy
           </Button>
 
+          <Button
+            variant="ghost"
+            onClick={() => window.print()}
+            className="text-xs text-muted hover:text-ink"
+            title="Export clean 1-page printable revision cheat sheet"
+          >
+            🖨️ Print / PDF
+          </Button>
+
           {isAiGenerated && (
             <Button
               variant="ghost"

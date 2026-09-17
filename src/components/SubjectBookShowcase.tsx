@@ -24,10 +24,17 @@ interface SubjectBookShowcaseProps {
 export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
+  const [flipDirection, setFlipDirection] = useState<"forward" | "backward" | null>(null);
 
   const activeSubjectData = selectedSubject
     ? subjects.find((s) => s.id === selectedSubject.id)
     : null;
+
+  const changeChapter = (nextIndex: number, dir: "forward" | "backward") => {
+    setFlipDirection(dir);
+    setActiveChapterIndex(nextIndex);
+    setTimeout(() => setFlipDirection(null), 400);
+  };
 
   return (
     <div className="w-full space-y-6">
@@ -219,7 +226,15 @@ export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
             </div>
 
             {/* Right: Active Chapter Pages Flip Preview */}
-            <div className="lg:col-span-8 rounded-xl border border-[#c3a47b]/20 bg-[#1e1a15]/90 p-6 flex flex-col justify-between shadow-inner">
+            <div
+              className={`lg:col-span-8 rounded-xl border border-[#c3a47b]/20 bg-[#1e1a15]/90 p-6 flex flex-col justify-between shadow-inner transition-transform ${
+                flipDirection === "forward"
+                  ? "anim-page-turn-forward"
+                  : flipDirection === "backward"
+                  ? "anim-page-turn-backward"
+                  : ""
+              }`}
+            >
               {(() => {
                 const chapter = selectedSubject.chapters[activeChapterIndex] || selectedSubject.chapters[0];
                 if (!chapter) return null;
@@ -283,10 +298,10 @@ export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
                       <button
                         type="button"
                         disabled={activeChapterIndex === 0}
-                        onClick={() => setActiveChapterIndex((i) => Math.max(0, i - 1))}
+                        onClick={() => changeChapter(Math.max(0, activeChapterIndex - 1), "backward")}
                         className="px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                       >
-                        ← Previous Chapter
+                        ← Turn Page Backward
                       </button>
 
                       <span className="font-mono text-[11px]">
@@ -297,13 +312,14 @@ export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
                         type="button"
                         disabled={activeChapterIndex === selectedSubject.chapters.length - 1}
                         onClick={() =>
-                          setActiveChapterIndex((i) =>
-                            Math.min(selectedSubject.chapters.length - 1, i + 1)
+                          changeChapter(
+                            Math.min(selectedSubject.chapters.length - 1, activeChapterIndex + 1),
+                            "forward"
                           )
                         }
                         className="px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                       >
-                        Next Chapter →
+                        Turn Page Forward →
                       </button>
                     </div>
                   </div>
