@@ -10,6 +10,7 @@ import { NotesView } from "@/components/NotesView";
 import { FlashcardsView } from "@/components/FlashcardsView";
 import { MindmapView } from "@/components/MindmapView";
 import { InteractiveSimLab, getSimForTopic } from "@/components/InteractiveSimLab";
+import { getExperimentsForChapter } from "@/lib/scienceExperiments";
 import { Button, Card, EmptyState, MasteryBadge, SectionTitle } from "@/components/ui";
 import type { Mistake, MasteryLevel } from "@/lib/types";
 import { notFound } from "next/navigation";
@@ -184,7 +185,86 @@ function TopicHubClient({
         )}
 
         {activeTab === "simlab" && (
-          <InteractiveSimLab simId={matchedSim ? matchedSim.id : "circuits"} />
+          <div className="space-y-6">
+            <InteractiveSimLab simId={matchedSim ? matchedSim.id : "circuits"} />
+
+            {(() => {
+              const chapterExperiments = subjectId === "science" ? getExperimentsForChapter(chapterId) : [];
+              const topicExperiments = chapterExperiments.filter(
+                (e) => e.simId === matchedSim?.id || e.title.toLowerCase().includes(topicId.toLowerCase())
+              );
+              const experimentsToShow = topicExperiments.length > 0 ? topicExperiments : chapterExperiments;
+
+              if (!experimentsToShow.length) return null;
+
+              return (
+                <div className="space-y-4 pt-4 border-t border-border/60">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <h3 className="text-sm font-bold text-ink flex items-center gap-2">
+                        <span>📖</span>
+                        <span>Prescribed NCERT Practical Reference for this Topic</span>
+                      </h3>
+                      <p className="text-xs text-muted mt-0.5">
+                        Aligned with CBSE Class 10 Laboratory Manual guidelines and marking scheme.
+                      </p>
+                    </div>
+                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 self-start sm:self-auto">
+                      Official Board Practicals
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    {experimentsToShow.map((exp) => (
+                      <div key={exp.id} className="p-4 rounded-2xl border border-border/80 bg-surface space-y-3 shadow-xs">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-mono font-bold text-accent px-2 py-0.5 rounded-md bg-accent-light">
+                            {exp.ncertExpNo}
+                          </span>
+                          <span className="text-xs font-semibold text-muted">{exp.badge}</span>
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-ink text-sm flex items-center gap-2">
+                            <span>{exp.icon}</span>
+                            <span>{exp.title}</span>
+                          </h4>
+                          <p className="text-xs text-muted mt-1 leading-relaxed">
+                            <span className="font-semibold text-ink">Aim: </span>{exp.aim}
+                          </p>
+                        </div>
+
+                        {exp.equationOrFormula && (
+                          <div className="p-2.5 rounded-xl bg-paper border border-border text-xs font-mono text-ink">
+                            <span className="text-[10px] uppercase font-bold text-muted block mb-1">Governing Reaction / Law:</span>
+                            <span className="text-accent font-semibold">{exp.equationOrFormula}</span>
+                          </div>
+                        )}
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                          <div className="p-3 rounded-xl bg-paper border border-border">
+                            <span className="font-bold text-ink block mb-1">Observation:</span>
+                            <p className="text-muted leading-relaxed">{exp.observations}</p>
+                          </div>
+                          <div className="p-3 rounded-xl bg-paper border border-border">
+                            <span className="font-bold text-ink block mb-1">Inference:</span>
+                            <p className="text-muted leading-relaxed">{exp.inference}</p>
+                          </div>
+                        </div>
+
+                        {exp.vivaQuestions.length > 0 && (
+                          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-1">
+                            <span className="font-bold text-amber-500 dark:text-amber-300 block">💡 CBSE Viva Question:</span>
+                            <p className="font-medium text-ink">Q: {exp.vivaQuestions[0].q}</p>
+                            <p className="text-muted">A: {exp.vivaQuestions[0].a}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
         )}
 
         {activeTab === "mistakes" && (
