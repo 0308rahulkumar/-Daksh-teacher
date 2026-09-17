@@ -6,7 +6,7 @@
 
 :root {
   --paper: #FAF8F5;        /* warm natural study parchment */
-  --surface: #FFFFFF;      /* clean crisp card background */
+  --surface: rgba(255, 255, 255, 0.88); /* clean crisp card background */
   --ink: #1C1917;          /* warm stone dark text (neutral 900) */
   --muted: #78716C;        /* warm stone muted text */
   --accent: #D97706;       /* rich warm amber/saffron gold (scholastic focus) */
@@ -22,17 +22,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #0C0D10;        /* true obsidian charcoal - zero blue hue */
-    --surface: #14161B;      /* deep neutral card surface - zero blue */
+    --paper: #090B0E;        /* true obsidian charcoal - zero blue hue */
+    --surface: rgba(18, 20, 26, 0.78);      /* frosted glass obsidian */
     --ink: #F4F4F5;          /* crisp off-white */
     --muted: #9496A1;        /* neutral stone gray */
     --accent: #F59E0B;       /* vibrant golden amber / ember flame */
-    --accent-light: rgba(245, 158, 11, 0.12); /* warm golden ambient tint */
+    --accent-light: rgba(245, 158, 11, 0.14); /* warm golden ambient tint */
     --highlight: rgba(245, 158, 11, 0.18);
     --success: #10B981;
     --danger: #EF4444;
     --warning: #F59E0B;
-    --border: #23262E;       /* crisp neutral hairline border - zero blue */
+    --border: rgba(255, 255, 255, 0.09);       /* crisp neutral hairline border */
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 4px 10px -4px rgba(0, 0, 0, 0.4);
   }
 }
@@ -41,14 +41,14 @@
 /*  ThreeUI Kage Temple Theme (Japanese sanctuary, charcoal & vermilion/gold) */
 /* -------------------------------------------------------------------------- */
 html[data-theme="kage"] {
-  --paper: #090c0f;
-  --surface: #101419;
+  --paper: #080A0D;
+  --surface: rgba(16, 20, 26, 0.78);
   --ink: #dfe7e0;
   --muted: #78837c;
   --accent: #e0231c;       /* authentic Kage vermilion */
-  --accent-light: rgba(224, 35, 28, 0.14);
-  --highlight: rgba(201, 162, 74, 0.18); /* Kage gold */
-  --border: rgba(223, 231, 224, 0.12);
+  --accent-light: rgba(224, 35, 28, 0.16);
+  --highlight: rgba(201, 162, 74, 0.2); /* Kage gold */
+  --border: rgba(224, 35, 28, 0.18);
   --shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.8);
 }
 
@@ -56,13 +56,13 @@ html[data-theme="kage"] {
 /*  ThreeUI Field Manuals Theme (Earth-toned editorial parchment & antique)   */
 /* -------------------------------------------------------------------------- */
 html[data-theme="field-manuals"] {
-  --paper: #1d1a15;
-  --surface: #29251d;
+  --paper: #16130e;
+  --surface: rgba(33, 28, 22, 0.8);
   --ink: #eee2ca;
   --muted: #c5b79e;
   --accent: #c3a47b;       /* authentic Field Manuals ochre foil */
-  --accent-light: rgba(195, 164, 123, 0.15);
-  --highlight: rgba(219, 195, 156, 0.2);
+  --accent-light: rgba(195, 164, 123, 0.16);
+  --highlight: rgba(219, 195, 156, 0.22);
   --border: rgba(195, 164, 123, 0.22);
   --shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.7);
 }
@@ -71,14 +71,14 @@ html[data-theme="field-manuals"] {
 /*  Warm Obsidian Amber Theme                                                 */
 /* -------------------------------------------------------------------------- */
 html[data-theme="obsidian"] {
-  --paper: #0C0D10;
-  --surface: #14161B;
+  --paper: #090B0E;
+  --surface: rgba(18, 20, 26, 0.78);
   --ink: #F4F4F5;
   --muted: #9496A1;
   --accent: #F59E0B;
-  --accent-light: rgba(245, 158, 11, 0.12);
+  --accent-light: rgba(245, 158, 11, 0.14);
   --highlight: rgba(245, 158, 11, 0.18);
-  --border: #23262E;
+  --border: rgba(255, 255, 255, 0.09);
   --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
 }
 
@@ -100,10 +100,22 @@ html[data-theme="obsidian"] {
 
 body {
   background-color: var(--paper);
-  background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(245, 158, 11, 0.05), transparent 70%);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(245, 158, 11, 0.07), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 85% 90%, rgba(234, 88, 12, 0.04), transparent 70%);
   background-attachment: fixed;
   color: var(--ink);
   min-height: 100vh;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Frosted Glass Primitives for Vibe Coding Aesthetics                       */
+/* -------------------------------------------------------------------------- */
+.glass-panel {
+  background-color: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -180,6 +192,8 @@ body {
   height: 100%;
   border-radius: 10.5px;
   background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--ink);
   font-weight: 600;
   padding: 8px 18px;

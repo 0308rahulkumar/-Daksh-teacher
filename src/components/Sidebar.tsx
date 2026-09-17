@@ -49,7 +49,7 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-border bg-surface/60 px-4 py-6">
+      <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-border/70 bg-surface/75 backdrop-blur-2xl px-4 py-6">
         <Link href="/" className="flex items-center gap-2 px-2 mb-8">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-white text-lg">📚</span>
           <span>
@@ -86,7 +86,7 @@ export function Sidebar() {
       </aside>
 
       {/* Mobile top bar */}
-      <div className="sticky top-0 z-20 md:hidden w-full bg-surface border-b border-border px-3 py-2">
+      <div className="sticky top-0 z-20 md:hidden w-full bg-surface/85 backdrop-blur-xl border-b border-border/70 px-3 py-2">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
           <Link href="/" className="flex items-center gap-1.5 font-semibold mr-2 shrink-0">
             <span className="grid h-7 w-7 place-items-center rounded-md bg-accent text-white text-sm">📚</span>

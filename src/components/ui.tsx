@@ -18,7 +18,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-xl border border-border bg-surface px-5 py-4 shadow-sm ${className}`}
+      className={`rounded-xl border border-border/80 bg-surface backdrop-blur-xl px-5 py-4 shadow-sm transition-all ${className}`}
       style={accent ? { borderLeftWidth: "3px", borderLeftColor: accent } : undefined}
     >
       {children}
@@ -176,7 +176,7 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-surface px-6 py-10 text-center shadow-xs">
+    <div className="rounded-xl border border-border/80 bg-surface backdrop-blur-xl px-6 py-10 text-center shadow-xs">
       <h3 className="mb-2 text-xl font-bold text-ink">{title}</h3>
       <div className="text-sm text-muted max-w-md mx-auto leading-relaxed">{children}</div>
       {action && <div className="mt-5 flex justify-center">{action}</div>}

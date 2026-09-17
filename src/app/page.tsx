@@ -108,7 +108,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Hero: Welcome + Live Student Motivation Header */}
-      <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface via-surface to-accent-light/30 p-6 shadow-xs">
+      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-br from-surface via-surface to-accent-light/20 backdrop-blur-xl p-6 shadow-xs">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 rounded-full bg-accent-light px-3 py-1 text-xs font-semibold text-accent">
@@ -184,7 +184,7 @@ export default function DashboardPage() {
       {/* Gamified Stat Meters */}
       <div className="grid gap-4 sm:grid-cols-3">
         {/* Streak */}
-        <div className="rounded-xl border border-emerald-500/30 bg-surface p-5 shadow-xs transition-all hover:border-emerald-500/60">
+        <div className="rounded-xl border border-emerald-500/30 bg-surface backdrop-blur-xl p-5 shadow-xs transition-all hover:border-emerald-500/60">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted">Daily Streak</span>
             <span className="text-2xl">🔥</span>
@@ -199,7 +199,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Mastery Progress */}
-        <div className="rounded-xl border border-indigo-500/30 bg-surface p-5 shadow-xs transition-all hover:border-indigo-500/60">
+        <div className="rounded-xl border border-indigo-500/30 bg-surface backdrop-blur-xl p-5 shadow-xs transition-all hover:border-indigo-500/60">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted">Overall Syllabus Mastery</span>
             <span className="text-2xl">📊</span>
@@ -215,7 +215,7 @@ export default function DashboardPage() {
 
         {/* Mistakes to Polish */}
         <Link href="/mistakes" className="block group">
-          <div className="rounded-xl border border-amber-500/30 bg-surface p-5 shadow-xs transition-all hover:border-amber-500/60 hover:-translate-y-0.5">
+          <div className="rounded-xl border border-amber-500/30 bg-surface backdrop-blur-xl p-5 shadow-xs transition-all hover:border-amber-500/60 hover:-translate-y-0.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted">Mistake Notebook</span>
               <span className="text-2xl group-hover:scale-110 transition-transform">⚠️</span>
