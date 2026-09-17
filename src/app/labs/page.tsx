@@ -8,12 +8,14 @@ import { ThreeLabStage } from "@/components/ThreeLabStage";
 import { SCIENCE_EXPERIMENTS } from "@/lib/scienceExperiments";
 
 export default function LabsPage() {
-  const [activeFilter, setActiveFilter] = useState<"All" | "Physics" | "Chemistry" | "Biology" | "Mathematics" | "NCERT Practicals">("All");
+  const [activeFilter, setActiveFilter] = useState<"All" | "NCERT Activities" | "Physics" | "Chemistry" | "Biology" | "Mathematics" | "NCERT Practicals">("All");
   const [activeSimId, setActiveSimId] = useState<SimId>("circuits");
   const [show3DStage, setShow3DStage] = useState(true);
 
   const filteredSims = activeFilter === "All" || activeFilter === "NCERT Practicals"
     ? SIMULATIONS
+    : activeFilter === "NCERT Activities"
+    ? SIMULATIONS.filter((s) => s.id.startsWith("act-") || s.badge.includes("NCERT Activity"))
     : SIMULATIONS.filter((s) => s.subject === activeFilter);
 
   const activeSim = SIMULATIONS.find((s) => s.id === activeSimId) ?? SIMULATIONS[0];
@@ -76,7 +78,7 @@ export default function LabsPage() {
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2 items-center justify-between border-b border-white/10 pb-4">
         <div className="flex flex-wrap gap-2">
-          {(["All", "Physics", "Chemistry", "Biology", "Mathematics", "NCERT Practicals"] as const).map((filter) => (
+          {(["All", "NCERT Activities", "Physics", "Chemistry", "Biology", "Mathematics", "NCERT Practicals"] as const).map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
@@ -87,6 +89,7 @@ export default function LabsPage() {
               }`}
             >
               {filter === "All" && "🌐 "}
+              {filter === "NCERT Activities" && "🎬 "}
               {filter === "Physics" && "⚡ "}
               {filter === "Chemistry" && "🧪 "}
               {filter === "Biology" && "🫀 "}

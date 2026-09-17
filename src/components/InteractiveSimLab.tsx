@@ -2,6 +2,18 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import {
+  MgCombustionLab,
+  FeSO4DecompositionLab,
+  PhIndicatorLab,
+  DisplacementLab,
+  MicelleLab,
+  RayOpticsLab,
+  PrismDispersionLab,
+  CircuitBuilderLab,
+  MagneticFieldLab,
+} from "./ActivityAnimations";
+
 
 export type SimId =
   | "circuits"
@@ -12,7 +24,16 @@ export type SimId =
   | "parabola"
   | "trig-tour"
   | "heart-circulation"
-  | "punnett-square";
+  | "punnett-square"
+  | "act-mg-combustion"
+  | "act-feso4-decomp"
+  | "act-ph-indicator"
+  | "act-displacement"
+  | "act-micelle"
+  | "act-ray-optics"
+  | "act-prism-dispersion"
+  | "act-circuit-builder"
+  | "act-magnetic-field";
 
 export interface SimMeta {
   id: SimId;
@@ -192,24 +213,199 @@ export const SIMULATIONS: SimMeta[] = [
     ],
     cbseExamQuestion: "CBSE Board: A pure tall pea plant (TT) is crossed with dwarf (tt). What is the phenotype of F1 and F2 progeny?",
   },
+  {
+    id: "act-mg-combustion",
+    title: "Magnesium Ribbon Combustion Lab",
+    subject: "Chemistry",
+    subjectColor: "#f59e0b",
+    badge: "NCERT Activity 1.1",
+    icon: "🔥",
+    ncertChapter: "Chemical Reactions (Ch-1)",
+    tagline: "Burn magnesium ribbon with dazzling white light & test basic oxide ash with litmus.",
+    description: "Experience the exothermic combination reaction of magnesium with atmospheric oxygen, collect white MgO ash, and verify that basic metallic oxides turn red litmus blue.",
+    experimentSteps: [
+      "1. Clean magnesium ribbon with sandpaper to remove the inert basic carbonate layer.",
+      "2. Ignite ribbon over the Bunsen burner with tongs.",
+      "3. Observe dazzling white flame and collect powdery white ash (MgO).",
+      "4. Dissolve ash in water [Mg(OH)₂] and test with red litmus paper (turns blue).",
+    ],
+    cbseExamQuestion: "CBSE Board: Why should a magnesium ribbon be cleaned before burning in air? Write the balanced chemical equation and state the nature of the product.",
+  },
+  {
+    id: "act-feso4-decomp",
+    title: "FeSO₄ Crystal Decomposition Lab",
+    subject: "Chemistry",
+    subjectColor: "#10b981",
+    badge: "NCERT Activity 1.5",
+    icon: "🧪",
+    ncertChapter: "Chemical Reactions (Ch-1)",
+    tagline: "Thermal decomposition of green ferrous sulphate to reddish-brown Fe₂O₃ with SO₂/SO₃ gas.",
+    description: "Heat green ferrous sulphate crystals in a dry boiling tube. Observe water of crystallization loss (turns white) followed by thermal decomposition into brown Fe₂O₃ with pungent sulphur gases.",
+    experimentSteps: [
+      "1. Place green FeSO₄·7H₂O crystals in a dry boiling tube.",
+      "2. Increase temperature with the burner slider.",
+      "3. Notice crystals lose 7H₂O and turn white, then decompose to reddish-brown Fe₂O₃.",
+      "4. Detect evolution of suffocating SO₂ and SO₃ gases smelling of burning sulphur.",
+    ],
+    cbseExamQuestion: "CBSE Board: State the color change observed on heating ferrous sulphate crystals and name the gases evolved with their characteristic smell.",
+  },
+  {
+    id: "act-ph-indicator",
+    title: "pH & Acid-Base Indicator Lab",
+    subject: "Chemistry",
+    subjectColor: "#06b6d4",
+    badge: "NCERT Activity 2.1",
+    icon: "🌈",
+    ncertChapter: "Acids, Bases and Salts (Ch-2)",
+    tagline: "Test acids and bases with Litmus, Phenolphthalein & Methyl Orange indicators.",
+    description: "Interactive acid-base testing suite. Select solutions ranging from strong acid (HCl) to strong base (NaOH), and observe distinct color responses across standard laboratory indicators.",
+    experimentSteps: [
+      "1. Select a sample solution (HCl, Lemon, Water, Soap, NaOH).",
+      "2. Choose an indicator (Litmus, Phenolphthalein, Methyl Orange).",
+      "3. Observe immediate color change and correlate with the 0-14 pH scale.",
+      "4. Identify whether the sample is acidic, basic, or neutral.",
+    ],
+    cbseExamQuestion: "CBSE Board: A student tests an unknown solution with phenolphthalein and it turns pink. What is the nature and approximate pH range of the solution?",
+  },
+  {
+    id: "act-displacement",
+    title: "Metal Reactivity & Displacement Lab",
+    subject: "Chemistry",
+    subjectColor: "#3b82f6",
+    badge: "NCERT Activity 3.5",
+    icon: "⚙️",
+    ncertChapter: "Metals & Non-metals (Ch-3)",
+    tagline: "Iron nail in copper sulphate: color shift from blue to green with reddish copper deposit.",
+    description: "Witness single displacement in action. Iron, being more electropositive than copper, displaces Cu²⁺ ions from blue copper sulphate solution, forming green ferrous sulphate and copper.",
+    experimentSteps: [
+      "1. Take blue copper sulphate solution (CuSO₄) in a beaker.",
+      "2. Click 'Immerse Iron Nail' to submerge clean iron nails.",
+      "3. Watch the blue solution gradually fade and turn light pale green (FeSO₄).",
+      "4. Observe reddish-brown copper metal depositing on the iron nail surface.",
+    ],
+    cbseExamQuestion: "CBSE Board: Why does the color of copper sulphate solution change when an iron nail is dipped in it? Write the balanced chemical equation.",
+  },
+  {
+    id: "act-micelle",
+    title: "Carbon Combustion & Soap Micelle Lab",
+    subject: "Chemistry",
+    subjectColor: "#8b5cf6",
+    badge: "NCERT Activity 4.5 & 4.9",
+    icon: "🫧",
+    ncertChapter: "Carbon & its Compounds (Ch-4)",
+    tagline: "Explore saturated vs unsaturated flame sootiness and radial soap micelle cleansing action.",
+    description: "Compare clean blue flames of saturated hydrocarbons with yellow sooty flames of unsaturated compounds. Switch to Micelle mode to see how hydrophobic tails and hydrophilic heads emulsify grease.",
+    experimentSteps: [
+      "1. In Combustion mode, toggle between Saturated (clean blue flame) and Unsaturated (yellow sooty flame).",
+      "2. Switch to Micelle mode to inspect radial arrangement of soap molecules.",
+      "3. Observe non-polar hydrocarbon tails trapping the central oil droplet while ionic heads interact with water.",
+    ],
+    cbseExamQuestion: "CBSE Board: Explain the mechanism of cleaning action of soaps with the help of a labeled diagram of a micelle.",
+  },
+  {
+    id: "act-ray-optics",
+    title: "Ray Optics Bench & Image Tracing",
+    subject: "Physics",
+    subjectColor: "#0284c7",
+    badge: "NCERT Activity 9.1-9.6",
+    icon: "🔍",
+    ncertChapter: "Light — Reflection & Refraction (Ch-9)",
+    tagline: "Interactive optical bench for concave mirrors and convex lenses with real-time ray tracing.",
+    description: "Move the object arrow anywhere along the principal axis. Watch focal rays, principal rays, and the resulting real/virtual images compute dynamically via mirror and lens equations.",
+    experimentSteps: [
+      "1. Select optical element: Concave Mirror or Convex Lens.",
+      "2. Adjust object distance (u) using the slider from close (virtual image) to beyond 2F (real image).",
+      "3. Observe ray convergence at the focal point F and trace image formation.",
+      "4. Verify magnification and image nature (real/inverted vs virtual/erect).",
+    ],
+    cbseExamQuestion: "CBSE Board: Draw a ray diagram showing the image formed by a concave mirror when an object is placed between its focus F and pole P.",
+  },
+  {
+    id: "act-prism-dispersion",
+    title: "Prism Dispersion & Spectrum Lab",
+    subject: "Physics",
+    subjectColor: "#a855f7",
+    badge: "NCERT Activity 10.1",
+    icon: "🌈",
+    ncertChapter: "Human Eye & Colorful World (Ch-10)",
+    tagline: "Dispersion of white light through a triangular glass prism into the VIBGYOR spectrum.",
+    description: "Simulate refraction and dispersion through a glass prism. Adjust the angle of incidence to witness how different wavelengths bend at varying angles, splitting white light into the full rainbow spectrum.",
+    experimentSteps: [
+      "1. Direct a beam of white light at the refracting surface of the glass prism.",
+      "2. Adjust the Angle of Incidence slider to observe beam deflection.",
+      "3. Notice that Violet bends the most while Red bends the least due to wavelength-dependent refractive indices.",
+      "4. Read the VIBGYOR color band emerging on the screen.",
+    ],
+    cbseExamQuestion: "CBSE Board: What is dispersion of white light? Why do different colors bend through different angles when passing through a prism?",
+  },
+  {
+    id: "act-circuit-builder",
+    title: "Live Circuit & Ohm's Law Builder",
+    subject: "Physics",
+    subjectColor: "#eab308",
+    badge: "NCERT Activity 11.1",
+    icon: "⚡",
+    ncertChapter: "Electricity (Ch-11)",
+    tagline: "Interactive circuit loop with animated electron flow, live ammeter/voltmeter & dynamic V-I graph.",
+    description: "Construct a closed circuit with variable DC power supply, resistor, ammeter, and voltmeter. Watch electron dots drift faster as voltage increases, and see Ohm's Law (V = IR) plotted in real time.",
+    experimentSteps: [
+      "1. Adjust the battery Voltage slider and Resistor slider.",
+      "2. Toggle the circuit switch to OPEN and CLOSED positions.",
+      "3. Observe animated electron flow and current readout on the Ammeter.",
+      "4. Examine the real-time V-I graph verifying the linear relationship of Ohm's Law.",
+    ],
+    cbseExamQuestion: "CBSE Board: State Ohm's Law. Draw the V-I graph for a metallic wire and state what its slope represents.",
+  },
+  {
+    id: "act-magnetic-field",
+    title: "Magnetic Field Lines & Solenoid Lab",
+    subject: "Physics",
+    subjectColor: "#ef4444",
+    badge: "NCERT Activity 12.1-12.3",
+    icon: "🧲",
+    ncertChapter: "Magnetic Effects of Electric Current (Ch-12)",
+    tagline: "Map continuous magnetic field loops around bar magnets and current-carrying solenoids.",
+    description: "Visualize magnetic field vector lines. Switch between a permanent bar magnet with surrounding compass needles and a current-carrying solenoid with reversible magnetic polarity.",
+    experimentSteps: [
+      "1. In Bar Magnet mode, observe field lines emerging from North and entering South pole.",
+      "2. Note compass needles rotating tangentially to field lines.",
+      "3. Switch to Solenoid mode and turn current ON/OFF or reverse direction.",
+      "4. Apply the Right-Hand Thumb Rule to verify North and South magnetic poles.",
+    ],
+    cbseExamQuestion: "CBSE Board: What are magnetic field lines? List three properties of magnetic field lines around a bar magnet.",
+  },
 ];
 
 export function getSimForTopic(chapterId?: string, topicId?: string): SimMeta | undefined {
   if (!chapterId) return undefined;
-  if (topicId?.includes("mirror")) {
-    return SIMULATIONS.find((s) => s.id === "geometric-optics");
+
+  // Specific NCERT activity mappings
+  if (topicId?.includes("combustion") || (chapterId === "ch-chem1" && (topicId?.includes("balancing") || topicId?.includes("reaction")))) {
+    return SIMULATIONS.find((s) => s.id === "act-mg-combustion");
   }
-  if (chapterId.includes("phy1") || topicId?.includes("refraction") || topicId?.includes("lens")) {
-    return SIMULATIONS.find((s) => s.id === "optics");
+  if (chapterId === "ch-chem1" && (topicId?.includes("decomposition") || topicId?.includes("types-reactions") || topicId?.includes("oxidation"))) {
+    return SIMULATIONS.find((s) => s.id === "act-feso4-decomp");
   }
-  if (chapterId.includes("phy2") || topicId?.includes("ohm") || topicId?.includes("circuit") || topicId?.includes("resistance")) {
-    return SIMULATIONS.find((s) => s.id === "circuits");
+  if (chapterId === "ch-chem2" || topicId?.includes("acid") || topicId?.includes("ph") || topicId?.includes("salt") || topicId?.includes("neutralisation")) {
+    return SIMULATIONS.find((s) => s.id === "act-ph-indicator") ?? SIMULATIONS.find((s) => s.id === "ph-scale");
   }
-  if (chapterId.includes("chem3") || topicId?.includes("metal") || topicId?.includes("ionic") || topicId?.includes("atom")) {
-    return SIMULATIONS.find((s) => s.id === "build-an-atom");
+  if (chapterId === "ch-chem3" || topicId?.includes("reactivity") || topicId?.includes("displacement") || topicId?.includes("metal")) {
+    return SIMULATIONS.find((s) => s.id === "act-displacement") ?? SIMULATIONS.find((s) => s.id === "build-an-atom");
   }
-  if (chapterId.includes("chem2") || topicId?.includes("acid") || topicId?.includes("ph") || topicId?.includes("salt")) {
-    return SIMULATIONS.find((s) => s.id === "ph-scale");
+  if (chapterId === "ch-chem4" || topicId?.includes("carbon") || topicId?.includes("micelle") || topicId?.includes("covalent") || topicId?.includes("homologous")) {
+    return SIMULATIONS.find((s) => s.id === "act-micelle");
+  }
+  if (chapterId === "ch-phy1" || topicId?.includes("mirror") || topicId?.includes("lens") || topicId?.includes("refraction") || topicId?.includes("reflection")) {
+    return SIMULATIONS.find((s) => s.id === "act-ray-optics") ?? SIMULATIONS.find((s) => s.id === "geometric-optics");
+  }
+  if (chapterId === "ch-phy2" || topicId?.includes("eye") || topicId?.includes("prism") || topicId?.includes("dispersion") || topicId?.includes("rainbow") || topicId?.includes("colourful")) {
+    return SIMULATIONS.find((s) => s.id === "act-prism-dispersion");
+  }
+  if (chapterId === "ch-phy3" || topicId?.includes("ohm") || topicId?.includes("circuit") || topicId?.includes("resistance") || topicId?.includes("current") || topicId?.includes("potential")) {
+    return SIMULATIONS.find((s) => s.id === "act-circuit-builder") ?? SIMULATIONS.find((s) => s.id === "circuits");
+  }
+  if (chapterId === "ch-phy4" || topicId?.includes("magnetic") || topicId?.includes("solenoid") || topicId?.includes("field") || topicId?.includes("compass") || topicId?.includes("lorentz")) {
+    return SIMULATIONS.find((s) => s.id === "act-magnetic-field");
   }
   if (chapterId.includes("alg2") || topicId?.includes("quadratic") || topicId?.includes("polynomial") || topicId?.includes("roots")) {
     return SIMULATIONS.find((s) => s.id === "parabola");
@@ -743,7 +939,7 @@ export function InteractiveSimLab({
             href="/labs"
             className="text-xs inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/30 text-amber-300 font-semibold transition"
           >
-            <span>🔬 Browse All 9 Labs</span>
+            <span>🔬 Browse All 18 Interactive Labs</span>
             <span>→</span>
           </Link>
         )}
@@ -780,6 +976,24 @@ export function InteractiveSimLab({
           <HeartCirculationVisualizer />
         ) : sim.id === "punnett-square" ? (
           <PunnettVisualizer />
+        ) : sim.id === "act-mg-combustion" ? (
+          <MgCombustionLab />
+        ) : sim.id === "act-feso4-decomp" ? (
+          <FeSO4DecompositionLab />
+        ) : sim.id === "act-ph-indicator" ? (
+          <PhIndicatorLab />
+        ) : sim.id === "act-displacement" ? (
+          <DisplacementLab />
+        ) : sim.id === "act-micelle" ? (
+          <MicelleLab />
+        ) : sim.id === "act-ray-optics" ? (
+          <RayOpticsLab />
+        ) : sim.id === "act-prism-dispersion" ? (
+          <PrismDispersionLab />
+        ) : sim.id === "act-circuit-builder" ? (
+          <CircuitBuilderLab />
+        ) : sim.id === "act-magnetic-field" ? (
+          <MagneticFieldLab />
         ) : null}
       </div>
 
