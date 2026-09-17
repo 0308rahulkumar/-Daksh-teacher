@@ -267,6 +267,14 @@ export default function DashboardPage() {
               </span>
             </div>
             <div className="flex items-center gap-2">
+              <Link
+                href="/labs"
+                className="text-xs px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-500 dark:text-amber-300 font-bold hover:from-amber-500/30 hover:to-orange-500/30 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <span>🔬</span>
+                <span>3D Sim Labs</span>
+                <span className="text-[10px] px-1 rounded bg-amber-500/20">NEW</span>
+              </Link>
               <button
                 type="button"
                 onClick={() => setShowFormulaVault(!showFormulaVault)}
@@ -317,6 +325,27 @@ export default function DashboardPage() {
                 : "Daily Goal Achieved! 🎯"}
             </span>
           </div>
+        </div>
+
+        {/* Interactive 3D STEM Labs Feature Banner */}
+        <div className="mt-4 rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-purple-500/5 to-cyan-500/10 p-3.5 backdrop-blur-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl p-2 rounded-xl bg-amber-500/20 border border-amber-500/30">🔬</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-ink">Interactive STEM Visual Laboratories</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-500 border border-amber-500/30">3D Simulation</span>
+              </div>
+              <p className="text-[11px] text-muted">Build DC Circuits, trace Snell's light refraction, watch heart double circulation, and explore quadratic parabolas.</p>
+            </div>
+          </div>
+          <Link
+            href="/labs"
+            className="text-xs px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-all shrink-0 flex items-center gap-1 shadow-sm"
+          >
+            <span>Launch Labs</span>
+            <span>→</span>
+          </Link>
         </div>
 
         {/* Instant Doubt AI Launcher */}

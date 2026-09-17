@@ -9,6 +9,7 @@ import { QuizRunner } from "@/components/QuizRunner";
 import { NotesView } from "@/components/NotesView";
 import { FlashcardsView } from "@/components/FlashcardsView";
 import { MindmapView } from "@/components/MindmapView";
+import { InteractiveSimLab, getSimForTopic } from "@/components/InteractiveSimLab";
 import { Button, Card, EmptyState, MasteryBadge, SectionTitle } from "@/components/ui";
 import type { Mistake, MasteryLevel } from "@/lib/types";
 import { notFound } from "next/navigation";
@@ -62,16 +63,24 @@ function TopicHubClient({
   const { state, dueNow, recordResult } = useStateBundle();
   const mastery = state?.progress[subjectId]?.[chapterId]?.[topicId]?.mastery ?? "NOT_STARTED";
   const [activeTab, setActiveTab] = useState<
-    "learn" | "notes" | "flashcards" | "quiz" | "mindmap" | "mistakes"
+    "learn" | "notes" | "flashcards" | "quiz" | "mindmap" | "simlab" | "mistakes"
   >("learn");
   const [mistakes, setMistakes] = useState<Mistake[]>([]);
 
-  const tabs: { id: typeof activeTab; label: string; icon: React.ReactNode }[] = [
+  const matchedSim = getSimForTopic(chapterId, topicId);
+
+  const tabs: { id: typeof activeTab; label: string; icon: React.ReactNode; badge?: string }[] = [
     { id: "learn", label: "Learn", icon: <span className="text-lg">💬</span> },
     { id: "notes", label: "Notes", icon: <span className="text-lg">📝</span> },
     { id: "flashcards", label: "Flashcards", icon: <span className="text-lg">🃏</span> },
     { id: "quiz", label: "Quiz", icon: <span className="text-lg">🎯</span> },
     { id: "mindmap", label: "Mind map", icon: <span className="text-lg">🗺️</span> },
+    {
+      id: "simlab",
+      label: "Sim Lab",
+      icon: <span className="text-lg">🔬</span>,
+      badge: matchedSim ? "3D" : undefined,
+    },
     { id: "mistakes", label: "Mistakes", icon: <span className="text-lg">⚠️</span> },
   ];
 
@@ -100,7 +109,18 @@ function TopicHubClient({
             <h1 className="text-2xl font-semibold text-ink">{topicName}</h1>
             {topicFocus && <p className="text-sm text-muted">{topicFocus}</p>}
           </div>
-          <MasteryBadge level={mastery} />
+          <div className="flex items-center gap-2">
+            {matchedSim && (
+              <button
+                type="button"
+                onClick={() => setActiveTab("simlab")}
+                className="text-xs px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold border border-amber-500/40 flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+              >
+                <span>⚡ Launch 3D Sim</span>
+              </button>
+            )}
+            <MasteryBadge level={mastery} />
+          </div>
         </div>
       </div>
 
@@ -110,7 +130,7 @@ function TopicHubClient({
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
               activeTab === t.id
                 ? "bg-accent-light text-accent"
                 : "text-muted hover:bg-accent-light/60 hover:text-ink"
@@ -118,6 +138,11 @@ function TopicHubClient({
           >
             {t.icon}
             {t.label}
+            {t.badge && (
+              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                {t.badge}
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -154,6 +179,10 @@ function TopicHubClient({
 
         {activeTab === "mindmap" && (
           <MindmapView subjectId={subjectId} chapterId={chapterId} topicId={topicId} topicName={topicName} />
+        )}
+
+        {activeTab === "simlab" && (
+          <InteractiveSimLab simId={matchedSim ? matchedSim.id : "circuits"} />
         )}
 
         {activeTab === "mistakes" && (

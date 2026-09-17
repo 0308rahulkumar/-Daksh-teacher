@@ -1,0 +1,5 @@
+﻿bioRxiv Literature Search License Notice
+Recorded At: 2026-09-17T15:02:00+05:30
+
+Please check the terms of service at https://api.biorxiv.org/ and https://www.biorxiv.org/content/about-biorxiv.
+Always check the individual license of any papers or materials retrieved from bioRxiv for distribution or reuse restrictions.

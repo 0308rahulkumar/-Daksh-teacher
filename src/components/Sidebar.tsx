@@ -27,6 +27,12 @@ const NAV = [
     icon: <Icon d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5Zm4 3h8M8 12h8M8 16h5" />,
   },
   {
+    href: "/labs",
+    label: "Interactive Labs",
+    badge: "3D",
+    icon: <Icon d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />,
+  },
+  {
     href: "/teacher",
     label: "AI Teacher",
     icon: <Icon d="M21 12a8 8 0 0 1-8 8H4a8 8 0 0 1 8-8 8 8 0 0 1 8-8v8ZM7 19l-2 2M12 15v2" />,
@@ -85,14 +91,21 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+              className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
                 isActive(item.href)
                   ? "bg-accent-light font-medium text-accent"
                   : "text-muted hover:bg-accent-light/60 hover:text-ink"
               }`}
             >
-              {item.icon}
-              {item.label}
+              <span className="flex items-center gap-3">
+                {item.icon}
+                {item.label}
+              </span>
+              {"badge" in item && (
+                <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           ))}
         </nav>
