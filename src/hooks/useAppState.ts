@@ -36,7 +36,7 @@ function getInitialStateForUser(currentUser: ReturnType<typeof getCurrentUser>):
       klass: "Class 10",
       board: currentUser ? currentUser.board : "CBSE",
       medium: currentUser ? currentUser.medium : "English",
-      subjects: ["science", "maths", "social-science", "english"],
+      subjects: ["science", "maths", "social-science", "english", "bseb-english"],
       dailyMinutes: 60,
       createdAt: now,
     },

@@ -659,6 +659,199 @@ export const SUBJECTS: Subject[] = [
       },
     ],
   },
+  {
+    id: "bseb-english",
+    name: "English (Bihar Board)",
+    icon: "📖",
+    tagline: "Panorama Part 2 · Prose, Poetry & Reader",
+    accent: "#2563EB",
+    chapters: [
+      // PROSE (8 Chapters)
+      {
+        id: "ch-bseb-p1",
+        name: "The Pace for Living",
+        branch: "Prose",
+        topics: [
+          { id: "pace-agony-merchant", name: "The Agony of the Corn Merchant", focus: "Fast-paced modern life vs slow thinkers, Irish corn merchant's anxiety" },
+          { id: "pace-slow-thinkers", name: "Slow Thinkers in Modern Civilization", focus: "Disadvantage of slow thinking in practical livelihood vs contemplative peace" },
+        ],
+      },
+      {
+        id: "ch-bseb-p2",
+        name: "Me and the Ecology Bit",
+        branch: "Prose",
+        topics: [
+          { id: "eco-jim-mission", name: "Jim's Ecological Campaign", focus: "Preaching environmental preservation vs personal convenience (Mr. Williams, Ms. Greene)" },
+          { id: "eco-compost-recycling", name: "Composting, Pollution & Household Waste", focus: "Practical challenges in recycling and pollution prevention" },
+        ],
+      },
+      {
+        id: "ch-bseb-p3",
+        name: "Gillu",
+        branch: "Prose",
+        topics: [
+          { id: "gillu-rescue-nurturing", name: "Rescue & Nurturing of Gillu", focus: "Mahadevi Varma healing the wounded baby squirrel attacked by crows" },
+          { id: "gillu-bond-farewell", name: "Affectionate Bond & Sonjuhi Farewell", focus: "Gillu's antics, intelligence, tragic short lifespan, and burial under Sonjuhi creeper" },
+        ],
+      },
+      {
+        id: "ch-bseb-p4",
+        name: "What is Wrong with Indian Films?",
+        branch: "Prose",
+        topics: [
+          { id: "films-critique-hollywood", name: "Critique of Hollywood Imitation", focus: "Satyajit Ray's critique of superficial gloss, lack of authentic Indian reality" },
+          { id: "films-visual-authenticity", name: "Visual Purity & Authentic Storytelling", focus: "Maturity, simplicity, and cultural grounding needed in Indian cinema" },
+        ],
+      },
+      {
+        id: "ch-bseb-p5",
+        name: "Acceptance Speech",
+        branch: "Prose",
+        topics: [
+          { id: "speech-suu-kyi-struggle", name: "Burmese Struggle for Democracy", focus: "Alexander Aris accepting 1991 Nobel Peace Prize on behalf of Aung San Suu Kyi" },
+          { id: "speech-peace-freedom", name: "Peace, Non-Violence & Human Dignity", focus: "International solidarity and the triumph of freedom over oppression" },
+        ],
+      },
+      {
+        id: "ch-bseb-p6",
+        name: "Once Upon a Time",
+        branch: "Prose",
+        topics: [
+          { id: "once-parable-bird", name: "Parable of the Blind Old Woman & Bird", focus: "Toni Morrison's Nobel lecture: responsibility of the living bird in youth's hands" },
+          { id: "once-language-power", name: "Language as an Instrument of Freedom", focus: "Oppressive vs life-giving language; duty of writers and the new generation" },
+        ],
+      },
+      {
+        id: "ch-bseb-p7",
+        name: "The Unity of Indian Culture",
+        branch: "Prose",
+        topics: [
+          { id: "unity-culture-vs-civilization", name: "Culture vs Civilization", focus: "Humayun Kabir on outer organizational structure vs inner spiritual culture" },
+          { id: "unity-continuity-assimilation", name: "Continuous Vitality & Assimilation", focus: "India's unbroken cultural continuity through diversity and absorption of races" },
+        ],
+      },
+      {
+        id: "ch-bseb-p8",
+        name: "Little Girls Wiser Than Men",
+        branch: "Prose",
+        topics: [
+          { id: "girls-muddy-puddle", name: "The Muddy Puddle & Adult Feud", focus: "Leo Tolstoy on Akoulya and Malasha's Easter dresses, mothers quarreling" },
+          { id: "girls-innocence-reconciliation", name: "Innocence, Forgiveness & True Wisdom", focus: "Little girls laughing and playing while adults brawl: wisdom of children" },
+        ],
+      },
+
+      // POETRY (8 Poems)
+      {
+        id: "ch-bseb-po1",
+        name: "God Made the Country",
+        branch: "Poetry",
+        topics: [
+          { id: "cowper-country-vs-town", name: "Rural Serenity vs Urban Chaos", focus: "William Cowper on divine rustic calm, birdsong vs artificial city life" },
+        ],
+      },
+      {
+        id: "ch-bseb-po2",
+        name: "Ode on Solitude",
+        branch: "Poetry",
+        topics: [
+          { id: "pope-happy-solitude", name: "The Blessed Independent Life", focus: "Alexander Pope on self-sufficiency, peaceful hours, unlamented passing" },
+        ],
+      },
+      {
+        id: "ch-bseb-po3",
+        name: "Polythene Bag",
+        branch: "Poetry",
+        topics: [
+          { id: "poly-hazard-grief", name: "Non-Biodegradable Pollutant & Lingering Grief", focus: "Durga Prasad Panda on plastic pollution and emotional pain that never decays" },
+        ],
+      },
+      {
+        id: "ch-bseb-po4",
+        name: "Thinner Than a Crescent",
+        branch: "Poetry",
+        topics: [
+          { id: "vidya-radha-separation", name: "Radha's Agony of Separation", focus: "Vidyapati on Radha pining for Krishna, weeping tears, wasting like the crescent moon" },
+        ],
+      },
+      {
+        id: "ch-bseb-po5",
+        name: "The Empty Heart",
+        branch: "Poetry",
+        topics: [
+          { id: "heart-greed-kalpataru", name: "Kalpataru & The Curse of Greed", focus: "Periasamy Thooran on insatiable greed, seven gold pitchers, tragic demise" },
+        ],
+      },
+      {
+        id: "ch-bseb-po6",
+        name: "Koel",
+        branch: "Poetry",
+        topics: [
+          { id: "koel-fiery-song", name: "The Fiery Song of the Cuckoo", focus: "Puran Singh on the black Koel scorched by love's fire, yearning for beloved" },
+        ],
+      },
+      {
+        id: "ch-bseb-po7",
+        name: "The Sleeping Porter",
+        branch: "Poetry",
+        topics: [
+          { id: "porter-hardship-slumber", name: "Heroic Struggle & Royal Slumber", focus: "Laxmi Prasad Devkota on Himalayan porter carrying 57 lbs, dignity of labor, peaceful sleep" },
+        ],
+      },
+      {
+        id: "ch-bseb-po8",
+        name: "Martha",
+        branch: "Poetry",
+        topics: [
+          { id: "martha-magical-tales", name: "The Enchantment of Fairy Storytelling", focus: "Walter de la Mare on Martha's tranquil eyes, hazel glen, entranced childhood memories" },
+        ],
+      },
+
+      // SUPPLEMENTARY READER (5 Stories)
+      {
+        id: "ch-bseb-sr1",
+        name: "January Night (Poos Ki Raat)",
+        branch: "Supplementary Reader",
+        topics: [
+          { id: "jan-halku-winter-debt", name: "Halku, Debt & Winter in the Fields", focus: "Premchand on peasant indebtedness, landlord Sahna, Halku and faithful dog Jabra" },
+          { id: "jan-ruined-harvest", name: "Ruined Crop & Peasant Resignation", focus: "Fire of dried leaves, nilgais destroying the crop, Halku's bitter relief from winter vigilance" },
+        ],
+      },
+      {
+        id: "ch-bseb-sr2",
+        name: "Quality",
+        branch: "Supplementary Reader",
+        topics: [
+          { id: "quality-gessler-craft", name: "The Gessler Brothers' Craftsmanship", focus: "John Galsworthy on devotion to quality bootmaking, integrity against commercial mass-production" },
+          { id: "quality-tragedy-starvation", name: "Slow Starvation of Traditional Artisans", focus: "The tragic demise of the younger Gessler brother who starved for his art" },
+        ],
+      },
+      {
+        id: "ch-bseb-sr3",
+        name: "Sun and Moon",
+        branch: "Supplementary Reader",
+        topics: [
+          { id: "sun-moon-party-wonder", name: "Childlike Wonder & The Lavish Party", focus: "Katherine Mansfield on little Sun and Moon observing adult preparations, ice pudding house" },
+          { id: "sun-moon-disillusionment", name: "Morning Disillusionment & Adult Pretense", focus: "The ruined party remains, broken ice house, emotional sensitivity of the child" },
+        ],
+      },
+      {
+        id: "ch-bseb-sr4",
+        name: "Two Horizons",
+        branch: "Supplementary Reader",
+        topics: [
+          { id: "horizons-mother-daughter", name: "Epistolary Dialogue: Mother & Daughter", focus: "Binapani Mohanty on letters between mother and daughter, domestic confinement, longing for horizon" },
+        ],
+      },
+      {
+        id: "ch-bseb-sr5",
+        name: "Love Defiled",
+        branch: "Supplementary Reader",
+        topics: [
+          { id: "love-defiled-compromise", name: "Idealistic Love vs Social Compromise", focus: "Giridhar Jha on eight-year romance ending in betrayal for an arranged IAS status marriage" },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ---------------------------------- Lookups ---------------------------------- */

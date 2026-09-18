@@ -1,11 +1,13 @@
 import { getTopic } from "./syllabus";
 import type { MindmapDoc, NoteDoc, Flashcard, GeneratedQuizQuestion } from "./types";
+import { BSEB_MINDMAPS, BSEB_NOTES, BSEB_FLASHCARDS } from "./bsebCuratedData";
 
 /**
- * Handcrafted high-yield concept maps for key CBSE Class 10 board topics.
- * Sourced from standard NCERT and high-yield CBSE revision repositories (BioNotes).
+ * Handcrafted high-yield concept maps for key CBSE & BSEB Class 10 board topics.
+ * Sourced from standard NCERT and Panorama Part 2.
  */
 const SPECIFIC_MINDMAPS: Record<string, MindmapDoc> = {
+  ...BSEB_MINDMAPS,
   "science:ch-chem1:balancing": {
     root: "Balancing Chemical Equations",
     nodes: [
@@ -488,6 +490,7 @@ const SPECIFIC_MINDMAPS: Record<string, MindmapDoc> = {
  * Handcrafted high-yield CBSE revision notes (from BioNotes and NCERT).
  */
 const SPECIFIC_NOTES: Record<string, NoteDoc> = {
+  ...BSEB_NOTES,
   "science:ch-bio1:nutrition": {
     topic: "Nutrition in Plants & Animals",
     chapter: "Life Processes",
@@ -839,6 +842,7 @@ const SPECIFIC_NOTES: Record<string, NoteDoc> = {
  * Handcrafted high-yield flashcard decks for core CBSE topics.
  */
 const SPECIFIC_FLASHCARDS: Record<string, Flashcard[]> = {
+  ...BSEB_FLASHCARDS,
   "science:ch-bio1:nutrition": [
     {
       front: "What is the complete balanced equation of photosynthesis?",
@@ -1007,9 +1011,54 @@ export function getCuratedMindmap(subjectId: string, chapterId: string, topicId:
 
   const found = getTopic(subjectId, chapterId, topicId);
   const title = found?.topic.name ?? topicId.replace(/-/g, " ");
-  const focus = found?.topic.focus ?? "Core NCERT concepts, formulas, and board exam principles";
+  const focus = found?.topic.focus ?? "Core concepts, themes, and board exam principles";
   const chapterTitle = found?.chapter.name ?? "Chapter Overview";
   const branch = found?.chapter.branch ?? found?.subject.name ?? "Class 10";
+  const isBseb = subjectId === "bseb-english";
+
+  if (isBseb) {
+    return {
+      root: title,
+      nodes: [
+        {
+          label: "Theme & Context",
+          detail: `Panorama Part 2: ${chapterTitle}`,
+          children: [
+            { label: focus },
+            { label: `Genre & Branch: ${branch} · Class 10 Bihar Board` },
+            { label: "Author/Poet intent, social message, and historical background" },
+          ],
+        },
+        {
+          label: "Key Characters & Plot Progression",
+          detail: "Core narrative developments and character interactions",
+          children: [
+            { label: "Protagonist actions, conflicts, and pivotal decisions" },
+            { label: "Crucial quotes, dialogues, and literary devices" },
+            { label: "Climax, resolution, and moral takeaway" },
+          ],
+        },
+        {
+          label: "Bihar Board Exam High-Yield Points",
+          detail: "50% Objective MCQs and Subjective answer tips",
+          children: [
+            { label: "Objective facts: Author/poet names, nationalities, dates, and locations" },
+            { label: "Short answer (2-mark): Explanation of character motivations and quotes" },
+            { label: "Long answer (5-mark): Comprehensive summary, theme, or character sketch" },
+          ],
+        },
+        {
+          label: "Quick Memory Recall",
+          detail: "Last-minute board revision pointers",
+          children: [
+            { label: `Core message: ${focus}` },
+            { label: "Accurate spelling of characters and authors to avoid deduction" },
+            { label: "BSEB top tip: Support answers with direct textual references" },
+          ],
+        },
+      ],
+    };
+  }
 
   return {
     root: title,
@@ -1055,7 +1104,7 @@ export function getCuratedMindmap(subjectId: string, chapterId: string, topicId:
 }
 
 /**
- * Returns high-yield revision notes for any CBSE topic
+ * Returns high-yield revision notes for any CBSE or BSEB topic
  */
 export function getCuratedNotes(subjectId: string, chapterId: string, topicId: string): NoteDoc {
   const key = `${subjectId}:${chapterId}:${topicId}`;
@@ -1065,9 +1114,48 @@ export function getCuratedNotes(subjectId: string, chapterId: string, topicId: s
 
   const found = getTopic(subjectId, chapterId, topicId);
   const topicName = found?.topic.name ?? topicId;
-  const focus = found?.topic.focus ?? "Important NCERT board principles";
+  const focus = found?.topic.focus ?? "Important board principles";
   const chapterName = found?.chapter.name ?? chapterId;
   const subjectName = found?.subject.name ?? subjectId;
+  const isBseb = subjectId === "bseb-english";
+
+  if (isBseb) {
+    return {
+      topic: topicName,
+      chapter: chapterName,
+      subject: "English (Bihar Board)",
+      definition: `${topicName} is a high-yield study unit in ${chapterName} (Panorama Part 2) highlighting: ${focus}.`,
+      keyPoints: [
+        focus,
+        "Master the author/poet's background, nationality, and thematic intent for BSEB board examination.",
+        "Memorize exact names, dates, amounts, and character traits tested in the 50-mark objective MCQ section.",
+        "Structure subjective answers (2-mark & 5-mark) clearly with an introduction, key plot evidence, and moral significance.",
+        "Highlight literary devices used in the text (such as metaphor, irony, symbolism, and simile).",
+      ],
+      examples: [
+        `Textual Illustration: How ${topicName} embodies the central conflict or moral dilemma in ${chapterName}.`,
+        `Board Question Model: 'Discuss the significance of ${topicName} with close reference to ${chapterName}.' (5 Marks)`,
+      ],
+      commonMistakes: [
+        "Misspelling character names or confusing minor characters in subjective answers.",
+        "Writing vague summaries without citing specific incidents from Panorama Part 2.",
+        "Ignoring the author or poet's biographical context in 1-mark objective questions.",
+      ],
+      examKeywords: [
+        topicName,
+        "Panorama Part 2",
+        "Bihar Board (BSEB)",
+        "Character Sketch",
+        "Thematic Analysis",
+        "Objective MCQs",
+      ],
+      quickRevision: [
+        `✅ Master the central theme: ${focus}.`,
+        `✅ Memorize the author/poet name and main characters of ${chapterName}.`,
+        "✅ Practice writing a 100-word character sketch or summary for this chapter.",
+      ],
+    };
+  }
 
   return {
     topic: topicName,
@@ -1105,7 +1193,7 @@ export function getCuratedNotes(subjectId: string, chapterId: string, topicId: s
 }
 
 /**
- * Returns high-yield flashcards for any CBSE topic
+ * Returns high-yield flashcards for any CBSE or BSEB topic
  */
 export function getCuratedFlashcards(subjectId: string, chapterId: string, topicId: string): Flashcard[] {
   const key = `${subjectId}:${chapterId}:${topicId}`;
@@ -1115,7 +1203,31 @@ export function getCuratedFlashcards(subjectId: string, chapterId: string, topic
 
   const found = getTopic(subjectId, chapterId, topicId);
   const topicName = found?.topic.name ?? topicId;
-  const focus = found?.topic.focus ?? "Core NCERT principles";
+  const focus = found?.topic.focus ?? "Core principles";
+  const chapterName = found?.chapter.name ?? chapterId;
+  const branch = found?.chapter.branch ?? "English";
+  const isBseb = subjectId === "bseb-english";
+
+  if (isBseb) {
+    return [
+      {
+        front: `What is the central focus of '${topicName}' in '${chapterName}'?`,
+        back: focus,
+      },
+      {
+        front: `Which prescribed textbook and branch does '${chapterName}' belong to in the Bihar Board curriculum?`,
+        back: `Prescribed Textbook: Panorama Part 2 (Class 10 Bihar Board / BSEB). Branch: ${branch}.`,
+      },
+      {
+        front: `What key factual details are frequently tested in 1-mark objective questions for '${topicName}'?`,
+        back: "Author/poet's name and nationality, setting of the story/poem, names of characters, and exact quotes.",
+      },
+      {
+        front: `How should a 5-mark answer for '${topicName}' be formatted for the BSEB Board exam?`,
+        back: "1. Introduce chapter title and author; 2. Describe central events and character actions; 3. Conclude with thematic significance and moral message.",
+      },
+    ];
+  }
 
   return [
     {
@@ -1249,6 +1361,66 @@ export function getCuratedQuiz(subjectId: string, chapterId: string, topicId: st
         answer: "-50 cm, Concave (diverging) lens",
         explanation: "P = 1/f(m) => f = 1 / (-2.0) = -0.5 m = -50 cm. Negative focal length indicates a concave lens.",
         difficulty: "Board Level",
+      },
+    ];
+  }
+
+  if (subjectId === "bseb-english") {
+    const chapterTitle = found?.chapter.name ?? "Panorama Part 2";
+    return [
+      {
+        id: `curated-bseb-${topicId}-1`,
+        topicId,
+        prompt: `Which of the following statements best captures the central idea of '${topicName}' in '${chapterTitle}'?`,
+        type: "mcq",
+        options: [
+          `${focus}`,
+          `It is solely an abstract mathematical theory with no literary or moral relevance.`,
+          `It contradicts the core themes established in the Panorama Part 2 textbook.`,
+          `None of the above.`,
+        ],
+        answer: "A",
+        explanation: `'${topicName}' in Panorama Part 2 explores: ${focus}.`,
+        difficulty: "Easy",
+      },
+      {
+        id: `curated-bseb-${topicId}-2`,
+        topicId,
+        prompt: `In Bihar Board (BSEB) Class 10 English exams, which element is essential for scoring full marks in answers on '${chapterTitle}'?`,
+        type: "mcq",
+        options: [
+          "Accurate author/poet attribution, correct character names, and textual citations from Panorama Part 2",
+          "Only informal colloquial speech without character references",
+          "One-word answers without textual justification",
+          "Ignoring the literary devices and moral message",
+        ],
+        answer: "A",
+        explanation: "BSEB marking schemes reward precise textual references, accurate spelling of character names, and clear thematic analysis.",
+        difficulty: "Board Level",
+      },
+      {
+        id: `curated-bseb-${topicId}-3`,
+        topicId,
+        prompt: `State the central takeaway or moral message of '${topicName}' in one sentence.`,
+        type: "short",
+        answer: `${focus}`,
+        explanation: `This represents the primary thematic core of '${topicName}'.`,
+        difficulty: "Medium",
+      },
+      {
+        id: `curated-bseb-${topicId}-4`,
+        topicId,
+        prompt: `'${chapterTitle}' is prescribed in which official English textbook for Class 10 Bihar Board (BSEB)?`,
+        type: "mcq",
+        options: [
+          "Panorama Part 2",
+          "First Flight",
+          "Footprints Without Feet",
+          "Beehive",
+        ],
+        answer: "A",
+        explanation: "Bihar Board Class 10 English curriculum is based on the official textbook 'Panorama Part 2'.",
+        difficulty: "Easy",
       },
     ];
   }

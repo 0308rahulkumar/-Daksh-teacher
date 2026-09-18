@@ -31,6 +31,12 @@ const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: strin
     color: "#E11D48",
     bg: "from-rose-500/10 to-pink-500/5",
   },
+  "bseb-english": {
+    icon: "📖",
+    badge: "Panorama Part 2 · Bihar Board",
+    color: "#2563EB",
+    bg: "from-blue-500/10 to-indigo-500/5",
+  },
 };
 
 export default function SubjectsIndexPage() {
