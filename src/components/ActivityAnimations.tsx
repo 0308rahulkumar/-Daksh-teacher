@@ -21,22 +21,41 @@ function useCanvas(
     if (!ctx) return;
 
     const resize = () => {
-      const rect = canvas.parentElement?.getBoundingClientRect();
-      if (!rect) return;
-      canvas.width = rect.width * Math.min(window.devicePixelRatio, 2);
-      canvas.height = rect.height * Math.min(window.devicePixelRatio, 2);
-      canvas.style.width = rect.width + "px";
-      canvas.style.height = rect.height + "px";
-      ctx.scale(Math.min(window.devicePixelRatio, 2), Math.min(window.devicePixelRatio, 2));
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      const rect = parent.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
     };
+
     resize();
     window.addEventListener("resize", resize);
+
+    // ResizeObserver reliably handles tab switches when container turns visible
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && canvas.parentElement) {
+      observer = new ResizeObserver(() => {
+        resize();
+      });
+      observer.observe(canvas.parentElement);
+    }
+
     startRef.current = performance.now();
 
     const loop = (now: number) => {
       const t = (now - startRef.current) / 1000;
       const rect = canvas.parentElement?.getBoundingClientRect();
-      if (rect) {
+      if (rect && rect.width > 0 && rect.height > 0) {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
+          resize();
+        }
         const w = rect.width;
         const h = rect.height;
         ctx.clearRect(0, 0, w, h);
@@ -45,9 +64,11 @@ function useCanvas(
       frameRef.current = requestAnimationFrame(loop);
     };
     frameRef.current = requestAnimationFrame(loop);
+
     return () => {
       cancelAnimationFrame(frameRef.current);
       window.removeEventListener("resize", resize);
+      if (observer) observer.disconnect();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
@@ -93,6 +114,7 @@ export function MgCombustionLab() {
   const [phase, setPhase] = useState<"ready" | "burning" | "ash" | "litmus">("ready");
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
+  const litmusStartRef = useRef<number | null>(null);
 
   const canvasRef = useCanvas((ctx, w, h, t) => {
     const p = phaseRef.current;
@@ -182,18 +204,25 @@ export function MgCombustionLab() {
     }
 
     if (p === "litmus") {
-      // Litmus paper turning blue
+      if (litmusStartRef.current === null) {
+        litmusStartRef.current = t;
+      }
+      const elapsed = Math.max(0, t - (litmusStartRef.current ?? t));
+      const blueHeight = Math.min(40, elapsed * 30);
+
+      // Litmus paper turning blue (permanently stays blue once tested)
       const lx = w * 0.78, ly = h * 0.5;
       ctx.fillStyle = "#ef4444";
       ctx.fillRect(lx - 8, ly, 16, 40);
       ctx.fillStyle = "#3b82f6";
-      const blueHeight = Math.min(40, (t % 5) * 15);
       ctx.fillRect(lx - 8, ly + 40 - blueHeight, 16, blueHeight);
       ctx.fillStyle = "#fff";
       ctx.font = "10px system-ui";
       ctx.textAlign = "center";
       ctx.fillText("Red litmus → Blue", lx, ly - 8);
       ctx.fillText("(Basic oxide!)", lx, ly + 56);
+    } else {
+      litmusStartRef.current = null;
     }
 
     // Labels
@@ -213,7 +242,7 @@ export function MgCombustionLab() {
 
   return (
     <LabWrapper title="Magnesium Combustion">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="flex flex-wrap gap-2 justify-center">
@@ -352,7 +381,7 @@ export function FeSO4DecompositionLab() {
 
   return (
     <LabWrapper title="FeSO₄ Decomposition">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="flex items-center gap-4 px-2">
@@ -496,7 +525,7 @@ export function PhIndicatorLab() {
 
   return (
     <LabWrapper title="pH & Indicator Lab">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -604,7 +633,7 @@ export function DisplacementLab() {
 
   return (
     <LabWrapper title="Displacement Reaction">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="flex gap-3 justify-center">
@@ -750,7 +779,7 @@ export function MicelleLab() {
 
   return (
     <LabWrapper title="Carbon Compounds">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="flex flex-wrap gap-2 justify-center">
@@ -928,7 +957,7 @@ export function RayOpticsLab() {
 
   return (
     <LabWrapper title="Ray Optics Bench">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 px-1">
@@ -1071,7 +1100,7 @@ export function PrismDispersionLab() {
 
   return (
     <LabWrapper title="Prism Dispersion">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="flex items-center gap-4 px-2">
@@ -1283,7 +1312,7 @@ export function CircuitBuilderLab() {
 
   return (
     <LabWrapper title="Circuit Builder">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 px-1">
@@ -1502,7 +1531,7 @@ export function MagneticFieldLab() {
 
   return (
     <LabWrapper title="Magnetic Field Simulator">
-      <div className="relative w-full aspect-[16/9] bg-slate-950 rounded-xl overflow-hidden border border-white/10">
+      <div className="relative w-full aspect-[16/9] min-h-[280px] sm:min-h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-white/10 touch-pan-y">
         <canvas ref={canvasRef} className="absolute inset-0" />
       </div>
       <div className="flex flex-wrap gap-2 justify-center">

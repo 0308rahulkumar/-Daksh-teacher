@@ -210,6 +210,38 @@ export const SCIENCE_EXPERIMENTS: ScienceExperiment[] = [
     icon: "🧲",
   },
 
+    // --- Chapter 4: Carbon and its Compounds (ch-chem4) ---
+  {
+    id: "exp-chem4-1",
+    chapterId: "ch-chem4",
+    subjectId: "science",
+    ncertExpNo: "Experiment 4.1",
+    title: "Study of Saponification Reaction & Cleaning Action of Soap",
+    aim: "To prepare soap by the saponification of vegetable oil with sodium hydroxide and study its cleansing mechanism via micelle formation.",
+    apparatus: ["Beaker (250 mL)", "Glass rod", "Test tubes", "Bunsen burner", "Wire gauze", "Tripod stand"],
+    chemicals: ["Vegetable oil (castor/linseed oil)", "20% NaOH solution", "Common salt (NaCl)", "Hard water and soft water"],
+    equationOrFormula: "Fat/Vegetable Oil + 3NaOH ──Δ──→ Glycerol + 3 R-COONa (Soap)",
+    procedure: [
+      "1. Take 20 mL of castor oil in a 250 mL beaker and add 30 mL of 20% sodium hydroxide solution.",
+      "2. Heat the mixture gently with constant stirring for 10-15 minutes until a thick paste forms.",
+      "3. Add 5-10 g of common salt (NaCl) to precipitate the soap (salting-out process).",
+      "4. Cool the mixture, filter the solid soap, and test its foaming ability in soft vs hard water.",
+    ],
+    observations: "Soap precipitates as a curd upon adding NaCl. In soft water it readily forms lather; in hard water (containing Ca²⁺/Mg²⁺) it produces an insoluble white curd (scum).",
+    inference: "Alkaline hydrolysis of oils forms soap and glycerol. Soap cleans by forming micelles with hydrophobic tails trapping grease and hydrophilic heads facing water.",
+    precautions: [
+      "Stir the reaction mixture continuously to prevent bumping and charring.",
+      "Handle hot concentrated NaOH with care; it is highly caustic.",
+    ],
+    vivaQuestions: [
+      { q: "What is saponification?", a: "The alkaline hydrolysis of oils/fats with NaOH or KOH to produce soap and glycerol." },
+      { q: "Why is common salt (NaCl) added during soap preparation?", a: "To precipitate out the soap from the aqueous solution (salting-out effect)." },
+    ],
+    simId: "act-micelle",
+    badge: "Prescribed Board Practical",
+    icon: "🫧",
+  },
+
   // --- Chapter 6: Life Processes (ch-bio1) ---
   {
     id: "exp-bio1-1",
@@ -335,10 +367,43 @@ export const SCIENCE_EXPERIMENTS: ScienceExperiment[] = [
     icon: "🔍",
   },
 
-  // --- Chapter 12: Electricity (ch-phy2) ---
+  // --- Chapter 11: Human Eye and Colourful World (ch-phy2) ---
   {
     id: "exp-phy2-1",
     chapterId: "ch-phy2",
+    subjectId: "science",
+    ncertExpNo: "Experiment 11.1",
+    title: "Tracing the Path of Light Ray through a Triangular Glass Prism",
+    aim: "To trace the path of the rays of light through a glass prism and measure the angle of incidence, emergence, and deviation.",
+    apparatus: ["Triangular glass prism", "Drawing board", "White sheet of paper", "Drawing pins", "Protractor", "Ruler"],
+    equationOrFormula: "A + D = i + e  (Angle of Prism A + Angle of Deviation D = Angle of Incidence i + Angle of Emergence e)",
+    procedure: [
+      "1. Fix a white paper on a drawing board and draw the triangular outline ABC of the prism.",
+      "2. Draw a normal line and an incident ray at an angle of 30° to 60° on face AB.",
+      "3. Fix two pins P and Q on the incident ray about 5 cm apart.",
+      "4. Look through face AC and fix two more pins R and S such that their feet align with images of P and Q.",
+      "5. Remove prism, join R-S to AC, and join the points on faces AB and AC to trace refracted ray inside prism.",
+      "6. Extend incident ray forward and emergent ray backward to measure Angle of Deviation (D).",
+    ],
+    observations: "Light ray bends towards normal on entering glass prism and away from normal on emerging into air. At minimum deviation, ray inside prism runs parallel to base BC.",
+    inference: "A triangular prism deviates light rays towards its base. White light disperses into VIBGYOR because different wavelengths travel with different speeds in glass.",
+    precautions: [
+      "The distance between pins should be at least 5 cm for accurate alignment.",
+      "Keep pins perfectly vertical while piercing the paper.",
+    ],
+    vivaQuestions: [
+      { q: "What is angle of deviation (D)?", a: "The angle between the direction of the incident ray and the emergent ray produced by the prism." },
+      { q: "Which color deviates the most through a prism?", a: "Violet deviates the most because it has the shortest wavelength and highest refractive index in glass." },
+    ],
+    simId: "act-prism-dispersion",
+    badge: "Prescribed Board Practical",
+    icon: "🌈",
+  },
+
+  // --- Chapter 12: Electricity (ch-phy3) ---
+  {
+    id: "exp-phy3-1",
+    chapterId: "ch-phy3",
     subjectId: "science",
     ncertExpNo: "Experiment 12.1",
     title: "Verification of Ohm's Law and V-I Graph Plotting",
@@ -362,13 +427,13 @@ export const SCIENCE_EXPERIMENTS: ScienceExperiment[] = [
       { q: "State Ohm's Law.", a: "At constant temperature, current flowing through a conductor is directly proportional to potential difference across its terminals (V = IR)." },
       { q: "Why should the key be removed between readings?", a: "Continuous current causes Joule heating (H = I²Rt), which increases resistance and introduces experimental error." },
     ],
-    simId: "circuits",
+    simId: "act-circuit-builder",
     badge: "Prescribed Board Practical",
     icon: "⚡",
   },
   {
-    id: "exp-phy2-2",
-    chapterId: "ch-phy2",
+    id: "exp-phy3-2",
+    chapterId: "ch-phy3",
     subjectId: "science",
     ncertExpNo: "Experiment 12.2",
     title: "Equivalent Resistance of Resistors in Series & Parallel",
@@ -390,15 +455,15 @@ export const SCIENCE_EXPERIMENTS: ScienceExperiment[] = [
       { q: "In domestic circuits, why are appliances connected in parallel and not in series?", a: "Parallel connection provides full supply voltage (220V) to each appliance and allows independent switching without breaking the whole circuit." },
       { q: "If two 10 Ω resistors are in parallel, what is equivalent resistance?", a: "5 Ω (1/Rp = 1/10 + 1/10 = 2/10 => Rp = 5 Ω)." },
     ],
-    simId: "circuits",
+    simId: "act-circuit-builder",
     badge: "Prescribed Board Practical",
     icon: "🔋",
   },
 
-  // --- Chapter 13: Magnetic Effects of Electric Current (ch-phy3) ---
+  // --- Chapter 13: Magnetic Effects of Electric Current (ch-phy4) ---
   {
-    id: "exp-phy3-1",
-    chapterId: "ch-phy3",
+    id: "exp-phy4-1",
+    chapterId: "ch-phy4",
     subjectId: "science",
     ncertExpNo: "Experiment 13.1",
     title: "Mapping Magnetic Field Lines Around a Bar Magnet",
