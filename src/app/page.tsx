@@ -336,10 +336,10 @@ export default function DashboardPage() {
             <span className="text-2xl p-2 rounded-xl bg-amber-500/20 border border-amber-500/30">🔬</span>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-ink">Interactive STEM Visual Laboratories</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-500 border border-amber-500/30">3D Simulation</span>
+                <span className="text-xs font-bold text-ink">18 Interactive STEM & NCERT Activity Laboratories</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-500 border border-amber-500/30">18 3D Labs</span>
               </div>
-              <p className="text-[11px] text-muted">Build DC Circuits, trace Snell's light refraction, watch heart double circulation, and explore quadratic parabolas.</p>
+              <p className="text-[11px] text-muted">Magnesium combustion, thermal decomposition, pH indicators, metal displacement, soap micelles, prism dispersion, ray optics & live circuit builder.</p>
             </div>
           </div>
           <Link

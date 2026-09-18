@@ -1,16 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { SIMULATIONS, InteractiveSimLab, type SimId } from "@/components/InteractiveSimLab";
 import { Interactive3DCard } from "@/components/Interactive3DCard";
 import { ThreeLabStage } from "@/components/ThreeLabStage";
 import { SCIENCE_EXPERIMENTS } from "@/lib/scienceExperiments";
 
-export default function LabsPage() {
+function LabsContent() {
+  const searchParams = useSearchParams();
+  const simParam = searchParams.get("sim") as SimId | null;
+
   const [activeFilter, setActiveFilter] = useState<"All" | "NCERT Activities" | "Physics" | "Chemistry" | "Biology" | "Mathematics" | "NCERT Practicals">("All");
   const [activeSimId, setActiveSimId] = useState<SimId>("circuits");
   const [show3DStage, setShow3DStage] = useState(true);
+
+  useEffect(() => {
+    if (simParam && SIMULATIONS.some((s) => s.id === simParam)) {
+      setActiveSimId(simParam);
+      if (simParam.startsWith("act-")) {
+        setActiveFilter("NCERT Activities");
+      } else {
+        const found = SIMULATIONS.find((s) => s.id === simParam);
+        if (found) setActiveFilter(found.subject);
+      }
+    }
+  }, [simParam]);
 
   const filteredSims = activeFilter === "All" || activeFilter === "NCERT Practicals"
     ? SIMULATIONS
@@ -219,5 +235,13 @@ export default function LabsPage() {
         <InteractiveSimLab key={activeSimId} simId={activeSimId} showCatalogLink={false} />
       </div>
     </div>
+  );
+}
+
+export default function LabsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-400 font-mono text-sm">Loading Interactive Laboratories…</div>}>
+      <LabsContent />
+    </Suspense>
   );
 }

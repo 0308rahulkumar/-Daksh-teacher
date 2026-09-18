@@ -906,6 +906,13 @@ export function InteractiveSimLab({
   showCatalogLink?: boolean;
 }) {
   const [selectedId, setSelectedId] = useState<SimId>(simId ?? "circuits");
+
+  useEffect(() => {
+    if (simId) {
+      setSelectedId(simId);
+    }
+  }, [simId]);
+
   const sim = SIMULATIONS.find((s) => s.id === selectedId) ?? SIMULATIONS[0];
 
   return (

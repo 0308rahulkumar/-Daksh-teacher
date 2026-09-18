@@ -158,7 +158,7 @@ export default function ChapterPage({ params }: ChapterPageProps) {
 
                     <div className="flex flex-wrap md:flex-col items-center md:items-end gap-2 shrink-0">
                       <Link
-                        href="/labs"
+                        href={exp.simId ? `/labs?sim=${exp.simId}` : "/labs"}
                         className="text-xs px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-600 dark:text-cyan-400 font-semibold border border-cyan-500/30 transition inline-flex items-center gap-1 cursor-pointer"
                       >
                         <span>🔬 3D Sim Lab</span>
