@@ -36,12 +36,46 @@ export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
     setTimeout(() => setFlipDirection(null), 400);
   };
 
+  const getSubjectBoardMeta = (id: string) => {
+    if (id === "bseb-english") {
+      return {
+        board: "Bihar Board (BSEB)",
+        edition: "Panorama Part 2 Edition",
+        spine: "BSEB · CLASS X",
+        readerDesc: "Flip through official Bihar Board Panorama Part 2 prose, poetry & supplementary stories.",
+      };
+    }
+    if (id === "english-grammar") {
+      return {
+        board: "English Grammar",
+        edition: "Core Class 10 Syllabus",
+        spine: "GRAMMAR · X",
+        readerDesc: "Master Class 10 English Grammar rules, tenses, modals, concord & reported speech.",
+      };
+    }
+    if (id === "hindi-grammar") {
+      return {
+        board: "हिंदी व्याकरण एवं रचना",
+        edition: "बोर्ड परीक्षा पाठ्यक्रम",
+        spine: "व्याकरण · X",
+        readerDesc: "बोर्ड परीक्षा के लिए पदबंध, वाक्य भेद, समास, वाच्य, अलंकार व मुहावरे सीखें।",
+      };
+    }
+    return {
+      board: "Central Board (CBSE)",
+      edition: "NCERT Official Curriculum",
+      spine: "NCERT · CLASS X",
+      readerDesc: "Flip through official NCERT chapters, inspect syllabus topics, and jump into AI explanations.",
+    };
+  };
+
   return (
     <div className="w-full space-y-6">
       {/* 3D Physical Book Shelf */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 pt-4 pb-2">
         {subjects.map((s, idx) => {
           const isSelected = selectedSubject?.id === s.id;
+          const meta = getSubjectBoardMeta(s.id);
           return (
             <div
               key={s.id}
@@ -69,7 +103,7 @@ export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
                 >
                   <div className="h-full w-full flex items-center justify-center opacity-70">
                     <span className="text-[9px] font-mono tracking-widest text-white rotate-90 uppercase whitespace-nowrap">
-                      NCERT · CLASS X
+                      {meta.spine}
                     </span>
                   </div>
                 </div>
@@ -90,7 +124,7 @@ export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
 
                     <div className="pt-3">
                       <p className="text-[11px] font-serif uppercase tracking-widest text-[#c3a47b]">
-                        Central Board (CBSE)
+                        {meta.board}
                       </p>
                       <h3 className="font-serif text-2xl font-bold tracking-tight text-[#eee2ca] group-hover:text-white transition-colors">
                         {s.name}
@@ -162,14 +196,14 @@ export function SubjectBookShowcase({ subjects }: SubjectBookShowcaseProps) {
               <div className="flex items-center gap-2">
                 <span className="text-xl">{activeSubjectData.theme.icon}</span>
                 <span className="text-xs uppercase tracking-widest font-mono text-[#c3a47b]">
-                  Interactive Book Reader · {activeSubjectData.name}
+                  {getSubjectBoardMeta(activeSubjectData.id).board} · {activeSubjectData.name}
                 </span>
               </div>
               <h2 className="font-serif text-3xl font-bold text-[#eee2ca] mt-1">
                 Browse Table of Contents & Chapters
               </h2>
               <p className="text-sm text-[#c5b79e] mt-1">
-                Flip through official NCERT chapters, inspect syllabus topics, and jump into AI explanations.
+                {getSubjectBoardMeta(activeSubjectData.id).readerDesc}
               </p>
             </div>
 

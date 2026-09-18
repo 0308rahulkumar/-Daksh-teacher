@@ -585,8 +585,14 @@ export default function DashboardPage() {
       {/* Interactive 3D Subject Book Showcase */}
       <div>
         <SectionTitle
-          title="CBSE Class 10 Volumes & Curriculum"
-          action={<span className="text-xs text-muted">Click any book to open and flip through chapters</span>}
+          title="Class 10 Subject Volumes & Curriculum"
+          action={
+            <div className="flex items-center gap-2">
+              <Link href="/subjects" className="text-xs text-accent hover:underline font-medium">
+                View All Categories (CBSE · BSEB · Grammar) →
+              </Link>
+            </div>
+          }
         />
         <SubjectBookShowcase subjects={subjStats} />
       </div>

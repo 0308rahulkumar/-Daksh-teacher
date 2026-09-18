@@ -24,6 +24,7 @@ const NAV = [
   {
     href: "/subjects",
     label: "Subjects",
+    badge: "7",
     icon: <Icon d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5Zm4 3h8M8 12h8M8 16h5" />,
   },
   {

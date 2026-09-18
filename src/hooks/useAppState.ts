@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { AppState, StudentProfile, QuizAnswerRecord, Mistake } from "@/lib/types";
+import type { AppState, StudentProfile, QuizAnswerRecord, Mistake, SubjectId } from "@/lib/types";
 import { dueTopics, applyQuizResult, type DueTopicRef } from "@/lib/learning";
 import { getCurrentUser } from "@/lib/auth";
 
@@ -36,7 +36,7 @@ function getInitialStateForUser(currentUser: ReturnType<typeof getCurrentUser>):
       klass: "Class 10",
       board: currentUser ? currentUser.board : "CBSE",
       medium: currentUser ? currentUser.medium : "English",
-      subjects: ["science", "maths", "social-science", "english", "bseb-english", "english-grammar", "hindi-grammar"],
+      subjects: ["science", "maths", "social-science", "english", "bseb-english", "english-grammar", "hindi-grammar"] as SubjectId[],
       dailyMinutes: 60,
       createdAt: now,
     },
@@ -67,6 +67,7 @@ export function useStateBundle(): StateBundle {
       setError(null);
       const currentUser = getCurrentUser();
       const storageKey = getStorageKey(currentUser);
+      const allSubjects: SubjectId[] = ["science", "maths", "social-science", "english", "bseb-english", "english-grammar", "hindi-grammar"];
 
       // Check user-scoped local storage first
       if (typeof window !== "undefined") {
@@ -78,6 +79,9 @@ export function useStateBundle(): StateBundle {
               parsed.profile.name = currentUser.name;
               parsed.profile.board = currentUser.board;
               parsed.profile.medium = currentUser.medium;
+            }
+            if (parsed.profile) {
+              parsed.profile.subjects = Array.from(new Set([...(parsed.profile.subjects || []), ...allSubjects])) as SubjectId[];
             }
             setState(parsed);
             setDueNow(dueTopics(parsed));
@@ -103,10 +107,13 @@ export function useStateBundle(): StateBundle {
         baseState = getInitialStateForUser(currentUser);
       }
 
-      if (currentUser && baseState.profile) {
-        baseState.profile.name = currentUser.name;
-        baseState.profile.board = currentUser.board;
-        baseState.profile.medium = currentUser.medium;
+      if (baseState.profile) {
+        baseState.profile.subjects = Array.from(new Set([...(baseState.profile.subjects || []), ...allSubjects])) as SubjectId[];
+        if (currentUser) {
+          baseState.profile.name = currentUser.name;
+          baseState.profile.board = currentUser.board;
+          baseState.profile.medium = currentUser.medium;
+        }
       }
 
       if (typeof window !== "undefined") {
