@@ -33,6 +33,12 @@ const NAV = [
     icon: <Icon d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />,
   },
   {
+    href: "/grammar-lab",
+    label: "Grammar Studio",
+    badge: "AI",
+    icon: <Icon d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />,
+  },
+  {
     href: "/teacher",
     label: "AI Teacher",
     icon: <Icon d="M21 12a8 8 0 0 1-8 8H4a8 8 0 0 1 8-8 8 8 0 0 1 8-8v8ZM7 19l-2 2M12 15v2" />,

@@ -1,13 +1,15 @@
 import { getTopic } from "./syllabus";
 import type { MindmapDoc, NoteDoc, Flashcard, GeneratedQuizQuestion } from "./types";
 import { BSEB_MINDMAPS, BSEB_NOTES, BSEB_FLASHCARDS } from "./bsebCuratedData";
+import { GRAMMAR_MINDMAPS, GRAMMAR_NOTES, GRAMMAR_FLASHCARDS } from "./grammarCuratedData";
 
 /**
  * Handcrafted high-yield concept maps for key CBSE & BSEB Class 10 board topics.
- * Sourced from standard NCERT and Panorama Part 2.
+ * Sourced from standard NCERT, Panorama Part 2, and English & Hindi Grammar.
  */
 const SPECIFIC_MINDMAPS: Record<string, MindmapDoc> = {
   ...BSEB_MINDMAPS,
+  ...GRAMMAR_MINDMAPS,
   "science:ch-chem1:balancing": {
     root: "Balancing Chemical Equations",
     nodes: [
@@ -491,6 +493,7 @@ const SPECIFIC_MINDMAPS: Record<string, MindmapDoc> = {
  */
 const SPECIFIC_NOTES: Record<string, NoteDoc> = {
   ...BSEB_NOTES,
+  ...GRAMMAR_NOTES,
   "science:ch-bio1:nutrition": {
     topic: "Nutrition in Plants & Animals",
     chapter: "Life Processes",
@@ -843,6 +846,7 @@ const SPECIFIC_NOTES: Record<string, NoteDoc> = {
  */
 const SPECIFIC_FLASHCARDS: Record<string, Flashcard[]> = {
   ...BSEB_FLASHCARDS,
+  ...GRAMMAR_FLASHCARDS,
   "science:ch-bio1:nutrition": [
     {
       front: "What is the complete balanced equation of photosynthesis?",
@@ -1060,6 +1064,94 @@ export function getCuratedMindmap(subjectId: string, chapterId: string, topicId:
     };
   }
 
+  if (subjectId === "english-grammar") {
+    return {
+      root: title,
+      nodes: [
+        {
+          label: "Core Rules & Syntax",
+          detail: `Grammar rules for ${title} (${chapterTitle})`,
+          children: [
+            { label: focus },
+            { label: "Standard sentence structures and formula patterns" },
+            { label: "Auxiliary verbs and inflection rules" },
+          ],
+        },
+        {
+          label: "Transformations & Contextual Usage",
+          detail: "Application in sentence conversions",
+          children: [
+            { label: "Step-by-step conversion steps (affirmative, negative, interrogative)" },
+            { label: "Key conjunctions, markers, and syntactic clues" },
+            { label: "Model illustrative examples" },
+          ],
+        },
+        {
+          label: "Board Exam High-Yield Traps",
+          detail: "Frequent mistakes tested in Class 10 Editing & Gap-filling",
+          children: [
+            { label: "Subject-verb disagreement and wrong auxiliary usage" },
+            { label: "Exceptions to standard grammatical rules" },
+            { label: "Commonly confused pairs and irregular forms" },
+          ],
+        },
+        {
+          label: "Quick Revision Formula",
+          detail: "Rapid-fire exam recall",
+          children: [
+            { label: `Core rule: ${focus}` },
+            { label: "Always check the subject's number and sentence tense first" },
+            { label: "Apply elimination strategy in 4-option board MCQs" },
+          ],
+        },
+      ],
+    };
+  }
+
+  if (subjectId === "hindi-grammar") {
+    return {
+      root: title,
+      nodes: [
+        {
+          label: "परिभाषा एवं मुख्य नियम",
+          detail: `${chapterTitle}: ${title} का व्याकरणिक स्वरूप`,
+          children: [
+            { label: focus },
+            { label: "मानक हिंदी व्याकरण नियम एवं पहचान चिह्न" },
+            { label: "पदों का पारस्परिक संबंध एवं संरचना" },
+          ],
+        },
+        {
+          label: "भेद व रूपांतरण प्रक्रिया",
+          detail: "उदाहरण एवं रूपांतरण विधि",
+          children: [
+            { label: "विभिन्न भेदों की तुलनात्मक पहचान" },
+            { label: "वाक्य/पद परिवर्तन के चरणबद्ध नियम" },
+            { label: "योजक शब्दों एवं कारक चिह्नों की भूमिका" },
+          ],
+        },
+        {
+          label: "बोर्ड परीक्षा के लिए महत्त्वपूर्ण बिंदु",
+          detail: "CBSE एवं राज्य बोर्ड के 4-अंकीय प्रश्न",
+          children: [
+            { label: "सामान्य त्रुटियाँ और उनका शुद्ध रूप" },
+            { label: "अपवाद और मिलते-जुलते भेदों का अंतर" },
+            { label: "विगत वर्षों में बार-बार पूछे गए उदाहरण" },
+          ],
+        },
+        {
+          label: "अचूक पहचान सूत्र (स्मरण ट्रिक्स)",
+          detail: "त्वरित स्मरण सूत्र",
+          children: [
+            { label: `मुख्य सिद्धांत: ${focus}` },
+            { label: "रेखांकित अंश या योजक शब्द से भेद तुरंत पहचानें" },
+            { label: "रूपांतरण करते समय वाक्य का मूल अर्थ और काल न बदलें" },
+          ],
+        },
+      ],
+    };
+  }
+
   return {
     root: title,
     nodes: [
@@ -1157,6 +1249,80 @@ export function getCuratedNotes(subjectId: string, chapterId: string, topicId: s
     };
   }
 
+  if (subjectId === "english-grammar") {
+    return {
+      topic: topicName,
+      chapter: chapterName,
+      subject: "English Grammar",
+      definition: `${topicName} is an essential grammatical structure in ${chapterName} covering: ${focus}.`,
+      keyPoints: [
+        focus,
+        "Master the structural formula and inflectional rules for accurate sentence formation.",
+        "Pay special attention to subject-verb agreement and tense consistency in complex sentences.",
+        "Learn the high-yield exceptions frequently targeted in Class 10 gap-filling and editing tasks.",
+        "Practice identifying the grammatical function of each word in context before transforming sentences.",
+      ],
+      examples: [
+        `Grammar Rule Example: Study the standard syntactic pattern of ${topicName.toLowerCase()} in affirmative, negative, and interrogative sentences.`,
+        `Board Exam Application: How ${topicName.toLowerCase()} appears in 1-mark editing passages or dialogue completion.`,
+      ],
+      commonMistakes: [
+        "Confusing singular and plural verb inflections.",
+        "Shifting tenses inconsistently within the same sentence or paragraph.",
+        "Overlooking irregular forms and exceptional cases.",
+      ],
+      examKeywords: [
+        topicName,
+        "Sentence Structure",
+        "Syntax Rule",
+        "Editing & Omission",
+        "Board Marking Scheme",
+      ],
+      quickRevision: [
+        `✅ Master the core rule: ${focus}.`,
+        "✅ Practice 5 transformation exercises (affirmative -> negative/interrogative/passive).",
+        "✅ Review common pitfalls before attempting board editing passages.",
+      ],
+    };
+  }
+
+  if (subjectId === "hindi-grammar") {
+    return {
+      topic: topicName,
+      chapter: chapterName,
+      subject: "Hindi Grammar (हिंदी व्याकरण)",
+      definition: `${topicName}, हिंदी व्याकरण के अध्याय '${chapterName}' का एक महत्त्वपूर्ण अंग है, जिसका मुख्य नियम है: ${focus}।`,
+      keyPoints: [
+        focus,
+        "मानक हिंदी वर्तनी और व्याकरणिक नियमों का ध्यानपूर्वक अध्ययन करें।",
+        "भेदों की पहचान के लिए योजक शब्दों, कारक चिह्नों और शीर्ष पदों के नियमों का अभ्यास करें।",
+        "रूपांतरण करते समय वाक्य के मूल अर्थ और काल को अपरिवर्तित रखें।",
+        "बोर्ड परीक्षा में पूछे जाने वाले 4 अंकों के वस्तुनिष्ठ एवं अति-लघूत्तरात्मक प्रश्नों का अभ्यास करें।",
+      ],
+      examples: [
+        `व्याकरणिक उदाहरण: वाक्य में ${topicName} के प्रयोग और उसकी सही पहचान का विश्लेषण।`,
+        `बोर्ड मॉडल प्रश्न: '${topicName}' पर आधारित विगत वर्षों के प्रश्न और उनका सटीक उत्तर।`,
+      ],
+      commonMistakes: [
+        "मिलते-जुलते भेदों (जैसे कर्मधारय vs बहुव्रीहि या संयुक्त vs मिश्र वाक्य) के बीच भ्रमित होना।",
+        "वाक्य रूपांतरण करते समय क्रिया का काल बदल देना।",
+        "वर्तनी की अशुद्धियों के कारण अंक कटना।",
+      ],
+      examKeywords: [
+        topicName,
+        "हिंदी व्याकरण",
+        "वाक्य संरचना",
+        "बोर्ड परीक्षा 4-अंक",
+        "सटीक विग्रह/रूपांतरण",
+      ],
+      quickRevision: [
+        `✅ मुख्य नियम याद रखें: ${focus}।`,
+        "✅ 5 वाक्यों में भेद पहचान और रूपांतरण का तुरंत अभ्यास करें।",
+        "✅ शुद्ध वर्तनी का विशेष ध्यान रखें।",
+      ],
+    };
+  }
+
   return {
     topic: topicName,
     chapter: chapterName,
@@ -1225,6 +1391,40 @@ export function getCuratedFlashcards(subjectId: string, chapterId: string, topic
       {
         front: `How should a 5-mark answer for '${topicName}' be formatted for the BSEB Board exam?`,
         back: "1. Introduce chapter title and author; 2. Describe central events and character actions; 3. Conclude with thematic significance and moral message.",
+      },
+    ];
+  }
+
+  if (subjectId === "english-grammar") {
+    return [
+      {
+        front: `What is the core rule behind '${topicName}' in ${chapterName}?`,
+        back: focus,
+      },
+      {
+        front: `What is a common pitfall students encounter in '${topicName}' in Class 10 board exams?`,
+        back: "Applying rules without verifying subject number, irregular forms, or inconsistent tense shifts.",
+      },
+      {
+        front: `How is '${topicName}' tested in board examination question papers?`,
+        back: "Through gap-filling, error correction/editing passages, dialogue completion, and sentence transformation.",
+      },
+    ];
+  }
+
+  if (subjectId === "hindi-grammar") {
+    return [
+      {
+        front: `'${chapterName}' के अंतर्गत '${topicName}' का मूल नियम क्या है?`,
+        back: focus,
+      },
+      {
+        front: `'${topicName}' की पहचान का सबसे सरल सूत्र क्या है?`,
+        back: "योजक शब्दों, कारक-चिह्नों और रेखांकित अंश के शीर्ष पद को ध्यान से देखकर भेद का निर्धारण करें।",
+      },
+      {
+        front: `बोर्ड परीक्षा में '${topicName}' से संबंधित प्रश्नों में पूरे अंक कैसे प्राप्त करें?`,
+        back: "सटीक परिभाषा/नियम लिखें, विग्रह अथवा रूपांतरण करते समय काल न बदलें, और वर्तनी की शुद्धता बनाए रखें।",
       },
     ];
   }
@@ -1420,6 +1620,126 @@ export function getCuratedQuiz(subjectId: string, chapterId: string, topicId: st
         ],
         answer: "A",
         explanation: "Bihar Board Class 10 English curriculum is based on the official textbook 'Panorama Part 2'.",
+        difficulty: "Easy",
+      },
+    ];
+  }
+
+  if (subjectId === "english-grammar") {
+    const chapterTitle = found?.chapter.name ?? "English Grammar";
+    return [
+      {
+        id: `curated-eg-${topicId}-1`,
+        topicId,
+        prompt: `Which of the following statements correctly expresses the rule for '${topicName}' in '${chapterTitle}'?`,
+        type: "mcq",
+        options: [
+          `${focus}`,
+          `Rules of concord and tense do not apply to this construction.`,
+          `It is completely arbitrary with no standard grammatical convention.`,
+          `None of the above.`,
+        ],
+        answer: "A",
+        explanation: `'${topicName}' is governed by: ${focus}.`,
+        difficulty: "Easy",
+      },
+      {
+        id: `curated-eg-${topicId}-2`,
+        topicId,
+        prompt: `In Class 10 Board exam editing passages, what is the most frequent error related to '${topicName}'?`,
+        type: "mcq",
+        options: [
+          "Incorrect auxiliary verb, mismatched tense aspect, or subject-verb disagreement",
+          "Excessive punctuation at the end of paragraphs",
+          "Using bold fonts incorrectly",
+          "None of the above",
+        ],
+        answer: "A",
+        explanation: "Board editing questions specifically test auxiliary selection, inflectional consistency, and concord.",
+        difficulty: "Board Level",
+      },
+      {
+        id: `curated-eg-${topicId}-3`,
+        topicId,
+        prompt: `State the standard grammatical rule of '${topicName}' in one sentence.`,
+        type: "short",
+        answer: `${focus}`,
+        explanation: `This is the core grammatical principle of '${topicName}'.`,
+        difficulty: "Medium",
+      },
+      {
+        id: `curated-eg-${topicId}-4`,
+        topicId,
+        prompt: `Why is thorough practice of '${topicName}' essential for scoring full marks in Section B (Grammar)?`,
+        type: "mcq",
+        options: [
+          "It directly determines accuracy in 10-mark grammar gap-filling, editing, and dialogue reporting",
+          "It carries negative marks in the board exam",
+          "It is optional and not tested in boards",
+          "It only applies to British literature",
+        ],
+        answer: "A",
+        explanation: "Class 10 Section B tests integrated grammar requiring mastery of these fundamental rules.",
+        difficulty: "Easy",
+      },
+    ];
+  }
+
+  if (subjectId === "hindi-grammar") {
+    const chapterTitle = found?.chapter.name ?? "हिंदी व्याकरण";
+    return [
+      {
+        id: `curated-hg-${topicId}-1`,
+        topicId,
+        prompt: `'${chapterTitle}' के अंतर्गत '${topicName}' का सही नियम अथवा लक्षण कौन-सा है?`,
+        type: "mcq",
+        options: [
+          `${focus}`,
+          `यह किसी भी मानक व्याकरणिक नियम का पालन नहीं करता।`,
+          `यह केवल संस्कृत में प्रयुक्त होता है, आधुनिक हिंदी में नहीं।`,
+          `उपर्युक्त में से कोई नहीं।`,
+        ],
+        answer: "A",
+        explanation: `'${topicName}' का आधारभूत नियम है: ${focus}।`,
+        difficulty: "Easy",
+      },
+      {
+        id: `curated-hg-${topicId}-2`,
+        topicId,
+        prompt: `बोर्ड परीक्षा में '${topicName}' पर आधारित 4-अंकीय प्रश्नों में पूरे अंक प्राप्त करने के लिए क्या आवश्यक है?`,
+        type: "mcq",
+        options: [
+          "सटीक भेद की पहचान, शुद्ध वर्तनी, और रूपांतरण करते समय अर्थ व काल को यथावत रखना",
+          "वाक्य का काल अपनी इच्छानुसार बदल देना",
+          "केवल एक शब्द लिखकर छोड़ देना",
+          "योजक शब्दों को अनदेखा करना",
+        ],
+        answer: "A",
+        explanation: "CBSE एवं राज्य बोर्ड की अंक योजना में सटीक पहचान और शुद्ध रूपांतरण पर ही पूर्ण अंक दिए जाते हैं।",
+        difficulty: "Board Level",
+      },
+      {
+        id: `curated-hg-${topicId}-3`,
+        topicId,
+        prompt: `'${topicName}' का प्रमुख नियम अथवा सूत्र संक्षेप में लिखिए।`,
+        type: "short",
+        answer: `${focus}`,
+        explanation: `यह '${topicName}' का मुख्य व्याकरणिक सिद्धांत है।`,
+        difficulty: "Medium",
+      },
+      {
+        id: `curated-hg-${topicId}-4`,
+        topicId,
+        prompt: `हिंदी व्याकरण में '${topicName}' का ज्ञान किसलिए सर्वाधिक महत्त्वपूर्ण है?`,
+        type: "mcq",
+        options: [
+          "यह वाक्य रचना की शुद्धता और बोर्ड परीक्षा के व्यावहारिक व्याकरण खंड में 16 में से 16 अंक सुनिश्चित करता है",
+          "यह केवल मौखिक परीक्षा का विषय है",
+          "इसका लिखित भाषा से कोई संबंध नहीं है",
+          "यह पाठ्यक्रम से हटा दिया गया है",
+        ],
+        answer: "A",
+        explanation: "कक्षा 10 हिंदी 'व्याकरण खंड' में 16 अंक निर्धारित हैं, जहाँ पूर्ण अंक प्राप्त किए जा सकते हैं।",
         difficulty: "Easy",
       },
     ];

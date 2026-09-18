@@ -24,7 +24,7 @@ export function defaultState(): AppState {
       klass: "Class 10",
       board: "CBSE",
       medium: "English",
-      subjects: ["science", "maths", "social-science", "english", "bseb-english"],
+      subjects: ["science", "maths", "social-science", "english", "bseb-english", "english-grammar", "hindi-grammar"],
       dailyMinutes: 60,
       createdAt: now,
     },

@@ -37,6 +37,18 @@ const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: strin
     color: "#2563EB",
     bg: "from-blue-500/10 to-indigo-500/5",
   },
+  "english-grammar": {
+    icon: "✍️",
+    badge: "Tenses • Concord • Modals",
+    color: "#6366F1",
+    bg: "from-indigo-500/10 to-violet-500/5",
+  },
+  "hindi-grammar": {
+    icon: "🕉️",
+    badge: "पदबंध • वाक्य • समास • अलंकार",
+    color: "#F97316",
+    bg: "from-orange-500/10 to-amber-500/5",
+  },
 };
 
 export default function SubjectsIndexPage() {

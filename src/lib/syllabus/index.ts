@@ -852,6 +852,171 @@ export const SUBJECTS: Subject[] = [
       },
     ],
   },
+  {
+    id: "english-grammar",
+    name: "English Grammar",
+    icon: "✍️",
+    tagline: "Tenses · Concord · Reported Speech · Modals",
+    accent: "#6366F1",
+    chapters: [
+      {
+        id: "ch-eg-tenses",
+        name: "Tenses & Time",
+        branch: "Core Grammar",
+        topics: [
+          { id: "eg-present-past", name: "Present & Past Forms", focus: "Simple, continuous, perfect, and perfect continuous forms" },
+          { id: "eg-future-time", name: "Future Time Reference & Aspect", focus: "Will/shall, going to, future continuous, and conditional time clauses" },
+        ],
+      },
+      {
+        id: "ch-eg-modals",
+        name: "Modals & Auxiliaries",
+        branch: "Core Grammar",
+        topics: [
+          { id: "eg-modal-functions", name: "Modal Auxiliaries & Functions", focus: "Can, could, may, might, will, would, shall, should, must, ought to" },
+        ],
+      },
+      {
+        id: "ch-eg-concord",
+        name: "Subject-Verb Concord",
+        branch: "Core Grammar",
+        topics: [
+          { id: "eg-agreement-rules", name: "Subject-Verb Agreement Rules", focus: "Singular/plural agreement, either/or, neither/nor, collective nouns, phrases" },
+        ],
+      },
+      {
+        id: "ch-eg-reported-speech",
+        name: "Reported Speech",
+        branch: "Sentence Structure",
+        topics: [
+          { id: "eg-direct-indirect-statements", name: "Direct & Indirect Statements", focus: "Tense backshift, pronoun changes, time and place adverbial shifts" },
+          { id: "eg-reported-questions-commands", name: "Reported Questions & Commands", focus: "Yes/no questions with if/whether, Wh- questions, imperatives and requests" },
+        ],
+      },
+      {
+        id: "ch-eg-determiners",
+        name: "Determiners & Articles",
+        branch: "Parts of Speech",
+        topics: [
+          { id: "eg-articles-quantifiers", name: "Articles & Quantifiers", focus: "A, an, the, some, any, much, many, each, every, few, little" },
+        ],
+      },
+      {
+        id: "ch-eg-voice",
+        name: "Active & Passive Voice",
+        branch: "Sentence Structure",
+        topics: [
+          { id: "eg-voice-transformations", name: "Voice Transformation Rules", focus: "Subject-object inversion, auxiliary be + past participle, imperative passives" },
+        ],
+      },
+      {
+        id: "ch-eg-clauses",
+        name: "Clauses & Complex Sentences",
+        branch: "Sentence Structure",
+        topics: [
+          { id: "eg-noun-relative-clauses", name: "Noun & Relative Clauses", focus: "Defining and non-defining relative clauses, noun clauses as subjects/objects" },
+          { id: "eg-adverb-clauses", name: "Adverbial Clauses", focus: "Clauses of time, reason, condition (if/unless), concession (although/though)" },
+        ],
+      },
+      {
+        id: "ch-eg-prepositions",
+        name: "Prepositions & Phrasal Verbs",
+        branch: "Parts of Speech",
+        topics: [
+          { id: "eg-prep-usage", name: "Prepositions of Time, Place & Direction", focus: "At, on, in, by, since, for, across, through, into, upon, and phrasal prepositions" },
+        ],
+      },
+      {
+        id: "ch-eg-editing",
+        name: "Editing & Error Correction",
+        branch: "Applied Grammar",
+        topics: [
+          { id: "eg-editing-omission", name: "Editing & Omission Passages", focus: "Board exam passage editing: locating errors and writing corrections" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "hindi-grammar",
+    name: "Hindi Grammar (हिंदी व्याकरण)",
+    icon: "🕉️",
+    tagline: "पदबंध · वाक्य रूपांतरण · समास · अलंकार · मुहावरे",
+    accent: "#F97316",
+    chapters: [
+      {
+        id: "ch-hg-padbandh",
+        name: "पदबंध (Phrase Types)",
+        branch: "व्याकरण संरचना",
+        topics: [
+          { id: "hg-padbandh-types", name: "पदबंध के भेद व पहचान", focus: "संज्ञा, सर्वनाम, विशेषण, क्रिया एवं क्रियाविशेषण (अव्यय) पदबंध की पहचान" },
+        ],
+      },
+      {
+        id: "ch-hg-vakya",
+        name: "रचना के आधार पर वाक्य रूपांतरण",
+        branch: "व्याकरण संरचना",
+        topics: [
+          { id: "hg-vakya-types-transform", name: "सरल, संयुक्त एवं मिश्र वाक्य", focus: "वाक्य के तीनों भेदों की पहचान, समानाधिकरण एवं व्यधिकरण योजक, वाक्य परिवर्तन" },
+        ],
+      },
+      {
+        id: "ch-hg-samas",
+        name: "समास एवं समास-विग्रह",
+        branch: "शब्द रचना",
+        topics: [
+          { id: "hg-samas-all-types", name: "समास के छह भेद व विग्रह", focus: "तत्पुरुष, कर्मधारय, द्विगु, द्वंद्व, बहुव्रीहि तथा अव्ययीभाव समास" },
+        ],
+      },
+      {
+        id: "ch-hg-vachya",
+        name: "वाच्य एवं वाच्य परिवर्तन",
+        branch: "व्याकरण संरचना",
+        topics: [
+          { id: "hg-vachya-types-transform", name: "कर्तृवाच्य, कर्मवाच्य व भाववाच्य", focus: "कर्ता, कर्म और भाव की प्रधानता, से/के द्वारा का प्रयोग, वाच्य रूपांतरण" },
+        ],
+      },
+      {
+        id: "ch-hg-alankar",
+        name: "अलंकार",
+        branch: "काव्य सौंदर्य",
+        topics: [
+          { id: "hg-shabdalankar-arthalankar", name: "शब्दालंकार एवं अर्थालंकार", focus: "अनुप्रास, यमक, श्लेष, उपमा, रूपक, उत्प्रेक्षा, अतिशयोक्ति, मानवीकरण" },
+        ],
+      },
+      {
+        id: "ch-hg-muhavare",
+        name: "मुहावरे एवं लोकोक्तियाँ",
+        branch: "भाषा प्रयोग",
+        topics: [
+          { id: "hg-muhavare-usage", name: "महत्त्वपूर्ण मुहावरे और वाक्य प्रयोग", focus: "बोर्ड परीक्षा में बार-बार पूछे जाने वाले प्रमुख मुहावरे, अर्थ व सटीक वाक्य प्रयोग" },
+        ],
+      },
+      {
+        id: "ch-hg-sandhi",
+        name: "संधि एवं संधि-विच्छेद",
+        branch: "वर्ण विचार",
+        topics: [
+          { id: "hg-sandhi-rules", name: "स्वर, व्यंजन एवं विसर्ग संधि", focus: "दीर्घ, गुण, वृद्धि, यण, अयादि स्वर संधि, व्यंजन और विसर्ग संधि के प्रमुख नियम" },
+        ],
+      },
+      {
+        id: "ch-hg-shuddhi",
+        name: "वर्तनी एवं वाक्य शुद्धि",
+        branch: "भाषा प्रयोग",
+        topics: [
+          { id: "hg-vakya-shuddhi-rules", name: "अशुद्धि शोधन के नियम", focus: "लिंग, वचन, कारक, पदक्रम, पुनरुक्ति संबंधी अशुद्धियों को पहचानना व शुद्ध करना" },
+        ],
+      },
+      {
+        id: "ch-hg-upasarg-pratyay",
+        name: "उपसर्ग एवं प्रत्यय",
+        branch: "शब्द रचना",
+        topics: [
+          { id: "hg-upasarg-pratyay-rules", name: "उपसर्ग, प्रत्यय और मूल शब्द", focus: "तत्सम, तद्भव, विदेशी उपसर्ग तथा कृत् एवं तद्धित प्रत्यय का पृथक्करण" },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ---------------------------------- Lookups ---------------------------------- */

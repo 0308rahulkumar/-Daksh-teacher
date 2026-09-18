@@ -1,6 +1,13 @@
 // Shared domain types for the Class 10 AI teaching agent.
 
-export type SubjectId = "science" | "maths" | "social-science" | "english" | "bseb-english";
+export type SubjectId =
+  | "science"
+  | "maths"
+  | "social-science"
+  | "english"
+  | "bseb-english"
+  | "english-grammar"
+  | "hindi-grammar";
 
 export interface Topic {
   id: string;

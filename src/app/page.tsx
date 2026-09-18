@@ -84,6 +84,18 @@ const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: strin
     color: "#2563EB",
     bg: "from-blue-500/10 to-indigo-500/5",
   },
+  "english-grammar": {
+    icon: "✍️",
+    badge: "Tenses • Concord • Modals",
+    color: "#6366F1",
+    bg: "from-indigo-500/10 to-violet-500/5",
+  },
+  "hindi-grammar": {
+    icon: "🕉️",
+    badge: "पदबंध • वाक्य • समास • अलंकार",
+    color: "#F97316",
+    bg: "from-orange-500/10 to-amber-500/5",
+  },
 };
 
 export default function DashboardPage() {
@@ -289,6 +301,14 @@ export default function DashboardPage() {
                 <span>3D Sim Labs</span>
                 <span className="text-[10px] px-1 rounded bg-amber-500/20">NEW</span>
               </Link>
+              <Link
+                href="/grammar-lab"
+                className="text-xs px-2.5 py-1.5 rounded-lg border border-indigo-500/40 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-indigo-500 dark:text-indigo-300 font-bold hover:from-indigo-500/30 hover:to-purple-500/30 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <span>✍️</span>
+                <span>Grammar Lab</span>
+                <span className="text-[10px] px-1 rounded bg-indigo-500/20">AI</span>
+              </Link>
               <button
                 type="button"
                 onClick={() => setShowFormulaVault(!showFormulaVault)}
@@ -361,6 +381,30 @@ export default function DashboardPage() {
             className="text-xs px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold transition-all shrink-0 flex items-center gap-1 shadow-md cursor-pointer"
           >
             <span>Launch Labs</span>
+            <span>→</span>
+          </Link>
+        </SpotlightCard>
+
+        {/* Bilingual AI Grammar Studio Feature Banner */}
+        <SpotlightCard
+          spotlightColor="rgba(99, 102, 241, 0.28)"
+          className="mt-3 border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-orange-500/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-2xl p-2 rounded-xl bg-indigo-500/20 border border-indigo-500/30">✍️</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-ink">Bilingual AI Grammar & हिंदी व्याकरण Studio</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">English & Hindi</span>
+              </div>
+              <p className="text-[11px] text-muted">Real-time syntactic parsing, Concord, Tenses, पदबंध, समास, वाच्य & वाक्य भेद error checker with board exam practice rules.</p>
+            </div>
+          </div>
+          <Link
+            href="/grammar-lab"
+            className="text-xs px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 text-white font-bold transition-all shrink-0 flex items-center gap-1 shadow-md cursor-pointer"
+          >
+            <span>Launch Grammar Lab</span>
             <span>→</span>
           </Link>
         </SpotlightCard>
