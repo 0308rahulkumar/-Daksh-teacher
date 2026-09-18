@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
-import { Rubik, Newsreader } from "next/font/google";
+import { Inter, Rubik, Newsreader } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { ThreeCanvas } from "@/components/ThreeCanvas";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
 
 const rubik = Rubik({
   variable: "--font-rubik",
@@ -23,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${rubik.variable} ${newsreader.variable}`}>
+    <html lang="en" className={`${inter.variable} ${rubik.variable} ${newsreader.variable}`}>
       <body className="min-h-svh font-sans antialiased relative">
         {/* ThreeUI Interactive 3D Ambient WebGL Background */}
         <ThreeCanvas />

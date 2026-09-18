@@ -93,6 +93,18 @@ html[data-theme="matrix"] {
   --shadow: 0 12px 30px -6px rgba(5, 10, 7, 0.85);
 }
 
+html[data-theme="electric-indigo"] {
+  --paper: #050315;
+  --surface: rgba(16, 12, 38, 0.82);
+  --ink: #FBFBFE;
+  --muted: #A5A1D6;
+  --accent: #433BFF;
+  --accent-light: rgba(67, 59, 255, 0.18);
+  --highlight: rgba(47, 39, 206, 0.28);
+  --border: rgba(67, 59, 255, 0.22);
+  --shadow: 0 12px 36px -6px rgba(5, 3, 21, 0.85);
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-surface: var(--surface);
@@ -105,7 +117,7 @@ html[data-theme="matrix"] {
   --color-danger: var(--danger);
   --color-warning: var(--warning);
   --color-border: var(--border);
-  --font-sans: var(--font-rubik), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-rubik), system-ui, sans-serif;
   --font-serif: var(--font-serif), "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
 }
 
@@ -309,6 +321,25 @@ body {
 .anim-page-turn-backward {
   animation: page-turn-backward 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   transform-origin: right center;
+}
+
+/* Motion-Primitives Shimmer and Glow Utilities */
+@keyframes text-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.text-shimmer {
+  background: linear-gradient(90deg, #fbfbfe 0%, #dedcff 35%, #433bff 50%, #dedcff 65%, #fbfbfe 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: text-shimmer 3.5s linear infinite;
+}
+
+.glow-pulse-indigo {
+  box-shadow: 0 0 25px -5px rgba(67, 59, 255, 0.35), 0 0 10px -2px rgba(47, 39, 206, 0.2);
 }
 
 @media print {

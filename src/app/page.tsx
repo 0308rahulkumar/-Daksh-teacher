@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStateBundle } from "@/hooks/useAppState";
 import { SUBJECTS, subjectOptions } from "@/lib/syllabus";
+import { SpotlightCard } from "@/components/motion/SpotlightCard";
+import { HaikeiWaves, HaikeiBlob } from "@/components/ui/HaikeiBackdrop";
 import { Button, Card, CardHeader, EmptyState, MasteryBadge, ProgressBar, SectionTitle } from "@/components/ui";
 import { Interactive3DCard } from "@/components/Interactive3DCard";
 import { SubjectBookShowcase } from "@/components/SubjectBookShowcase";
@@ -180,7 +182,10 @@ export default function DashboardPage() {
       {/* ==================================================================== */}
       {/*  STUDENT COMMAND CENTER: NAME, STATS & EXAM GOAL                     */}
       {/* ==================================================================== */}
-      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-surface/90 backdrop-blur-2xl p-6 shadow-sm">
+      <div className="relative overflow-hidden rounded-3xl border border-border/80 bg-surface/90 backdrop-blur-2xl p-6 shadow-sm">
+        <HaikeiWaves />
+        <HaikeiBlob color="#433BFF" size={320} className="top-[-100px] right-[-40px]" />
+        <HaikeiBlob color="#2F27CE" size={240} className="bottom-[-80px] left-[10%]" />
         {/* Header Strip: Name, Avatar & Live Countdown */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/50">
           <div className="flex items-start gap-4">
@@ -228,7 +233,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+                    <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-shimmer">
                       {profile.name === "Student" ? "Board Scholar" : profile.name}
                     </h1>
                     <button
@@ -330,8 +335,11 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Interactive 3D STEM Labs Feature Banner */}
-        <div className="mt-4 rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-purple-500/5 to-cyan-500/10 p-3.5 backdrop-blur-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+        {/* Interactive 3D STEM Labs Feature Banner with Spotlight */}
+        <SpotlightCard
+          spotlightColor="rgba(67, 59, 255, 0.28)"
+          className="mt-4 border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-[#433BFF]/10 to-cyan-500/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs"
+        >
           <div className="flex items-center gap-3">
             <span className="text-2xl p-2 rounded-xl bg-amber-500/20 border border-amber-500/30">🔬</span>
             <div>
@@ -344,12 +352,12 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/labs"
-            className="text-xs px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-all shrink-0 flex items-center gap-1 shadow-sm"
+            className="text-xs px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold transition-all shrink-0 flex items-center gap-1 shadow-md cursor-pointer"
           >
             <span>Launch Labs</span>
             <span>→</span>
           </Link>
-        </div>
+        </SpotlightCard>
 
         {/* Instant Doubt AI Launcher */}
         <div className="mt-6 rounded-xl border border-border/80 bg-paper/70 p-3 sm:p-4">

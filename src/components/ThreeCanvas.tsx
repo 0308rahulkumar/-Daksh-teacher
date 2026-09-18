@@ -11,6 +11,12 @@ interface ThemePalette {
 }
 
 const PALETTES: Record<string, ThemePalette> = {
+  "electric-indigo": {
+    primary: new THREE.Color("#433BFF"), // Neon Iris
+    secondary: new THREE.Color("#2F27CE"), // Royal Electric Indigo
+    tertiary: new THREE.Color("#DEDCFF"), // Soft Periwinkle
+    gridColor: new THREE.Color("#2F27CE"),
+  },
   obsidian: {
     primary: new THREE.Color("#F59E0B"), // Amber Gold
     secondary: new THREE.Color("#FB923C"), // Warm Flame

@@ -2,10 +2,17 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-export type ThemeOption = "obsidian" | "kage" | "field-manuals" | "cyberpunk" | "matrix";
+export type ThemeOption = "electric-indigo" | "obsidian" | "kage" | "field-manuals" | "cyberpunk" | "matrix";
 export type BgMode = "constellation" | "cybergrid" | "embers";
 
 const THEMES: { id: ThemeOption; label: string; icon: string; desc: string; accentColor: string }[] = [
+  {
+    id: "electric-indigo",
+    label: "Midnight",
+    icon: "🌌",
+    desc: "Space obsidian, royal electric indigo & neon iris",
+    accentColor: "#433BFF",
+  },
   {
     id: "obsidian",
     label: "Obsidian",

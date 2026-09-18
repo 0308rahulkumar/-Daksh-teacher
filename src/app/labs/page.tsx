@@ -7,6 +7,19 @@ import { SIMULATIONS, InteractiveSimLab, type SimId } from "@/components/Interac
 import { Interactive3DCard } from "@/components/Interactive3DCard";
 import { ThreeLabStage } from "@/components/ThreeLabStage";
 import { SCIENCE_EXPERIMENTS } from "@/lib/scienceExperiments";
+import { SpotlightCard } from "@/components/motion/SpotlightCard";
+import { AnimatedTabs, type TabItem } from "@/components/motion/AnimatedTabs";
+import { HaikeiWaves, HaikeiBlob } from "@/components/ui/HaikeiBackdrop";
+
+const LAB_FILTER_TABS: TabItem<"All" | "NCERT Activities" | "Physics" | "Chemistry" | "Biology" | "Mathematics" | "NCERT Practicals">[] = [
+  { id: "All", label: "All", icon: "🌐" },
+  { id: "NCERT Activities", label: "NCERT Activities", icon: "🎬", badge: "New" },
+  { id: "Physics", label: "Physics", icon: "⚡" },
+  { id: "Chemistry", label: "Chemistry", icon: "🧪" },
+  { id: "Biology", label: "Biology", icon: "🫀" },
+  { id: "Mathematics", label: "Mathematics", icon: "📐" },
+  { id: "NCERT Practicals", label: "NCERT Practicals", icon: "🔬" },
+];
 
 function LabsContent() {
   const searchParams = useSearchParams();
@@ -38,19 +51,21 @@ function LabsContent() {
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto px-2 sm:px-4 py-6">
-      {/* Top Header */}
-      <div className="relative rounded-3xl p-6 md:p-8 overflow-hidden border border-white/10 bg-gradient-to-br from-indigo-950/40 via-purple-950/20 to-slate-950/60 backdrop-blur-xl shadow-2xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Top Header with Haikei Generative Waves */}
+      <div className="relative rounded-3xl p-6 md:p-8 overflow-hidden border border-white/15 bg-gradient-to-br from-[#050315] via-[#120f2d]/80 to-[#0a061e] backdrop-blur-2xl shadow-2xl">
+        <HaikeiWaves />
+        <HaikeiBlob color="#433BFF" size={380} className="top-[-80px] right-[-60px]" />
+        <HaikeiBlob color="#2F27CE" size={260} className="bottom-[-60px] left-[20%]" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#433BFF]/20 border border-[#433BFF]/40 text-[#DEDCFF] text-xs font-semibold backdrop-blur-md">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#433BFF] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#433BFF]"></span>
               </span>
               <span>✨ 3D WebGL & Vector STEM Simulation Suite</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-shimmer">
               Interactive STEM Laboratories
             </h1>
             <p className="text-sm text-slate-300 leading-relaxed">
@@ -91,33 +106,15 @@ function LabsContent() {
         </div>
       )}
 
-      {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 items-center justify-between border-b border-white/10 pb-4">
-        <div className="flex flex-wrap gap-2">
-          {(["All", "NCERT Activities", "Physics", "Chemistry", "Biology", "Mathematics", "NCERT Practicals"] as const).map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`text-xs px-4 py-2 rounded-xl font-medium transition border cursor-pointer ${
-                activeFilter === filter
-                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-lg shadow-amber-500/10 font-bold"
-                  : "bg-white/5 text-slate-300 border-white/10 hover:bg-white/10"
-              }`}
-            >
-              {filter === "All" && "🌐 "}
-              {filter === "NCERT Activities" && "🎬 "}
-              {filter === "Physics" && "⚡ "}
-              {filter === "Chemistry" && "🧪 "}
-              {filter === "Biology" && "🫀 "}
-              {filter === "Mathematics" && "📐 "}
-              {filter === "NCERT Practicals" && "🔬 "}
-              {filter}
-            </button>
-          ))}
-        </div>
-
-        <span className="text-xs text-slate-400 font-mono">
-          Showing {filteredSims.length} Active Laboratories
+      {/* Filter Tabs with Motion Primitives Animated Sliding Pill */}
+      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between border-b border-white/10 pb-4">
+        <AnimatedTabs
+          tabs={LAB_FILTER_TABS}
+          activeTab={activeFilter}
+          onChange={(tab) => setActiveFilter(tab)}
+        />
+        <span className="text-xs text-slate-400 font-mono self-end sm:self-center px-2">
+          Showing {filteredSims.length} Laboratories
         </span>
       </div>
 
@@ -173,18 +170,19 @@ function LabsContent() {
         </div>
       )}
 
-      {/* Lab Selector Cards Strip with 3D Tilt */}
+      {/* Lab Selector Cards Strip with Motion-Primitives Spotlight & 3D Tilt */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredSims.map((sim) => {
           const isSelected = sim.id === activeSimId;
           return (
-            <Interactive3DCard key={sim.id} maxRotation={6}>
-              <div
+            <Interactive3DCard key={sim.id} maxRotation={5}>
+              <SpotlightCard
+                spotlightColor="rgba(67, 59, 255, 0.26)"
                 onClick={() => setActiveSimId(sim.id)}
-                className={`cursor-pointer p-4 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full ${
+                className={`cursor-pointer p-4.5 transition-all duration-300 flex flex-col justify-between h-full ${
                   isSelected
-                    ? "bg-slate-900/90 border-amber-400 shadow-xl shadow-amber-500/20 scale-[1.01]"
-                    : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/25"
+                    ? "bg-[#0d0a27]/95 border-[#433BFF] shadow-xl shadow-[#433BFF]/25 scale-[1.01] ring-1 ring-[#433BFF]/50"
+                    : "bg-slate-950/60 border-white/10 hover:border-white/30"
                 }`}
               >
                 <div>
@@ -211,7 +209,7 @@ function LabsContent() {
                     {isSelected ? "● Active Lab" : "Launch →"}
                   </span>
                 </div>
-              </div>
+              </SpotlightCard>
             </Interactive3DCard>
           );
         })}
