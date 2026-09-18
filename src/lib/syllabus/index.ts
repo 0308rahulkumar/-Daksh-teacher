@@ -852,45 +852,83 @@ export const SUBJECTS: Subject[] = [
       },
     ],
   },
-  {
+    {
     id: "english-grammar",
     name: "English Grammar",
     icon: "✍️",
-    tagline: "Tenses · Concord · Reported Speech · Modals",
+    tagline: "Parts of Speech · Tenses · Concord · Reported Speech · Modals",
     accent: "#6366F1",
     chapters: [
+      /* --- COMPLETE PARTS OF SPEECH (THE 8 BUILDING BLOCKS + DETERMINERS) --- */
       {
-        id: "ch-eg-tenses",
-        name: "Tenses & Time",
-        branch: "Core Grammar",
+        id: "ch-eg-nouns",
+        name: "Nouns & Nominal Forms",
+        branch: "Parts of Speech",
         topics: [
-          { id: "eg-present-past", name: "Present & Past Forms", focus: "Simple, continuous, perfect, and perfect continuous forms" },
-          { id: "eg-future-time", name: "Future Time Reference & Aspect", focus: "Will/shall, going to, future continuous, and conditional time clauses" },
+          { id: "eg-noun-classes", name: "Classification of Nouns", focus: "Proper, Common, Collective, Abstract & Material nouns with board error traps" },
+          { id: "eg-noun-number-gender", name: "Noun Number, Gender & Cases", focus: "Countable vs uncountable nouns, irregular plurals, and possessive ('s) case rules" },
         ],
       },
       {
-        id: "ch-eg-modals",
-        name: "Modals & Auxiliaries",
-        branch: "Core Grammar",
+        id: "ch-eg-pronouns",
+        name: "Pronouns & Antecedents",
+        branch: "Parts of Speech",
         topics: [
-          { id: "eg-modal-functions", name: "Modal Auxiliaries & Functions", focus: "Can, could, may, might, will, would, shall, should, must, ought to" },
+          { id: "eg-personal-relative-pronouns", name: "Personal, Demonstrative & Relative Pronouns", focus: "Subject vs object cases (I/me, who/whom), relative pronouns (who, which, that), and antecedent agreement" },
+          { id: "eg-reflexive-indefinite", name: "Reflexive, Emphatic & Indefinite Pronouns", focus: "Reflexive vs emphatic (-self), indefinite pronouns (everyone, someone) verb agreement, and reciprocal pronouns" },
         ],
       },
       {
-        id: "ch-eg-concord",
-        name: "Subject-Verb Concord",
-        branch: "Core Grammar",
+        id: "ch-eg-verbs",
+        name: "Verbs & Non-Finite Forms",
+        branch: "Parts of Speech",
         topics: [
-          { id: "eg-agreement-rules", name: "Subject-Verb Agreement Rules", focus: "Singular/plural agreement, either/or, neither/nor, collective nouns, phrases" },
+          { id: "eg-transitive-intransitive", name: "Transitive, Intransitive & Linking Verbs", focus: "Direct vs indirect objects, transitive vs intransitive verbs, and stative vs dynamic verbs" },
+          { id: "eg-non-finites", name: "Non-Finite Verbs: Infinitives, Gerunds & Participles", focus: "To-infinitives, bare infinitives (let, make), gerunds as verbal nouns, and present/past participles" },
         ],
       },
       {
-        id: "ch-eg-reported-speech",
-        name: "Reported Speech",
-        branch: "Sentence Structure",
+        id: "ch-eg-adjectives",
+        name: "Adjectives & Comparison",
+        branch: "Parts of Speech",
         topics: [
-          { id: "eg-direct-indirect-statements", name: "Direct & Indirect Statements", focus: "Tense backshift, pronoun changes, time and place adverbial shifts" },
-          { id: "eg-reported-questions-commands", name: "Reported Questions & Commands", focus: "Yes/no questions with if/whether, Wh- questions, imperatives and requests" },
+          { id: "eg-adjective-types", name: "Types of Adjectives & Attributes", focus: "Qualitative, quantitative, numeral, demonstrative, interrogative, and proper adjectives" },
+          { id: "eg-comparison-order", name: "Degrees of Comparison & Order of Adjectives", focus: "Positive, comparative, superlative rules, irregular degrees, and standard Royal Order (OSASCOMP)" },
+        ],
+      },
+      {
+        id: "ch-eg-adverbs",
+        name: "Adverbs & Modifiers",
+        branch: "Parts of Speech",
+        topics: [
+          { id: "eg-adverb-types", name: "Classification & Formation of Adverbs", focus: "Adverbs of manner, place, time, frequency, degree, reason, and suffix -ly formation" },
+          { id: "eg-adverb-position-inversion", name: "Placement of Adverbs & Inversion Rules", focus: "Positioning of adverbs, confusing pairs (hard/hardly, late/lately), and negative inversion (seldom, hardly)" },
+        ],
+      },
+      {
+        id: "ch-eg-prepositions",
+        name: "Prepositions & Phrasal Collocations",
+        branch: "Parts of Speech",
+        topics: [
+          { id: "eg-prep-usage", name: "Prepositions of Time, Place & Direction", focus: "At, on, in, by, since, for, across, through, into, upon, and phrasal prepositions" },
+          { id: "eg-phrasal-prepositions", name: "Complex Prepositions & Fixed Collocations", focus: "According to, in spite of, by virtue of, and fixed prepositional verbs (abide by, fond of, accuse of)" },
+        ],
+      },
+      {
+        id: "ch-eg-conjunctions",
+        name: "Conjunctions & Connectors",
+        branch: "Parts of Speech",
+        topics: [
+          { id: "eg-coordinating-subordinating", name: "Coordinating & Subordinating Conjunctions", focus: "Coordinating FANBOYS, subordinating conjunctions of cause, time, condition (unless, although, because)" },
+          { id: "eg-correlative-conjunctions", name: "Correlative Conjunction Pairs", focus: "Either...or, neither...nor, not only...but also, scarcely...when, no sooner...than parallelism" },
+        ],
+      },
+      {
+        id: "ch-eg-interjections",
+        name: "Interjections & Emotional Markers",
+        branch: "Parts of Speech",
+        topics: [
+          { id: "eg-interjections-usage", name: "Interjections & Punctuation", focus: "Primary emotions: joy (Hurrah!), grief (Alas!), surprise (Wow!), approval (Bravo!), and exclamation rules" },
         ],
       },
       {
@@ -901,10 +939,46 @@ export const SUBJECTS: Subject[] = [
           { id: "eg-articles-quantifiers", name: "Articles & Quantifiers", focus: "A, an, the, some, any, much, many, each, every, few, little" },
         ],
       },
+
+      /* --- CORE SENTENCE GRAMMAR & SYNTAX --- */
+      {
+        id: "ch-eg-tenses",
+        name: "Tenses & Time",
+        branch: "Core Sentence Grammar",
+        topics: [
+          { id: "eg-present-past", name: "Present & Past Forms", focus: "Simple, continuous, perfect, and perfect continuous forms" },
+          { id: "eg-future-time", name: "Future Time Reference & Aspect", focus: "Will/shall, going to, future continuous, and conditional time clauses" },
+        ],
+      },
+      {
+        id: "ch-eg-modals",
+        name: "Modals & Auxiliaries",
+        branch: "Core Sentence Grammar",
+        topics: [
+          { id: "eg-modal-functions", name: "Modal Auxiliaries & Functions", focus: "Can, could, may, might, will, would, shall, should, must, ought to" },
+        ],
+      },
+      {
+        id: "ch-eg-concord",
+        name: "Subject-Verb Concord",
+        branch: "Core Sentence Grammar",
+        topics: [
+          { id: "eg-agreement-rules", name: "Subject-Verb Agreement Rules", focus: "Singular/plural agreement, either/or, neither/nor, collective nouns, phrases" },
+        ],
+      },
+      {
+        id: "ch-eg-reported-speech",
+        name: "Reported Speech",
+        branch: "Core Sentence Grammar",
+        topics: [
+          { id: "eg-direct-indirect-statements", name: "Direct & Indirect Statements", focus: "Tense backshift, pronoun changes, time and place adverbial shifts" },
+          { id: "eg-reported-questions-commands", name: "Reported Questions & Commands", focus: "Yes/no questions with if/whether, Wh- questions, imperatives and requests" },
+        ],
+      },
       {
         id: "ch-eg-voice",
         name: "Active & Passive Voice",
-        branch: "Sentence Structure",
+        branch: "Core Sentence Grammar",
         topics: [
           { id: "eg-voice-transformations", name: "Voice Transformation Rules", focus: "Subject-object inversion, auxiliary be + past participle, imperative passives" },
         ],
@@ -912,20 +986,14 @@ export const SUBJECTS: Subject[] = [
       {
         id: "ch-eg-clauses",
         name: "Clauses & Complex Sentences",
-        branch: "Sentence Structure",
+        branch: "Core Sentence Grammar",
         topics: [
           { id: "eg-noun-relative-clauses", name: "Noun & Relative Clauses", focus: "Defining and non-defining relative clauses, noun clauses as subjects/objects" },
           { id: "eg-adverb-clauses", name: "Adverbial Clauses", focus: "Clauses of time, reason, condition (if/unless), concession (although/though)" },
         ],
       },
-      {
-        id: "ch-eg-prepositions",
-        name: "Prepositions & Phrasal Verbs",
-        branch: "Parts of Speech",
-        topics: [
-          { id: "eg-prep-usage", name: "Prepositions of Time, Place & Direction", focus: "At, on, in, by, since, for, across, through, into, upon, and phrasal prepositions" },
-        ],
-      },
+
+      /* --- APPLIED GRAMMAR & BOARD EDITING --- */
       {
         id: "ch-eg-editing",
         name: "Editing & Error Correction",
