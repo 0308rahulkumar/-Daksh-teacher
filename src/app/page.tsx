@@ -60,6 +60,12 @@ const SUBJECT_THEMES: Record<string, { icon: string; badge: string; color: strin
     color: "#059669",
     bg: "from-emerald-500/10 to-teal-500/5",
   },
+  maths: {
+    icon: "📐",
+    badge: "Algebra • Geometry • Trig",
+    color: "#D97706",
+    bg: "from-amber-500/10 to-orange-500/5",
+  },
   mathematics: {
     icon: "📐",
     badge: "Algebra • Geometry • Trig",

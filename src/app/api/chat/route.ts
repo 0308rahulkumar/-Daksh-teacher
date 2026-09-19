@@ -5,6 +5,7 @@ import { buildSystemPrompt, type ChatContext } from "@/lib/ai/prompts";
 import { dueTopics } from "@/lib/learning";
 import { getState } from "@/lib/store";
 import { getChapter, getSubject, getTopic } from "@/lib/syllabus";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -50,6 +51,15 @@ function toCore(messages: WireMessage[]): { role: "user" | "assistant"; content:
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  const { allowed } = checkRateLimit(ip + ":chat", 40, 60000);
+  if (!allowed) {
+    return new Response("Too many requests. Please wait a moment before sending another message.", {
+      status: 429,
+      headers: { "content-type": "text/plain" },
+    });
+  }
+
   if (!isAiConfigured()) return missingKeyResponse();
 
   const url = new URL(req.url);

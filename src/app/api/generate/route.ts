@@ -3,6 +3,7 @@ import { isAiConfigured } from "@/lib/ai/provider";
 import { generate, type GenInput } from "@/lib/ai/generators";
 import { getCuratedMindmap, getCuratedNotes, getCuratedFlashcards, getCuratedQuiz } from "@/lib/curatedContent";
 import type { GeneratorKind } from "@/lib/types";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -23,6 +24,12 @@ function getFallback(kind: GeneratorKind, subjectId: string, chapterId: string, 
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  const { allowed } = checkRateLimit(ip + ":gen", 40, 60000);
+  if (!allowed) {
+    return json({ error: "Too many requests. Please wait a moment before generating again." }, 429);
+  }
+
   const body = (await req.json().catch(() => ({}))) as Partial<GenInput> & { kind?: GeneratorKind };
 
   if (!body.kind) return json({ error: "Missing 'kind' (notes | flashcards | mcq | mindmap | quiz)." }, 400);

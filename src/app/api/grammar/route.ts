@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { isAiConfigured, model } from "@/lib/ai/provider";
 import { generateObject } from "ai";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -251,6 +252,12 @@ function heuristicAnalyze(text: string, language: "english" | "hindi"): GrammarA
 }
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  const { allowed } = checkRateLimit(ip + ":grammar", 30, 60000);
+  if (!allowed) {
+    return json({ error: "Rate limit reached. Please wait a moment before analyzing another sentence." }, 429);
+  }
+
   const body = (await req.json().catch(() => ({}))) as {
     text?: string;
     language?: "english" | "hindi";

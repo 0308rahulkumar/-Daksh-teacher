@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import { useGenerator } from "@/hooks/useGenerator";
 import { Button } from "@/components/ui";
 import { getCuratedNotes } from "@/lib/curatedContent";
+import { formatMathFormulas } from "@/lib/formatMath";
 import type { NoteDoc } from "@/lib/types";
 
 interface NotesViewProps {
@@ -143,7 +144,7 @@ export function NotesView({ subjectId, chapterId, topicId, topicName }: NotesVie
         {effectiveData.definition && (
           <div className="rounded-lg border-l-4 border-accent bg-accent-light/40 p-4">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {"**" + effectiveData.topic + "** is " + effectiveData.definition}
+              {formatMathFormulas("**" + effectiveData.topic + "** is " + effectiveData.definition)}
             </ReactMarkdown>
           </div>
         )}
@@ -156,7 +157,7 @@ export function NotesView({ subjectId, chapterId, topicId, topicName }: NotesVie
                 <li key={i} className="flex gap-2.5 text-ink">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                   <div className="flex-1">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{p}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{formatMathFormulas(p)}</ReactMarkdown>
                   </div>
                 </li>
               ))}
@@ -170,7 +171,7 @@ export function NotesView({ subjectId, chapterId, topicId, topicName }: NotesVie
             <div className="flex flex-wrap gap-2">
               {effectiveData.formulas.map((f, i) => (
                 <code key={i} className="rounded-md bg-accent-light/70 px-3 py-1.5 text-sm font-semibold text-ink border border-accent/20">
-                  {f}
+                  {formatMathFormulas(f)}
                 </code>
               ))}
             </div>
