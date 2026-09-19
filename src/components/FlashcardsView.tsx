@@ -45,7 +45,20 @@ export function FlashcardsView({ subjectId, chapterId, topicId, topicName }: Fla
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
+    const hasDevanagari = /[\u0900-\u097F]/.test(text);
+    const targetLang = hasDevanagari ? "hi-IN" : "en-IN";
+    utterance.lang = targetLang;
     utterance.rate = 0.95; // clear instructional pacing
+
+    const voices = window.speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+      const matched = voices.find(
+        (v) => v.lang.toLowerCase().replace(/_/g, "-") === targetLang.toLowerCase() ||
+               v.lang.toLowerCase().startsWith(targetLang.slice(0, 2).toLowerCase())
+      );
+      if (matched) utterance.voice = matched;
+    }
+
     window.speechSynthesis.speak(utterance);
   }
 

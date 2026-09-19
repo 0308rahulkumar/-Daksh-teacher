@@ -39,6 +39,21 @@ export function getCurrentUser(): StudentAccount | null {
   }
 }
 
+function hashPin(pin: string): string {
+  let hash = 0x811c9dc5;
+  const combined = `daksh_salt_v1:${pin}:class10_secure`;
+  for (let i = 0; i < combined.length; i++) {
+    hash ^= combined.charCodeAt(i);
+    hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+  }
+  return "h_" + (hash >>> 0).toString(16);
+}
+
+function verifyPin(enteredPin: string, storedPin: string): boolean {
+  if (storedPin === enteredPin) return true; // legacy plaintext support
+  return storedPin === hashPin(enteredPin);
+}
+
 export function signUp(data: {
   name: string;
   username: string;
@@ -64,7 +79,7 @@ export function signUp(data: {
     id: "student_" + Math.random().toString(36).substring(2, 9),
     username: cleanUsername,
     name: data.name.trim(),
-    pin: data.pin,
+    pin: hashPin(data.pin),
     board: data.board || "CBSE",
     medium: data.medium || "English",
     targetScore: data.targetScore || 95,
@@ -89,7 +104,13 @@ export function signIn(username: string, pin: string): { success: boolean; error
 
   const account = accounts.find((a) => a.username === cleanUsername);
   if (!account) return { success: false, error: "Account not found. Please Sign Up." };
-  if (account.pin !== pin) return { success: false, error: "Incorrect 4-digit PIN." };
+  if (!verifyPin(pin, account.pin)) return { success: false, error: "Incorrect 4-digit PIN." };
+
+  // If legacy unhashed PIN, silently upgrade to hash
+  if (account.pin === pin) {
+    account.pin = hashPin(pin);
+    localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+  }
 
   localStorage.setItem(ACTIVE_USER_KEY, account.id);
   window.dispatchEvent(new CustomEvent("daksh-auth-changed", { detail: account }));

@@ -28,6 +28,37 @@ function normalize(s: string): string {
   return s.trim().toLowerCase().replace(/\s+/g, " ").replace(/[.！」!？?,]/g, "");
 }
 
+function isOptionMatch(opt: string, optIndex: number, answer: string): boolean {
+  if (!answer) return false;
+  const normOpt = normalize(opt);
+  const normAns = normalize(answer);
+
+  // Exact or normalized text match
+  if (normOpt === normAns) return true;
+
+  // Check letter matching ("A", "B", "C", "D" or "a", "b", "c", "d")
+  const letters = ["a", "b", "c", "d"];
+  if (optIndex >= 0 && optIndex < letters.length && normAns === letters[optIndex]) {
+    return true;
+  }
+
+  // Check if answer is formatted like "A) Option text" or "A. Option text"
+  if (optIndex >= 0 && optIndex < letters.length) {
+    if (normAns.startsWith(letters[optIndex] + " ") || normAns.startsWith(letters[optIndex] + ")")) {
+      return true;
+    }
+  }
+
+  // Strip leading "A)", "B.", etc. and compare
+  const cleanAns = normAns.replace(/^[a-d][\s).:-]+/, "").trim();
+  const cleanOpt = normOpt.replace(/^[a-d][\s).:-]+/, "").trim();
+  if (cleanAns && (cleanAns === cleanOpt || cleanAns === normOpt || normAns === cleanOpt)) {
+    return true;
+  }
+
+  return false;
+}
+
 const LETTERS = ["A", "B", "C", "D"];
 
 export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorded, onRecord }: QuizRunnerProps) {
@@ -92,7 +123,8 @@ export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorde
   /** MCQ: grade, store, reveal. */
   function submitMCQ() {
     if (!q || selected === null) return;
-    const correct = normalize(selected) === normalize(q.answer ?? "");
+    const selIndex = (q.options ?? []).indexOf(selected);
+    const correct = isOptionMatch(selected, selIndex, q.answer ?? "");
     recordAnswer(selected, correct);
     setPhase("reveal");
   }
@@ -243,7 +275,8 @@ export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorde
 
   /* ---------------- answering / reveal ---------------- */
   const answered = phase === "reveal";
-  const mcqCorrect = answered ? normalize(selected ?? "") === normalize(q.answer ?? "") : false;
+  const selIndex = (q?.options ?? []).indexOf(selected ?? "");
+  const mcqCorrect = answered && q ? isOptionMatch(selected ?? "", selIndex, q.answer ?? "") : false;
 
   return (
     <div>
@@ -266,7 +299,7 @@ export function QuizRunner({ subjectId, chapterId, topicId, topicName, onRecorde
           <div className="space-y-2">
             {(q.options ?? []).map((opt, i) => {
               const isSelected = selected === opt;
-              const showCorrect = answered && normalize(opt) === normalize(q.answer ?? "");
+              const showCorrect = answered && isOptionMatch(opt, i, q.answer ?? "");
               const showWrong = answered && isSelected && !showCorrect;
               return (
                 <button

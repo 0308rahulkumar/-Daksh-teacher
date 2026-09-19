@@ -70,24 +70,38 @@ export function applyQuizResult(
   const nowIso = new Date().toISOString();
   const newMistakes: Mistake[] = [];
 
+  const today = todayKey();
+
   for (const a of input.answers) {
-    if (!a.topicId) continue;
+    const targetTopicId = a.topicId || input.topicId || "overview";
     const subjectMap = (s.progress[input.subjectId] ??= {});
     const chapterMap = (subjectMap[input.chapterId] ??= {});
-    const p = (chapterMap[a.topicId] ??= {
+    const p = (chapterMap[targetTopicId] ??= {
       mastery: "NOT_STARTED",
       attempts: 0,
       correct: 0,
       intervalDays: 1,
       history: [],
     });
+
+    const alreadyPracticedToday = p.history.some((h) => h.date === today);
+
     p.attempts += 1;
     if (a.correct) p.correct += 1;
     p.lastResult = a.correct ? "correct" : "wrong";
     p.lastPracticed = nowIso;
-    p.history.push({ date: todayKey(), correct: a.correct });
-    p.intervalDays = nextInterval(p.intervalDays, a.correct);
-    p.nextReview = addDays(todayKey(), p.intervalDays);
+    p.history.push({ date: today, correct: a.correct });
+
+    // Genuine spaced repetition: don't artificially escalate interval on same-day repeats
+    if (!a.correct) {
+      p.intervalDays = 1;
+    } else if (!alreadyPracticedToday) {
+      p.intervalDays = nextInterval(p.intervalDays, true);
+    } else {
+      p.intervalDays = Math.max(1, Math.min(p.intervalDays, 2));
+    }
+
+    p.nextReview = addDays(today, p.intervalDays);
     p.mastery = deriveMastery(p);
 
     if (!a.correct) {
@@ -96,7 +110,7 @@ export function applyQuizResult(
         date: nowIso,
         subjectId: input.subjectId,
         chapterId: input.chapterId,
-        topic: a.topicId,
+        topic: targetTopicId,
         question: a.prompt,
         studentAnswer: a.studentAnswer || "(no answer given)",
         correctAnswer: a.correctAnswer,

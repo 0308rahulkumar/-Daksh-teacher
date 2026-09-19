@@ -15,21 +15,21 @@ export type ModelRole = "teacher" | "deep" | "fast";
 /* -------------------------------------------------------------------------- */
 
 const GATEWAY_IDS: Record<ModelRole, string> = {
-  teacher: "anthropic/claude-sonnet-5",
-  deep: "anthropic/claude-opus-5",
-  fast: "anthropic/claude-haiku-4.5",
+  teacher: "google/gemini-1.5-flash",
+  deep: "google/gemini-1.5-pro",
+  fast: "google/gemini-1.5-flash",
 };
 
 const ANTHROPIC_IDS: Record<ModelRole, string> = {
-  teacher: "claude-sonnet-5",
-  deep: "claude-opus-5",
-  fast: "claude-haiku-4-5-20251001",
+  teacher: "claude-3-5-sonnet-latest",
+  deep: "claude-3-5-sonnet-latest",
+  fast: "claude-3-5-haiku-latest",
 };
 
 const GOOGLE_IDS: Record<ModelRole, string> = {
-  teacher: "gemini-3.6-flash",
-  deep: "gemini-3.6-flash",
-  fast: "gemini-3.6-flash",
+  teacher: "gemini-1.5-flash",
+  deep: "gemini-1.5-pro",
+  fast: "gemini-1.5-flash",
 };
 
 /* -------------------------------------------------------------------------- */

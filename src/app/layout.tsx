@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* ThreeUI Interactive 3D Ambient WebGL Background */}
         <ThreeCanvas />
 
-        <div className="relative z-10 flex min-h-svh">
+        <div className="relative z-10 flex flex-col md:flex-row min-h-svh">
           <Sidebar />
           <div className="flex-1 min-w-0">
             <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-8">{children}</main>

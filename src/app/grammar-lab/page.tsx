@@ -430,8 +430,20 @@ export default function GrammarLabPage() {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.lang = language === "hindi" ? "hi-IN" : "en-US";
+    const hasDevanagari = /[\u0900-\u097F]/.test(textToSpeak);
+    const targetLang = (language === "hindi" || hasDevanagari) ? "hi-IN" : "en-IN";
+    utterance.lang = targetLang;
     utterance.rate = 0.9;
+
+    const voices = window.speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+      const matched = voices.find(
+        (v) => v.lang.toLowerCase().replace(/_/g, "-") === targetLang.toLowerCase() ||
+               v.lang.toLowerCase().startsWith(targetLang.slice(0, 2).toLowerCase())
+      );
+      if (matched) utterance.voice = matched;
+    }
+
     window.speechSynthesis.speak(utterance);
   }
 
