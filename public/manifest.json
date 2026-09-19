@@ -1,0 +1,16 @@
+﻿{
+  "name": "Daksh — Class 10 AI Teacher",
+  "short_name": "Daksh",
+  "description": "Class 10 CBSE & Bihar Board AI Teacher & Learning Studio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050315",
+  "theme_color": "#433bff",
+  "icons": [
+    {
+      "src": "/globe.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

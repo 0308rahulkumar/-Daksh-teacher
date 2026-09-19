@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Rubik, Newsreader } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
@@ -22,9 +22,16 @@ const newsreader = Newsreader({
   style: ["normal", "italic"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#433bff",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "Daksh — Class 10 AI Teacher",
-  description: "A personal AI teacher for Class 10 board exam preparation.",
+  title: "Daksh — Class 10 AI Teacher (CBSE & Bihar Board)",
+  description: "Personal AI teacher for Class 10 board exam preparation. Visual 3D STEM labs, notes, mind maps, quizzes, and bilingual grammar studio.",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
